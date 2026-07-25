@@ -1,0 +1,167 @@
+# ---------------------------------------------------------------------------
+# Candidate product list for demand scanning.
+# Add/remove products freely. Each product needs:
+#   name        - human readable label
+#   keywords    - search terms used across Reddit, Google Trends, marketplaces
+#                 (include misspellings / shorthand riders actually use)
+#   category    - "rad_power_bikes", "ebike_general", "mtb_general" etc.
+# ---------------------------------------------------------------------------
+
+products:
+  - name: "Rad Power Bikes battery terminal / fuse cover"
+    keywords: ["rad power battery terminal cover", "rad power fuse cover", "radpower terminal cap"]
+    category: rad_power_bikes
+
+  - name: "Rad Power charging port dust cap"
+    keywords: ["rad power charging port cap", "rad power charge port plug", "ebike charge port cover"]
+    category: rad_power_bikes
+
+  - name: "Rad Power cargo net hooks"
+    keywords: ["rad power cargo net hook", "radrunner cargo hook replacement"]
+    category: rad_power_bikes
+
+  - name: "Rad Power kickstand foot / base widener"
+    keywords: ["rad power kickstand foot", "radrunner kickstand widener", "ebike kickstand base extender"]
+    category: rad_power_bikes
+
+  - name: "Rad Power display / phone mount"
+    keywords: ["rad power phone mount", "radrunner handlebar mount", "ebike display mount 3d print"]
+    category: rad_power_bikes
+
+  - name: "MTB chain guide / bash guard"
+    keywords: ["3d printed chain guide mountain bike", "printed bash guard mtb"]
+    category: mtb_general
+
+  - name: "MTB cable/hose routing clips"
+    keywords: ["3d printed cable routing clip mtb", "brake hose guide clip bike"]
+    category: mtb_general
+
+  - name: "MTB frame protector / chainstay guard"
+    keywords: ["3d printed chainstay protector", "frame guard mountain bike print"]
+    category: mtb_general
+
+  - name: "GoPro / action cam mount for MTB helmet or bars"
+    keywords: ["3d printed gopro mount bike", "action cam handlebar mount print"]
+    category: mtb_general
+
+  - name: "Fender / mudguard bracket"
+    keywords: ["3d printed fender bracket bike", "mudguard mount ebike print"]
+    category: mtb_general
+
+  # --- Candidate niche #2: FPV / racing drones ---------------------------
+  # Buyers here mostly own printers themselves (weaker willingness-to-pay
+  # signal than e-bikes), but the community is large and crash damage means
+  # recurring replacement demand for the same handful of parts.
+  - name: "FPV drone GoPro / action-cam mount"
+    keywords: ["fpv drone gopro mount 3d print", "fpv camera mount replacement"]
+    category: drone_fpv
+
+  - name: "FPV drone arm / frame crash guard"
+    keywords: ["fpv drone arm guard 3d print", "drone prop guard replacement"]
+    category: drone_fpv
+
+  - name: "FPV drone antenna / VTX mount"
+    keywords: ["fpv antenna mount 3d print", "vtx antenna holder drone"]
+    category: drone_fpv
+
+  # --- Candidate niche #3: Automotive -------------------------------------
+  # CAUTION: automotive parts are usually make/model-specific, so a generic
+  # "automotive" catalog fragments the way appliance parts do. These rows
+  # are deliberately generic to test whether cross-model demand (clips,
+  # mounts, brackets that work across many cars) exists at all before
+  # narrowing to one platform (e.g. a specific Jeep/Subaru-style community
+  # the way Rad Power represents e-bikes).
+  - name: "Automotive interior trim clip replacement"
+    keywords: ["3d printed car trim clip", "interior clip replacement car"]
+    category: automotive
+
+  - name: "Automotive phone/tablet mount bracket"
+    keywords: ["3d printed car phone mount bracket", "dash mount replacement clip"]
+    category: automotive
+
+  - name: "Automotive cable routing bracket"
+    keywords: ["3d printed cable routing bracket car", "wiring harness clip replacement"]
+    category: automotive
+
+  # --- Candidate niche #4: ATV / UTV --------------------------------------
+  - name: "UTV GoPro / accessory mount"
+    keywords: ["utv gopro mount 3d print", "rzr accessory mount replacement"]
+    category: atv_utv
+
+  - name: "UTV cup holder / storage bracket"
+    keywords: ["utv cup holder mount 3d print", "rzr storage bracket replacement"]
+    category: atv_utv
+
+  - name: "UTV snorkel / vent mount bracket"
+    keywords: ["utv snorkel mount bracket 3d print", "rzr vent mount replacement"]
+    category: atv_utv
+
+# ---------------------------------------------------------------------------
+# Reddit communities to scan. Add any others relevant to your niche.
+# Verify these subreddit names still exist/are active before your first run —
+# subreddit names and activity levels drift over time.
+# ---------------------------------------------------------------------------
+subreddits:
+  - RadPowerBikes
+  - ebikes
+  - electricbikes
+  - MTB
+  - mountainbiking
+  - bikewrench
+  - functionalprint
+  - 3Dprinting
+  - fpv
+  - Multicopter
+  - diydrones
+  - MechanicAdvice
+  - cartalk
+  - UTV
+  - atvs
+  - side_by_side
+
+# Lookback window for Reddit search, in days
+reddit_lookback_days: 180
+
+# Marketplace search pages to check for existing competition/demand proxy.
+# `result_selector` is the CSS selector for one search-result card on that
+# page — inspect the page once and update if a site redesigns.
+marketplaces:
+  - name: printables
+    search_url_template: "https://www.printables.com/search/models?q={query}"
+    result_selector: "a[href*='/model/']"
+  - name: makerworld
+    search_url_template: "https://makerworld.com/en/search/models?keyword={query}"
+    result_selector: "a[href*='/models/']"
+
+# ---------------------------------------------------------------------------
+# Manual-check community sources.
+# These are NOT scraped by any script in this tool. They're listed here so
+# every source you're tracking demand across lives in one config file, even
+# the ones that stay a human task.
+#
+# Facebook Groups: excluded on purpose — Meta's ToS prohibits scraping and
+# its anti-automation measures make it unreliable even before the compliance
+# question.
+#
+# Pinkbike Forum and MTBR Forum: tested directly (July 2026) and both run
+# JS/session-gated search (no plain keyword-in-URL results page an
+# unauthenticated script can fetch), the same practical problem as Facebook.
+# A future upgrade path if this becomes worth automating: both forums are
+# Google-indexed, so a paid SERP API (e.g. `site:pinkbike.com/forum
+# <keyword>`) could substitute for the manual check without touching the
+# forums' own search directly.
+#
+# Log all manual checks in facebook_manual_log.csv (now covers all three
+# manual sources, not just Facebook — kept the filename so existing weekly
+# habits/links don't break) on the same weekly cadence as the automated scan.
+# ---------------------------------------------------------------------------
+manual_check_sources:
+  - name: "Facebook Groups"
+    examples: ["Rad Power Bikes Owners", "regional MTB/e-bike groups"]
+    note: "ToS prohibits scraping; 5-min weekly manual keyword check"
+  - name: "Pinkbike Forum"
+    url: "https://www.pinkbike.com/forum/"
+    note: "Use the on-page 'Search Forum' box per product keyword; JS/session-gated, not scriptable"
+  - name: "MTBR Forum"
+    url: "https://www.mtbr.com/search/?type=post"
+    note: "Advanced search page; XenForo search requires a live session, not scriptable"
