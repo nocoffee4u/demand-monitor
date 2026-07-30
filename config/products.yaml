@@ -122,16 +122,28 @@ subreddits:
 # Lookback window for Reddit search, in days
 reddit_lookback_days: 180
 
-# Marketplace search pages to check for existing competition/demand proxy.
-# `result_selector` is the CSS selector for one search-result card on that
-# page — inspect the page once and update if a site redesigns.
+# Marketplace competition sources.
+# Each entry needs a `name` (CSV column prefix) and an `adapter` that
+# marketplace_scan.py knows how to talk to:
+#   printables | cults | thangs | makerworld | html (generic CSS scrape)
+# Set enabled: false to skip without deleting the block.
+#
+# makerworld: HTML is Cloudflare-gated; unauthenticated JSON search does not
+# filter by keyword (empty or global hot-list). Left disabled so it doesn't
+# flood the report with ERR — re-enable to re-probe after API behavior changes.
 marketplaces:
   - name: printables
-    search_url_template: "https://www.printables.com/search/models?q={query}"
-    result_selector: "a[href*='/model/']"
+    adapter: printables
+  - name: cults
+    adapter: cults
+  # Thangs is often client-rendered / 403 for bots; enable only if it starts
+  # returning stable totals again.
+  - name: thangs
+    adapter: thangs
+    enabled: false
   - name: makerworld
-    search_url_template: "https://makerworld.com/en/search/models?keyword={query}"
-    result_selector: "a[href*='/models/']"
+    adapter: makerworld
+    enabled: false
 
 # ---------------------------------------------------------------------------
 # Manual-check community sources.

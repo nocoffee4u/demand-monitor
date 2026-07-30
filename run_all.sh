@@ -1,12 +1,30 @@
 #!/usr/bin/env bash
 # Runs the full demand-scan pipeline in order and prints the ranked report.
-# Requires REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET env vars to be set first
-# (see reddit_scan.py header for how to get them).
+#
+# Reddit scan defaults to the PullPush backend (no credentials). To use the
+# official Reddit API once approved:
+#   REDDIT_BACKEND=praw ./run_all.sh
+# and set REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET (see reddit_scan.py).
+#
+# If PullPush is flaky, wait until healthy first:
+#   WAIT_FOR_PULLPUSH=1 ./run_all.sh
+#   # or: python3 wait_for_pullpush.py --full-pipeline
 set -e
 cd "$(dirname "$0")"
 
-echo "== 1/4 Reddit scan =="
-python3 reddit_scan.py
+REDDIT_BACKEND="${REDDIT_BACKEND:-pullpush}"
+
+if [[ "${WAIT_FOR_PULLPUSH:-0}" == "1" && "${REDDIT_BACKEND}" == "pullpush" ]]; then
+  echo "== 0/4 Waiting for PullPush to be healthy =="
+  python3 wait_for_pullpush.py --wait-only
+fi
+
+echo "== 1/4 Reddit scan (backend: ${REDDIT_BACKEND}) =="
+if [[ "${REDDIT_BACKEND}" == "pullpush" ]]; then
+  python3 reddit_scan.py --backend pullpush --delay "${REDDIT_DELAY:-5}"
+else
+  python3 reddit_scan.py --backend "${REDDIT_BACKEND}"
+fi
 
 echo "== 2/4 Google Trends scan =="
 python3 trends_scan.py
