@@ -22,13 +22,12 @@ you've decided rather than guessing upfront.
 
 | Signal | Automated? | Tool |
 |---|---|---|
-| Reddit posts/upvotes/comments mentioning a keyword | Yes | `reddit_scan.py` (PullPush by default; PRAW optional) |
+| **Google Ads monthly search volume / CPC / competition** | Yes | `search_volume_scan.py` (DataForSEO — **primary demand signal**) |
+| Existing listing count on Printables / Cults / Thangs | Yes | `marketplace_scan.py` (competition) |
 | Google Trends relative search interest + momentum | Yes | `trends_scan.py` (pytrends) |
-| Existing listing count on Printables / Cults / Thangs (+ MakerWorld best-effort) | Yes | `marketplace_scan.py` |
-| X / Twitter keyword + brand-account chatter | Yes (API) or manual | `x_scan.py` — needs `X_BEARER_TOKEN` (pay-per-use) or `x_manual_log.csv` |
-| Facebook Group discussion volume | **No — manual** | see below |
-| Pinkbike Forum discussion volume | **No — manual** | see below |
-| MTBR Forum discussion volume | **No — manual** | see below |
+| X / Twitter keyword + brand-account chatter | Yes (API) or manual | `x_scan.py` — needs `X_BEARER_TOKEN` or `x_manual_log.csv` |
+| Reddit posts/upvotes/comments | Optional / unreliable | `reddit_scan.py` (PullPush default; PRAW optional). Skip with `SKIP_REDDIT=1` |
+| Facebook / Pinkbike / MTBR | **No — manual** | `facebook_manual_log.csv` |
 
 Facebook actively blocks automated scraping and its ToS prohibits it.
 Pinkbike Forum and MTBR Forum were tested directly (July 2026) and both run
@@ -57,7 +56,34 @@ python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Reddit data (two backends)
+### Search volume (DataForSEO — recommended first)
+
+1. Create an account at https://app.dataforseo.com/api-access
+2. Copy login + password into `.env`:
+   ```bash
+   cp .env.example .env
+   # DATAFORSEO_LOGIN=...
+   # DATAFORSEO_PASSWORD=...
+   ```
+3. Estimate cost (no charge), then run:
+   ```bash
+   python3 search_volume_scan.py --estimate
+   python3 search_volume_scan.py              # Standard queue (cheaper, may take minutes)
+   # python3 search_volume_scan.py --live     # faster, higher cost
+   ```
+
+Keywords are cached under `cache/search_volume_cache.json` (default TTL **7 days**).
+A full product list is typically **one task** (≤1000 keywords) ≈ **$0.05** on Standard
+queue when the cache is cold; weekly re-runs cost $0 while the cache is fresh.
+
+Outputs:
+- `out/search_volume_signal.csv` — one row per product (`search_volume` = max monthly volume)
+- `out/search_volume_keywords.csv` — one row per keyword (audit)
+
+Optional per-product override in `config/products.yaml`:
+`search_volume_keywords: [...]` (else uses `keywords`).
+
+### Reddit data (two backends, optional)
 
 **Default: PullPush** — no Reddit API credentials. Uses the public
 [PullPush](https://pullpush.io/) archive to keyword-search submissions in your
@@ -115,13 +141,16 @@ Responsible Builder Policy (manual review; no longer self-serve):
 Or run stages individually — useful while you're tuning `config/products.yaml`:
 
 ```bash
-python3 reddit_scan.py                  # PullPush default, no credentials
-# python3 reddit_scan.py --backend praw # after Reddit API approval
+python3 search_volume_scan.py --estimate
+python3 search_volume_scan.py           # DataForSEO (needs credentials)
 python3 trends_scan.py
 python3 marketplace_scan.py
 python3 x_scan.py                       # API if X_BEARER_TOKEN set, else manual log
+# python3 reddit_scan.py                # optional
 python3 score_demand.py
 ```
+
+Pipeline env knobs: `SKIP_SEARCH_VOLUME=1`, `SKIP_REDDIT=1`, `SKIP_X=1`.
 
 Output: `out/demand_report.csv`, ranked highest-demand-score first, plus a
 printed table in the terminal.

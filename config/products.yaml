@@ -153,6 +153,27 @@ subreddits:
 reddit_lookback_days: 180
 
 # ---------------------------------------------------------------------------
+# Google Ads search volume via DataForSEO (primary demand signal).
+# Credentials: DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD in .env
+# queue: standard (cheaper, async poll) | live (faster, higher cost)
+# cache_ttl_days: skip re-querying keywords fresher than this
+# Optional per-product: search_volume_keywords (else uses keywords)
+# ---------------------------------------------------------------------------
+search_volume:
+  enabled: true
+  location_code: 2840          # United States
+  language_code: en
+  queue: standard              # standard | live
+  cache_ttl_days: 7
+  cache_path: cache/search_volume_cache.json
+  poll_interval_s: 15
+  poll_timeout_s: 3600
+  search_partners: false
+  # cost_* used only by --estimate (update if DataForSEO changes pricing)
+  cost_standard: 0.05
+  cost_live: 0.075
+
+# ---------------------------------------------------------------------------
 # X (Twitter) signal — optional, pay-per-use API (see x_scan.py / README).
 # brand_accounts: handles to fold into category-matched product queries
 # brand_categories: only those product categories get brand-scoped queries
