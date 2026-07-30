@@ -2,7 +2,8 @@
 
 Scores candidate 3D-printed products by real demand signal before you spend
 filament and time on them: Reddit conversation volume/engagement, Google
-Trends search interest, and existing marketplace competition/saturation.
+Trends search interest, marketplace competition/saturation, and optional
+X (Twitter) chatter.
 
 `out/*.csv` currently contains sample/demo data from a test run so you can
 see the report format — running the pipeline for real will overwrite them.
@@ -24,6 +25,7 @@ you've decided rather than guessing upfront.
 | Reddit posts/upvotes/comments mentioning a keyword | Yes | `reddit_scan.py` (PullPush by default; PRAW optional) |
 | Google Trends relative search interest + momentum | Yes | `trends_scan.py` (pytrends) |
 | Existing listing count on Printables / Cults / Thangs (+ MakerWorld best-effort) | Yes | `marketplace_scan.py` |
+| X / Twitter keyword + brand-account chatter | Yes (API) or manual | `x_scan.py` — needs `X_BEARER_TOKEN` (pay-per-use) or `x_manual_log.csv` |
 | Facebook Group discussion volume | **No — manual** | see below |
 | Pinkbike Forum discussion volume | **No — manual** | see below |
 | MTBR Forum discussion volume | **No — manual** | see below |
@@ -117,18 +119,59 @@ python3 reddit_scan.py                  # PullPush default, no credentials
 # python3 reddit_scan.py --backend praw # after Reddit API approval
 python3 trends_scan.py
 python3 marketplace_scan.py
+python3 x_scan.py                       # API if X_BEARER_TOKEN set, else manual log
 python3 score_demand.py
 ```
 
 Output: `out/demand_report.csv`, ranked highest-demand-score first, plus a
 printed table in the terminal.
 
-## Recommended cadence (keeps you inside free API limits)
+## X (Twitter) signal
 
-- **Weekly**: run the full pipeline (`./run_all.sh`), 5 minutes, scheduled
-  via cron or your OS task scheduler.
+X no longer has a practical free search tier for new developers (pay-per-use
+as of 2026 — check [developer.x.com](https://developer.x.com) for current
+Post-read rates). This tool supports two paths:
+
+```bash
+# Cost ceiling for the current product list (no API calls):
+python3 x_scan.py --estimate
+
+# API path — set X_BEARER_TOKEN in .env first
+python3 x_scan.py --backend api
+
+# Manual path — fill x_manual_log.csv weekly (no spend)
+python3 x_scan.py --backend manual
+
+# Skip X in the full pipeline
+SKIP_X=1 ./run_all.sh
+```
+
+Config (`config/products.yaml` → `x:`):
+
+- `brand_accounts` — e.g. `RadPowerBikes` (queries `from:` / `@` for matching categories)
+- `brand_categories` — only those product categories get brand-scoped queries
+- `max_results` — keep at 10 to bound weekly cost
+- Per-product `x_keywords` — tighter phrases than Reddit discovery keywords
+
+When X is all zeros, `score_demand.py` redistributes X's weight to the other
+signals so empty X data does not flatten the ranking.
+
+## Recommended cadence
+
+- **Weekly**: run the full pipeline (`./run_all.sh`).
+- **macOS schedule** (launchd, Sundays 09:15 by default):
+
+  ```bash
+  ./scripts/install_weekly_schedule.sh
+  # WEEKDAY=1 HOUR=8 MINUTE=0 ./scripts/install_weekly_schedule.sh  # Monday 08:00
+  ./scripts/install_weekly_schedule.sh --uninstall
+  ```
+
+  Logs land in `out/logs/weekly.stdout.log` and `weekly.stderr.log`.
+
 - **Adding products**: edit `config/products.yaml` — add a product block
-  with its own keyword list and it's automatically included in the next run.
+  with `keywords` (discovery) and preferably `marketplace_keywords`
+  (tighter competition queries). Optional `x_keywords` for X.
 - **When the demand_score for something new crosses ~70+** with rising
   Trends momentum and low marketplace saturation: that's your signal to
   prototype it.
@@ -158,6 +201,18 @@ adapters: `printables`, `cults`, `thangs`, `makerworld`. Generic sites can use
 `adapter: html` plus `search_url_template`, `result_selector`, and optional
 `total_regex` / `id_regex`.
 
+### Keeping competition queries tight
+
+Discovery keywords (good for Reddit) are often too loose for marketplaces
+(`"gopro mount"` returns thousands of unrelated listings). Two controls:
+
+1. **`marketplace_keywords` per product** — preferred by `marketplace_scan.py`.
+   Keep brand + part-specific tokens (e.g. `rad power phone mount`, not
+   `phone mount`).
+2. **Specificity filter** — the scanner ignores ultra-generic 1–2 token
+   queries when tighter variants exist, and scores competition from the
+   best *specific* hit rather than the global max of every shortened form.
+
 ## Tuning the scoring
 
 Open `score_demand.py` and adjust the `WEIGHTS` dict at the top — e.g. if
@@ -175,3 +230,5 @@ items, raise `marketplace_gap` and lower `reddit_engagement`.
   endpoint), swap in Google's official Trends API (alpha, limited quota) or
   a paid provider like SerpApi's Trends endpoint — same output shape, just
   replace the internals of `trends_scan.py`.
+- X brand accounts: add handles under `x.brand_accounts` and map which
+  `category` values should receive brand-scoped queries.

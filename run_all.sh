@@ -9,30 +9,43 @@
 # If PullPush is flaky, wait until healthy first:
 #   WAIT_FOR_PULLPUSH=1 ./run_all.sh
 #   # or: python3 wait_for_pullpush.py --full-pipeline
+#
+# X signal (optional):
+#   Set X_BEARER_TOKEN in .env to use the official API (pay-per-use).
+#   Otherwise x_scan.py falls back to x_manual_log.csv.
+#   Skip entirely: SKIP_X=1 ./run_all.sh
 set -e
 cd "$(dirname "$0")"
 
 REDDIT_BACKEND="${REDDIT_BACKEND:-pullpush}"
 
 if [[ "${WAIT_FOR_PULLPUSH:-0}" == "1" && "${REDDIT_BACKEND}" == "pullpush" ]]; then
-  echo "== 0/4 Waiting for PullPush to be healthy =="
+  echo "== 0/5 Waiting for PullPush to be healthy =="
   python3 wait_for_pullpush.py --wait-only
 fi
 
-echo "== 1/4 Reddit scan (backend: ${REDDIT_BACKEND}) =="
+echo "== 1/5 Reddit scan (backend: ${REDDIT_BACKEND}) =="
 if [[ "${REDDIT_BACKEND}" == "pullpush" ]]; then
   python3 reddit_scan.py --backend pullpush --delay "${REDDIT_DELAY:-5}"
 else
   python3 reddit_scan.py --backend "${REDDIT_BACKEND}"
 fi
 
-echo "== 2/4 Google Trends scan =="
+echo "== 2/5 Google Trends scan =="
 python3 trends_scan.py
 
-echo "== 3/4 Marketplace listing scan =="
+echo "== 3/5 Marketplace listing scan =="
 python3 marketplace_scan.py
 
-echo "== 4/4 Scoring & ranking =="
+if [[ "${SKIP_X:-0}" != "1" ]]; then
+  echo "== 4/5 X (Twitter) scan =="
+  python3 x_scan.py
+else
+  echo "== 4/5 X (Twitter) scan =="
+  echo "  skipped (SKIP_X=1)"
+fi
+
+echo "== 5/5 Scoring & ranking =="
 python3 score_demand.py
 
 echo

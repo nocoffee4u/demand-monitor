@@ -419,17 +419,58 @@ def count_for_marketplace(
     return CountResult(None, f"unknown adapter '{name}'", "error")
 
 
-def marketplace_query_variants(keywords: list[str], max_variants: int = 4) -> list[str]:
+_STOPWORDS = {
+    "the",
+    "a",
+    "an",
+    "for",
+    "of",
+    "and",
+    "or",
+    "to",
+    "in",
+    "on",
+    "with",
+    "by",
+}
+
+
+def query_specificity(q: str) -> int:
+    """Count content tokens (excludes stopwords / 1-char crumbs)."""
+    tokens = [
+        t
+        for t in re.split(r"\W+", (q or "").lower())
+        if t and t not in _STOPWORDS and len(t) > 1
+    ]
+    return len(tokens)
+
+
+def strip_print_meta(kw: str) -> str:
+    """Drop Reddit-oriented '3d printed' fluff that kills marketplace recall."""
+    cleaned = re.sub(r"\b3d\s*printed\b", " ", kw, flags=re.I)
+    cleaned = re.sub(r"\b3d\s*print\b", " ", cleaned, flags=re.I)
+    cleaned = re.sub(r"\bprinted\b", " ", cleaned, flags=re.I)
+    # Only strip standalone 'print' when not part of brand phrases.
+    cleaned = re.sub(r"\bprint\b", " ", cleaned, flags=re.I)
+    return re.sub(r"\s+", " ", cleaned).strip(" -_")
+
+
+def marketplace_query_variants(
+    keywords: list[str],
+    max_variants: int = 4,
+    *,
+    min_specificity: int = 3,
+) -> list[str]:
     """
     Build search variants for competition checks.
 
     Product keywords often include '3d printed' / 'print' for Reddit discovery.
-    Those tokens kill marketplace recall (Printables returns 0 for
-    '3d printed gopro mount bike' but 2340 for 'gopro mount'). We try the
-    original terms plus cleaned variants; the scan keeps the MAX count as
-    the competition signal.
+    Those tokens kill marketplace recall. We strip print-meta only — we do
+    NOT collapse to ultra-generic 2-token queries like 'gopro mount', which
+    inflate competition for every cam-mount SKU the same way.
 
-    Caps at max_variants so a full product list stays within a weekly run.
+    Prefer optional product.marketplace_keywords (passed in as `keywords`
+    when present) — those should already be competition-tight.
     """
     variants: list[str] = []
     seen: set[str] = set()
@@ -437,45 +478,40 @@ def marketplace_query_variants(keywords: list[str], max_variants: int = 4) -> li
     def add(q: str) -> None:
         q = re.sub(r"\s+", " ", (q or "").strip())
         key = q.lower()
-        if q and key not in seen:
-            seen.add(key)
-            variants.append(q)
+        if not q or key in seen:
+            return
+        # Soft-reject ultra-generic queries unless nothing else exists.
+        if query_specificity(q) < min_specificity and variants:
+            return
+        seen.add(key)
+        variants.append(q)
 
-    def strip_print_meta(kw: str) -> str:
-        cleaned = re.sub(r"\b3d\s*printed\b", " ", kw, flags=re.I)
-        cleaned = re.sub(r"\b3d\s*print\b", " ", cleaned, flags=re.I)
-        cleaned = re.sub(r"\bprinted\b", " ", cleaned, flags=re.I)
-        cleaned = re.sub(r"\bprint\b", " ", cleaned, flags=re.I)
-        return re.sub(r"\s+", " ", cleaned).strip(" -_")
-
-    def drop_trailing_platform(kw: str) -> str:
-        short = re.sub(
-            r"\s+\b(mtb|bike|ebike|e-bike|drone|fpv|utv|rzr|car)\b\s*$",
-            "",
-            kw,
-            flags=re.I,
-        ).strip()
-        return short if short != kw and len(short.split()) >= 2 else ""
-
-    # 1) Cleaned primary (+ careful short form) first — best recall.
-    if keywords:
-        primary_clean = strip_print_meta(keywords[0])
-        add(primary_clean)
-        short = drop_trailing_platform(primary_clean)
-        if short:
-            add(short)
-
-    # 2) Cleaned remaining keywords.
-    for kw in keywords[1:3]:
-        add(strip_print_meta(kw))
+    # 1) Cleaned keywords, most specific first.
+    cleaned = [strip_print_meta(k) for k in keywords if k]
+    cleaned = sorted(
+        (c for c in cleaned if c),
+        key=lambda c: query_specificity(c),
+        reverse=True,
+    )
+    for c in cleaned:
+        add(c)
         if len(variants) >= max_variants:
             return variants[:max_variants]
 
-    # 3) Originals (brand phrases).
-    for kw in keywords[:2]:
+    # 2) Originals (brand phrases) if cleaning removed too much.
+    for kw in keywords[:3]:
         add(kw)
         if len(variants) >= max_variants:
             break
+
+    # 3) Last resort if still empty (e.g. one ultra-short keyword).
+    if not variants:
+        for kw in keywords[:2]:
+            c = strip_print_meta(kw) or (kw or "")
+            q = re.sub(r"\s+", " ", c.strip())
+            if q and q.lower() not in seen:
+                seen.add(q.lower())
+                variants.append(q)
 
     return variants[:max_variants]
 
@@ -486,10 +522,15 @@ def best_count_for_marketplace(
     session: requests.Session,
     delay_s: float,
 ) -> CountResult:
-    """Try keyword variants; return the highest trusted count (max competition)."""
+    """
+    Try keyword variants; return the highest count among *specific enough*
+    queries so a loose 'gopro mount' hit doesn't dominate every product.
+    """
     variants = marketplace_query_variants(keywords)
-    best: CountResult | None = None
+    best_specific: CountResult | None = None
+    best_any: CountResult | None = None
     last_err: CountResult | None = None
+    min_spec = 3
 
     for i, query in enumerate(variants):
         if i:
@@ -500,14 +541,19 @@ def best_count_for_marketplace(
             continue
         tagged = CountResult(
             result.count,
-            f"{result.detail} (query={query!r})",
+            f"{result.detail} (query={query!r} spec={query_specificity(query)})",
             result.source,
         )
-        if best is None or (tagged.count or 0) > (best.count or 0):
-            best = tagged
+        if best_any is None or (tagged.count or 0) > (best_any.count or 0):
+            best_any = tagged
+        if query_specificity(query) >= min_spec:
+            if best_specific is None or (tagged.count or 0) > (best_specific.count or 0):
+                best_specific = tagged
 
-    if best is not None:
-        return best
+    if best_specific is not None:
+        return best_specific
+    if best_any is not None:
+        return best_any
     return last_err or CountResult(None, "no keyword variants produced a count", "error")
 
 
@@ -560,12 +606,19 @@ def scan(
 
     for product in products:
         name = product["name"]
-        keywords = product.get("keywords") or [name]
+        # marketplace_keywords: tighter competition queries (preferred).
+        # Fall back to discovery keywords used by Reddit/Trends.
+        keywords = (
+            product.get("marketplace_keywords")
+            or product.get("keywords")
+            or [name]
+        )
         row: dict = {"product": name}
 
         for mp in marketplaces:
             col = f"{mp['name']}_listing_count"
-            # Max across keyword variants = true competition ceiling.
+            # Max across *specific* keyword variants = competition ceiling
+            # without collapsing every cam-mount SKU to bare "gopro mount".
             result = best_count_for_marketplace(mp, keywords, session, delay_s)
 
             if result.count is None:

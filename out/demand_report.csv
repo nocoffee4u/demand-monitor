@@ -1,11 +1,20 @@
-product,category,reddit_matching_posts,reddit_total_upvotes,reddit_total_comments,reddit_example_links,trends_avg_interest_0_100,trends_recent_vs_prior_pct_change,printables_listing_count,makerworld_listing_count,total_listings,score_reddit_volume,score_reddit_engagement,score_trends_interest,score_trends_momentum,score_marketplace_gap,demand_score
-MTB chain guide / bash guard,mtb_general,22.0,340.0,90.0,,35.0,22.0,0.0,0.0,0.0,100.0,100.0,100.0,100.0,80.0,97.0
-Rad Power Bikes battery terminal / fuse cover,rad_power_bikes,14.0,210.0,58.0,,18.0,12.0,0.0,0.0,0.0,63.63636363636363,62.32558139534884,51.42857142857142,61.53846153846154,50.857142857142854,58.2
-Rad Power charging port dust cap,rad_power_bikes,6.0,40.0,12.0,,9.0,-4.0,0.0,0.0,0.0,27.27272727272727,12.093023255813954,25.71428571428571,0.0,35.42857142857143,22.3
-Fender / mudguard bracket,,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,15.384615384615385,20.0,4.5
-GoPro / action cam mount for MTB helmet or bars,,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,15.384615384615385,20.0,4.5
-MTB cable/hose routing clips,,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,15.384615384615385,20.0,4.5
-MTB frame protector / chainstay guard,,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,15.384615384615385,20.0,4.5
-Rad Power cargo net hooks,,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,15.384615384615385,20.0,4.5
-Rad Power display / phone mount,,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,15.384615384615385,20.0,4.5
-Rad Power kickstand foot / base widener,,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,15.384615384615385,20.0,4.5
+product,category,reddit_matching_posts,reddit_total_upvotes,reddit_total_comments,reddit_example_links,trends_avg_interest_0_100,trends_recent_vs_prior_pct_change,printables_listing_count,cults_listing_count,thangs_listing_count,x_matching_posts,x_total_likes,x_total_replies,x_total_reposts,x_example_links,x_backend,x_notes,total_listings,score_reddit_volume,score_reddit_engagement,score_trends_interest,score_trends_momentum,score_marketplace_gap,score_x_volume,score_x_engagement,demand_score
+FPV drone antenna / VTX mount,drone_fpv,5,19,5,https://www.reddit.com/r/fpv/comments/1km1dj0/help_me_build_this_please/ | https://www.reddit.com/r/fpv/comments/1k6hvyd/first_freestyle_build_am_i_good_to_go/ | https://www.reddit.com/r/fpv/comments/1jlzhn7/upgrading_to_walksnail_1s_lite_on_a_5_frame/,0.0,0.0,1032,2400,0.0,0,0,0,0,,manual,example row — fill during weekly manual check if no X_BEARER_TOKEN,3432.0,100.0,100.0,0.0,15.384615384615385,22.045841519318927,50,50,53.9
+MTB chain guide / bash guard,mtb_general,0,0,0,,35.0,22.0,162,493,0.0,0,0,0,0,,manual,no manual row,655.0,0.0,0.0,100.0,100.0,96.5946299934512,50,50,50.6
+Rad Power Bikes battery terminal / fuse cover,rad_power_bikes,0,0,0,,18.0,12.0,0,42,0.0,0,0,0,0,,manual,example row — search X for product keywords + check @RadPowerBikes,42.0,0.0,0.0,51.42857142857142,61.53846153846154,70.66329871830854,50,50,30.4
+FPV drone GoPro / action-cam mount,drone_fpv,3,3,9,https://www.reddit.com/r/fpv/comments/1k6wik1/help_betafpv_pavo_femto_o4_camera_mount/ | https://www.reddit.com/r/fpv/comments/1k6oyja/fpv_rookie_dilemma_repair_wait_has_me_questioning/ | https://www.reddit.com/r/fpv/comments/1ium6z2/n3_goggle_thoughts_after_flying_with_them_and/,0.0,0.0,2340,5300,0.0,0,0,0,0,,manual,no manual row,7640.0,60.0,50.0,0.0,15.384615384615385,0.0,50,50,29.0
+Rad Power charging port dust cap,rad_power_bikes,0,0,0,,9.0,-4.0,21,161,0.0,0,0,0,0,,manual,no manual row,182.0,0.0,0.0,25.71428571428571,0.0,54.501262980634294,50,50,15.1
+Rad Power kickstand foot / base widener,rad_power_bikes,0,0,0,,0.0,0.0,0,12,0.0,0,0,0,0,,manual,no manual row,12.0,0.0,0.0,0.0,15.384615384615385,39.96332678454486,50,50,7.9
+Rad Power cargo net hooks,rad_power_bikes,0,0,0,,0.0,0.0,0,5,0.0,0,0,0,0,,manual,no manual row,5.0,0.0,0.0,0.0,15.384615384615385,40.0,50,50,7.9
+Automotive cable routing bracket,automotive,0,0,0,,0.0,0.0,2,71,0.0,0,0,0,0,,manual,no manual row,73.0,0.0,0.0,0.0,15.384615384615385,39.6437459070072,50,50,7.9
+MTB cable/hose routing clips,mtb_general,0,0,0,,0.0,0.0,10,101,0.0,0,0,0,0,,manual,no manual row,111.0,0.0,0.0,0.0,15.384615384615385,39.444662737393585,50,50,7.8
+Automotive phone/tablet mount bracket,automotive,0,0,0,,0.0,0.0,16,210,0.0,0,0,0,0,,manual,no manual row,226.0,0.0,0.0,0.0,15.384615384615385,38.84217419777342,50,50,7.8
+UTV snorkel / vent mount bracket,atv_utv,0,0,0,,0.0,0.0,3,156,0.0,0,0,0,0,,manual,no manual row,159.0,0.0,0.0,0.0,15.384615384615385,39.1931892599869,50,50,7.8
+Fender / mudguard bracket,mtb_general,0,0,0,,0.0,0.0,538,132,0.0,0,0,0,0,,manual,no manual row,670.0,0.0,0.0,0.0,15.384615384615385,36.51604453176162,50,50,7.4
+UTV cup holder / storage bracket,atv_utv,0,0,0,,0.0,0.0,137,465,0.0,0,0,0,0,,manual,no manual row,602.0,0.0,0.0,0.0,15.384615384615385,36.87229862475442,50,50,7.4
+MTB frame protector / chainstay guard,mtb_general,0,0,0,,0.0,0.0,27,738,3.0,0,0,0,0,,manual,no manual row,768.0,0.0,0.0,0.0,15.384615384615385,36.002619515389654,50,50,7.3
+FPV drone arm / frame crash guard,drone_fpv,0,0,0,,0.0,0.0,124,671,5.0,0,0,0,0,,manual,no manual row,800.0,0.0,0.0,0.0,15.384615384615385,35.83497053045187,50,50,7.3
+Automotive interior trim clip replacement,automotive,0,0,0,,0.0,0.0,117,838,0.0,0,0,0,0,,manual,no manual row,955.0,0.0,0.0,0.0,15.384615384615385,35.02292075965946,50,50,7.1
+Rad Power display / phone mount,rad_power_bikes,0,0,0,,0.0,0.0,828,4700,0.0,0,0,0,0,,manual,no manual row,5528.0,0.0,0.0,0.0,15.384615384615385,11.064833005893911,50,50,3.3
+GoPro / action cam mount for MTB helmet or bars,mtb_general,0,0,0,,0.0,0.0,2340,5300,0.0,0,0,0,0,,manual,no manual row,7640.0,0.0,0.0,0.0,15.384615384615385,0.0,50,50,1.6
+UTV GoPro / accessory mount,atv_utv,0,0,0,,0.0,0.0,2340,5300,0.0,0,0,0,0,,manual,no manual row,7640.0,0.0,0.0,0.0,15.384615384615385,0.0,50,50,1.6
