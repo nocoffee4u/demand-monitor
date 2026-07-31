@@ -1,69 +1,119 @@
 # ---------------------------------------------------------------------------
 # Candidate product list for demand scanning.
 # Add/remove products freely. Each product needs:
-#   name                 - human readable label
-#   keywords             - discovery terms (Reddit, Trends, X fallback)
-#   marketplace_keywords - tighter competition queries (optional, preferred
-#                          by marketplace_scan.py so generic "gopro mount"
-#                          doesn't inflate every cam-mount product equally)
-#   x_keywords           - optional tighter X search phrases
-#   category             - "rad_power_bikes", "mtb_general", etc.
+#   name                   - human readable label
+#   keywords               - discovery terms (Reddit, Trends, X fallback)
+#   search_volume_keywords - broader phrases people actually type in Google
+#                            (used by search_volume_scan.py / DataForSEO)
+#   marketplace_keywords   - tighter competition queries (optional)
+#   x_keywords             - optional tighter X search phrases
+#   category               - "rad_power_bikes", "mtb_general", etc.
 # ---------------------------------------------------------------------------
 
 products:
   - name: "Rad Power Bikes battery terminal / fuse cover"
     keywords: ["rad power battery terminal cover", "rad power fuse cover", "radpower terminal cap"]
+    search_volume_keywords:
+      - "rad power accessories"
+      - "ebike fuse cover"
+      - "ebike battery terminal cover"
+      - "rad power battery cover"
     marketplace_keywords: ["rad power battery terminal cover", "radpower fuse cover", "radrunner terminal cap"]
     x_keywords: ["rad power fuse cover", "radpower battery terminal"]
     category: rad_power_bikes
 
   - name: "Rad Power charging port dust cap"
     keywords: ["rad power charging port cap", "rad power charge port plug", "ebike charge port cover"]
+    search_volume_keywords:
+      - "ebike charging port cover"
+      - "ebike charge port cap"
+      - "rad power accessories"
+      - "electric bike charge port"
     marketplace_keywords: ["rad power charging port cap", "radpower charge port plug", "radrunner charge port cover"]
     x_keywords: ["rad power charge port", "radpower charging port cap"]
     category: rad_power_bikes
 
   - name: "Rad Power cargo net hooks"
     keywords: ["rad power cargo net hook", "radrunner cargo hook replacement"]
+    search_volume_keywords:
+      - "ebike cargo net"
+      - "bike cargo hooks"
+      - "radrunner accessories"
+      - "rad power cargo"
     marketplace_keywords: ["rad power cargo net hook", "radrunner cargo hook"]
     x_keywords: ["radrunner cargo hook", "rad power cargo net"]
     category: rad_power_bikes
 
   - name: "Rad Power kickstand foot / base widener"
     keywords: ["rad power kickstand foot", "radrunner kickstand widener", "ebike kickstand base extender"]
+    search_volume_keywords:
+      - "ebike kickstand"
+      - "bike kickstand pad"
+      - "kickstand foot pad"
+      - "rad power kickstand"
     marketplace_keywords: ["rad power kickstand foot", "radrunner kickstand widener", "radpower kickstand base"]
     x_keywords: ["radrunner kickstand", "rad power kickstand foot"]
     category: rad_power_bikes
 
   - name: "Rad Power display / phone mount"
     keywords: ["rad power phone mount", "radrunner handlebar mount", "ebike display mount 3d print"]
+    search_volume_keywords:
+      - "ebike phone mount"
+      - "bike phone mount"
+      - "handlebar phone mount"
+      - "rad power phone mount"
     marketplace_keywords: ["rad power phone mount", "radrunner phone mount", "radpower display mount"]
     x_keywords: ["radrunner phone mount", "rad power display mount"]
     category: rad_power_bikes
 
   - name: "MTB chain guide / bash guard"
     keywords: ["3d printed chain guide mountain bike", "printed bash guard mtb"]
+    search_volume_keywords:
+      - "mtb chain guide"
+      - "bike chain guide"
+      - "bash guard"
+      - "mountain bike bash guard"
     marketplace_keywords: ["mtb chain guide", "mountain bike bash guard", "chain guide bash guard"]
     category: mtb_general
 
   - name: "MTB cable/hose routing clips"
     keywords: ["3d printed cable routing clip mtb", "brake hose guide clip bike"]
+    search_volume_keywords:
+      - "bike cable clips"
+      - "brake hose guide"
+      - "mtb cable guide"
+      - "bike cable routing"
     marketplace_keywords: ["mtb cable routing clip", "brake hose guide clip", "bike cable guide clip"]
     category: mtb_general
 
   - name: "MTB frame protector / chainstay guard"
     keywords: ["3d printed chainstay protector", "frame guard mountain bike print"]
+    search_volume_keywords:
+      - "chainstay protector"
+      - "chainstay guard"
+      - "mtb frame protection"
+      - "bike frame guard"
     marketplace_keywords: ["chainstay protector mtb", "mountain bike frame guard", "chainstay guard"]
     category: mtb_general
 
   - name: "GoPro / action cam mount for MTB helmet or bars"
     keywords: ["3d printed gopro mount bike", "action cam handlebar mount print"]
+    search_volume_keywords:
+      - "gopro bike mount"
+      - "bike helmet gopro mount"
+      - "handlebar gopro mount"
+      - "action camera bike mount"
     marketplace_keywords: ["mtb gopro mount", "bike helmet gopro mount", "mtb handlebar action cam mount"]
     x_keywords: ["mtb gopro mount", "bike gopro mount"]
     category: mtb_general
 
   - name: "Fender / mudguard bracket"
     keywords: ["3d printed fender bracket bike", "mudguard mount ebike print"]
+    search_volume_keywords:
+      - "bike fender mount"
+      - "bike mudguard"
+      - "ebike fender"
+      - "bicycle fender bracket"
     marketplace_keywords: ["bike fender bracket", "ebike mudguard mount", "bicycle fender mount"]
     category: mtb_general
 
@@ -73,17 +123,32 @@ products:
   # recurring replacement demand for the same handful of parts.
   - name: "FPV drone GoPro / action-cam mount"
     keywords: ["fpv drone gopro mount 3d print", "fpv camera mount replacement"]
+    search_volume_keywords:
+      - "fpv gopro mount"
+      - "drone gopro mount"
+      - "fpv camera mount"
+      - "gopro drone mount"
     marketplace_keywords: ["fpv gopro mount", "fpv action cam mount", "drone gopro mount fpv"]
     x_keywords: ["fpv gopro mount", "fpv camera mount"]
     category: drone_fpv
 
   - name: "FPV drone arm / frame crash guard"
     keywords: ["fpv drone arm guard 3d print", "drone prop guard replacement"]
+    search_volume_keywords:
+      - "fpv prop guard"
+      - "drone arm guard"
+      - "fpv crash guard"
+      - "drone propeller guard"
     marketplace_keywords: ["fpv arm guard", "fpv frame crash guard", "drone arm protector fpv"]
     category: drone_fpv
 
   - name: "FPV drone antenna / VTX mount"
     keywords: ["fpv antenna mount 3d print", "vtx antenna holder drone"]
+    search_volume_keywords:
+      - "fpv antenna mount"
+      - "vtx mount"
+      - "fpv vtx mount"
+      - "drone antenna holder"
     marketplace_keywords: ["fpv antenna mount", "vtx antenna holder", "fpv vtx mount"]
     category: drone_fpv
 
@@ -96,33 +161,63 @@ products:
   # the way Rad Power represents e-bikes).
   - name: "Automotive interior trim clip replacement"
     keywords: ["3d printed car trim clip", "interior clip replacement car"]
+    search_volume_keywords:
+      - "car trim clips"
+      - "interior trim clips"
+      - "automotive trim clips"
+      - "door panel clips"
     marketplace_keywords: ["car interior trim clip", "automotive trim clip replacement"]
     category: automotive
 
   - name: "Automotive phone/tablet mount bracket"
     keywords: ["3d printed car phone mount bracket", "dash mount replacement clip"]
+    search_volume_keywords:
+      - "car phone mount"
+      - "dash phone mount"
+      - "car phone holder"
+      - "magnetic car mount"
     marketplace_keywords: ["car phone mount bracket", "dash phone mount clip car"]
     category: automotive
 
   - name: "Automotive cable routing bracket"
     keywords: ["3d printed cable routing bracket car", "wiring harness clip replacement"]
+    search_volume_keywords:
+      - "wire harness clips"
+      - "car cable clips"
+      - "wiring harness clips"
+      - "automotive cable clips"
     marketplace_keywords: ["car cable routing bracket", "wiring harness clip car"]
     category: automotive
 
   # --- Candidate niche #4: ATV / UTV --------------------------------------
   - name: "UTV GoPro / accessory mount"
     keywords: ["utv gopro mount 3d print", "rzr accessory mount replacement"]
+    search_volume_keywords:
+      - "utv gopro mount"
+      - "rzr gopro mount"
+      - "utv camera mount"
+      - "side by side gopro"
     marketplace_keywords: ["utv gopro mount", "rzr gopro mount", "utv accessory mount"]
     x_keywords: ["utv gopro mount", "rzr gopro mount"]
     category: atv_utv
 
   - name: "UTV cup holder / storage bracket"
     keywords: ["utv cup holder mount 3d print", "rzr storage bracket replacement"]
+    search_volume_keywords:
+      - "utv cup holder"
+      - "rzr cup holder"
+      - "utv storage"
+      - "side by side cup holder"
     marketplace_keywords: ["utv cup holder mount", "rzr cup holder", "utv storage bracket"]
     category: atv_utv
 
   - name: "UTV snorkel / vent mount bracket"
     keywords: ["utv snorkel mount bracket 3d print", "rzr vent mount replacement"]
+    search_volume_keywords:
+      - "utv snorkel"
+      - "rzr snorkel"
+      - "utv snorkel kit"
+      - "side by side snorkel"
     marketplace_keywords: ["utv snorkel mount", "rzr snorkel bracket", "utv vent mount"]
     category: atv_utv
 
