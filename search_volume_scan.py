@@ -337,6 +337,11 @@ def post_standard_task(
     return task_id
 
 
+# DataForSEO "still working" codes — keep polling (not fatal errors).
+# 20100 Task Created, 40601 Task Handed, 40602 Task In Queue
+PENDING_TASK_CODES = {20100, 40601, 40602}
+
+
 def poll_task(
     task_id: str,
     settings: dict,
@@ -363,9 +368,9 @@ def poll_task(
             time.sleep(interval)
             continue
         task = tasks[0]
-        code = task.get("status_code")
+        code = int(task.get("status_code") or 0)
         msg = task.get("status_message")
-        # 20000 = Ok (ready); 20100 = created; 40601/40602 = still processing variants
+        # 20000 = Ok (ready)
         if code == 20000:
             result = task.get("result")
             if result is None:
@@ -374,14 +379,45 @@ def poll_task(
                 continue
             print(f"  task ready after {attempt} poll(s); {len(result)} keyword rows")
             return result
-        if code and int(code) >= 40000:
-            raise RuntimeError(f"task failed: {code} {msg}")
-        if attempt == 1 or attempt % 4 == 0:
-            print(f"  waiting… status={code} {msg} (poll {attempt})")
-        time.sleep(interval)
+        # Still queued / processing — wait (do NOT treat 40602 as failure)
+        if code in PENDING_TASK_CODES or 10000 <= code < 40000:
+            if attempt == 1 or attempt % 4 == 0:
+                print(f"  waiting… status={code} {msg} (poll {attempt})")
+            time.sleep(interval)
+            continue
+        # True hard failures (e.g. 401xx auth, 5xxxx internal)
+        raise RuntimeError(f"task failed: {code} {msg}")
     raise TimeoutError(
         f"task {task_id} not ready within {settings['poll_timeout_s']:.0f}s"
     )
+
+
+def fetch_task_result(
+    task_id: str,
+    login: str,
+    password: str,
+) -> list[dict]:
+    """One-shot GET of a previously posted task (no charge). Raises if not ready."""
+    url = f"{TASK_GET}/{task_id}"
+    resp = api_request("GET", url, login, password)
+    if resp.get("status_code") != 20000:
+        raise RuntimeError(
+            f"task_get failed: {resp.get('status_code')} {resp.get('status_message')}"
+        )
+    tasks = resp.get("tasks") or []
+    if not tasks:
+        raise RuntimeError("task_get returned no tasks")
+    task = tasks[0]
+    code = int(task.get("status_code") or 0)
+    msg = task.get("status_message")
+    if code in PENDING_TASK_CODES:
+        raise RuntimeError(f"task still pending: {code} {msg}")
+    if code != 20000:
+        raise RuntimeError(f"task failed: {code} {msg}")
+    result = task.get("result")
+    if result is None:
+        raise RuntimeError("task ready but result is null")
+    return result
 
 
 def run_live(
@@ -644,6 +680,31 @@ def estimate(cfg: dict, force_refresh: bool, use_live: bool) -> None:
         print("\nAll keywords covered by fresh cache — this run would cost $0.")
 
 
+def apply_api_result_to_cache(
+    result: list[dict],
+    keywords_requested: list[str],
+    cache: dict,
+    settings: dict,
+) -> None:
+    """Merge API rows into cache (including no-data markers) and save."""
+    fetched_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    new_entries = result_rows_to_cache_entries(result, settings, fetched_at)
+    cache.setdefault("entries", {}).update(new_entries)
+    missing = mark_missing_as_zero(
+        keywords_requested, set(new_entries.keys()), settings, fetched_at
+    )
+    cache["entries"].update(missing)
+    save_cache(settings["cache_path"], cache)
+    with_vol = sum(
+        1 for e in new_entries.values() if e.get("search_volume") is not None
+    )
+    print(
+        f"  cached {len(new_entries)} API rows "
+        f"({with_vol} with search_volume, {len(new_entries) - with_vol} null) + "
+        f"{len(missing)} no-data markers"
+    )
+
+
 def scan(
     config_path: str,
     out_products: str,
@@ -653,6 +714,7 @@ def scan(
     use_live: bool = False,
     cache_only: bool = False,
     poll_timeout: float | None = None,
+    resume_task_id: str | None = None,
 ) -> None:
     cfg = load_config(config_path)
     settings = sv_settings(cfg)
@@ -693,6 +755,18 @@ def scan(
         f"fetch {len(need)} | mode={'live' if use_live else 'standard'}"
     )
 
+    # Resume a previously posted Standard-queue task (no extra charge).
+    if resume_task_id:
+        login, password = get_credentials()
+        print(f"  resuming task {resume_task_id} (GET only, $0)…")
+        try:
+            result = poll_task(resume_task_id, settings, login, password)
+        except Exception as e:
+            print(f"ERROR: resume failed: {e}")
+            sys.exit(1)
+        apply_api_result_to_cache(result, all_kws, cache, settings)
+        need = []  # cache now populated
+
     if need:
         if cache_only:
             print(
@@ -702,7 +776,6 @@ def scan(
             sys.exit(1)
 
         login, password = get_credentials()
-        fetched_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
         # Batch into ≤1000 keyword tasks
         for i in range(0, len(need), MAX_KEYWORDS_PER_TASK):
@@ -713,6 +786,10 @@ def scan(
                     result = run_live(batch, settings, login, password)
                 else:
                     task_id = post_standard_task(batch, settings, login, password)
+                    print(
+                        f"  (if interrupted, resume with: "
+                        f"python3 search_volume_scan.py --resume-task {task_id})"
+                    )
                     result = poll_task(task_id, settings, login, password)
             except Exception as e:
                 print(f"ERROR: DataForSEO fetch failed: {e}")
@@ -720,18 +797,8 @@ def scan(
                 print("  writing partial results from cache; re-run to retry failed batch")
                 break
 
-            new_entries = result_rows_to_cache_entries(result, settings, fetched_at)
-            cache.setdefault("entries", {}).update(new_entries)
-            missing = mark_missing_as_zero(
-                batch, set(new_entries.keys()), settings, fetched_at
-            )
-            cache["entries"].update(missing)
-            save_cache(settings["cache_path"], cache)
-            print(
-                f"  cached {len(new_entries)} rows with data, "
-                f"{len(missing)} no-data markers"
-            )
-    else:
+            apply_api_result_to_cache(result, batch, cache, settings)
+    elif not resume_task_id:
         print("  all keywords served from cache — $0 API cost this run")
 
     # Build product rows
@@ -797,6 +864,15 @@ if __name__ == "__main__":
         default=None,
         help="Seconds to wait for standard-queue results (default from config).",
     )
+    parser.add_argument(
+        "--resume-task",
+        default=None,
+        metavar="TASK_ID",
+        help=(
+            "Fetch results for an already-posted Standard-queue task id "
+            "(no extra charge). Use if a previous run posted then exited early."
+        ),
+    )
     args = parser.parse_args()
 
     cfg = load_config(args.config)
@@ -816,4 +892,5 @@ if __name__ == "__main__":
         use_live=use_live,
         cache_only=args.cache_only,
         poll_timeout=args.poll_timeout,
+        resume_task_id=args.resume_task,
     )

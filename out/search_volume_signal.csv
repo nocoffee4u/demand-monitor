@@ -1,0 +1,20 @@
+product,category,search_volume,search_volume_max,search_volume_sum,search_volume_avg,search_volume_best_keyword,ads_competition_avg,cpc_avg,keywords_queried,keywords_with_data
+Rad Power Bikes battery terminal / fuse cover,rad_power_bikes,0,0,0,0.0,,,,3,0
+Rad Power charging port dust cap,rad_power_bikes,0,0,0,0.0,,,,3,0
+Rad Power cargo net hooks,rad_power_bikes,0,0,0,0.0,,,,2,0
+Rad Power kickstand foot / base widener,rad_power_bikes,0,0,0,0.0,,,,3,0
+Rad Power display / phone mount,rad_power_bikes,0,0,0,0.0,,,,3,0
+MTB chain guide / bash guard,mtb_general,0,0,0,0.0,,,,2,0
+MTB cable/hose routing clips,mtb_general,0,0,0,0.0,,,,2,0
+MTB frame protector / chainstay guard,mtb_general,10,10,10,10.0,3d printed chainstay protector,45.0,0.78,2,1
+GoPro / action cam mount for MTB helmet or bars,mtb_general,0,0,0,0.0,,,,2,0
+Fender / mudguard bracket,mtb_general,0,0,0,0.0,,,,2,0
+FPV drone GoPro / action-cam mount,drone_fpv,0,0,0,0.0,,,,2,0
+FPV drone arm / frame crash guard,drone_fpv,0,0,0,0.0,,,,2,0
+FPV drone antenna / VTX mount,drone_fpv,10,10,10,10.0,fpv antenna mount 3d print,31.0,,2,1
+Automotive interior trim clip replacement,automotive,0,0,0,0.0,,,,2,0
+Automotive phone/tablet mount bracket,automotive,0,0,0,0.0,,,,2,0
+Automotive cable routing bracket,automotive,0,0,0,0.0,,,,2,0
+UTV GoPro / accessory mount,atv_utv,0,0,0,0.0,,,,2,0
+UTV cup holder / storage bracket,atv_utv,0,0,0,0.0,,,,2,0
+UTV snorkel / vent mount bracket,atv_utv,0,0,0,0.0,,,,2,0
