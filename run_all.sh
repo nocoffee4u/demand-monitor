@@ -26,7 +26,7 @@ cd "$(dirname "$0")"
 
 REDDIT_BACKEND="${REDDIT_BACKEND:-pullpush}"
 STEP=0
-total=6
+total=7
 
 step() {
   STEP=$((STEP + 1))
@@ -75,8 +75,16 @@ fi
 step "Google Trends scan"
 python3 trends_scan.py || echo "  [warn] trends scan failed — continuing"
 
-step "Marketplace listing scan"
+step "Marketplace listing scan (competition counts)"
 python3 marketplace_scan.py
+
+if [[ "${SKIP_COMMUNITY:-0}" != "1" ]]; then
+  step "Printables + Cults engagement (downloads/makes/likes)"
+  python3 printables_cults_scan.py || echo "  [warn] community scan failed — continuing"
+else
+  step "Printables + Cults engagement"
+  echo "  skipped (SKIP_COMMUNITY=1)"
+fi
 
 if [[ "${SKIP_X:-0}" != "1" ]]; then
   step "X (Twitter) scan"

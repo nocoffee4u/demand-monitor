@@ -23,7 +23,8 @@ you've decided rather than guessing upfront.
 | Signal | Automated? | Tool |
 |---|---|---|
 | **Google Ads monthly search volume / CPC / competition** | Yes | `search_volume_scan.py` (DataForSEO — **primary demand signal**) |
-| Existing listing count on Printables / Cults / Thangs | Yes | `marketplace_scan.py` (competition) |
+| Printables + Cults downloads / makes / likes | Yes | `printables_cults_scan.py` (community demand) |
+| Existing listing count on Printables / Cults / Thangs | Yes | `marketplace_scan.py` (competition count) |
 | Google Trends relative search interest + momentum | Yes | `trends_scan.py` (pytrends) |
 | X / Twitter keyword + brand-account chatter | Yes (API) or manual | `x_scan.py` — needs `X_BEARER_TOKEN` or `x_manual_log.csv` |
 | Reddit posts/upvotes/comments | Optional / unreliable | `reddit_scan.py` (PullPush default; PRAW optional). Skip with `SKIP_REDDIT=1` |
@@ -144,13 +145,34 @@ Or run stages individually — useful while you're tuning `config/products.yaml`
 python3 search_volume_scan.py --estimate
 python3 search_volume_scan.py           # DataForSEO (needs credentials)
 python3 trends_scan.py
-python3 marketplace_scan.py
+python3 marketplace_scan.py             # listing counts (competition)
+python3 printables_cults_scan.py        # downloads / makes / likes (demand)
 python3 x_scan.py                       # API if X_BEARER_TOKEN set, else manual log
 # python3 reddit_scan.py                # optional
 python3 score_demand.py
 ```
 
-Pipeline env knobs: `SKIP_SEARCH_VOLUME=1`, `SKIP_REDDIT=1`, `SKIP_X=1`.
+Pipeline env knobs: `SKIP_SEARCH_VOLUME=1`, `SKIP_COMMUNITY=1`, `SKIP_REDDIT=1`, `SKIP_X=1`.
+
+### Printables + Cults engagement (community demand)
+
+```bash
+python3 printables_cults_scan.py           # all products
+python3 printables_cults_scan.py --smoke   # first product only
+python3 printables_cults_scan.py --top 5 --delay 2
+# → out/printables_cults_signal.csv
+```
+
+For each product, searches by `marketplace_keywords` (else broader keywords),
+samples the top N models on each site, and sums **downloads / makes / likes**.
+
+| Site | How stats are collected |
+|---|---|
+| **Printables** | Search HTML → model ids → public GraphQL (`downloadCount`, `makesCount`, `likesCount`) |
+| **Cults3D** | Search HTML → model pages → parse download/like/make text |
+
+`community_downloads` / `community_makes` / `community_likes` feed scoring as
+demand-side engagement (separate from listing *counts* in `marketplace_scan.py`).
 
 Output: `out/demand_report.csv`, ranked highest-demand-score first, plus a
 printed table in the terminal.

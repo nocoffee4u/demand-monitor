@@ -34,14 +34,16 @@ import os
 import pandas as pd
 
 WEIGHTS = {
-    "search_volume": 0.30,  # DataForSEO Google Ads monthly volume
-    "reddit_volume": 0.08,  # optional / unreliable
-    "reddit_engagement": 0.05,
-    "trends_interest": 0.18,
-    "trends_momentum": 0.08,
-    "marketplace_gap": 0.18,  # rewards LOW saturation relative to interest
-    "x_volume": 0.08,
-    "x_engagement": 0.05,
+    "search_volume": 0.26,  # DataForSEO Google Ads monthly volume
+    "community_downloads": 0.14,  # Printables+Cults downloads (demand)
+    "community_makes": 0.06,  # shared makes / prints
+    "reddit_volume": 0.06,  # optional / unreliable
+    "reddit_engagement": 0.04,
+    "trends_interest": 0.14,
+    "trends_momentum": 0.06,
+    "marketplace_gap": 0.16,  # rewards LOW saturation relative to interest
+    "x_volume": 0.05,
+    "x_engagement": 0.03,
 }
 
 
@@ -87,10 +89,12 @@ def main(
     out_path: str,
     x_path: str | None = None,
     search_volume_path: str | None = None,
+    community_path: str | None = None,
 ) -> None:
     # Prefer marketplace/products as the product spine when Reddit is missing.
     frames = [
         _safe_read(search_volume_path),
+        _safe_read(community_path),
         _safe_read(marketplace_path),
         _safe_read(trends_path),
         _safe_read(reddit_path),
@@ -114,6 +118,9 @@ def main(
         ("x_total_replies", 0),
         ("x_total_reposts", 0),
         ("search_volume", 0),
+        ("community_downloads", 0),
+        ("community_makes", 0),
+        ("community_likes", 0),
     ]:
         if col not in df.columns:
             df[col] = default
@@ -125,6 +132,8 @@ def main(
     df["total_listings"] = df[marketplace_cols].sum(axis=1) if marketplace_cols else 0
 
     df["score_search_volume"] = normalize(df["search_volume"])
+    df["score_community_downloads"] = normalize(df["community_downloads"])
+    df["score_community_makes"] = normalize(df["community_makes"])
     df["score_reddit_volume"] = normalize(df["reddit_matching_posts"])
     df["score_reddit_engagement"] = normalize(
         df["reddit_total_upvotes"] + df["reddit_total_comments"]
@@ -146,6 +155,8 @@ def main(
     unused: list[str] = []
     if df["search_volume"].sum() == 0:
         unused.append("search_volume")
+    if df["community_downloads"].sum() == 0 and df["community_makes"].sum() == 0:
+        unused.extend(["community_downloads", "community_makes"])
     if df["reddit_matching_posts"].sum() == 0 and (
         df["reddit_total_upvotes"] + df["reddit_total_comments"]
     ).sum() == 0:
@@ -163,6 +174,8 @@ def main(
 
     df["demand_score"] = (
         df["score_search_volume"] * weights.get("search_volume", 0)
+        + df["score_community_downloads"] * weights.get("community_downloads", 0)
+        + df["score_community_makes"] * weights.get("community_makes", 0)
         + df["score_reddit_volume"] * weights.get("reddit_volume", 0)
         + df["score_reddit_engagement"] * weights.get("reddit_engagement", 0)
         + df["score_trends_interest"] * weights.get("trends_interest", 0)
@@ -171,7 +184,6 @@ def main(
         + df["score_x_volume"] * weights.get("x_volume", 0)
         + df["score_x_engagement"] * weights.get("x_engagement", 0)
     ).round(1)
-
     df = df.sort_values("demand_score", ascending=False)
     os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
     df.to_csv(out_path, index=False)
@@ -181,10 +193,10 @@ def main(
         "product",
         "demand_score",
         "search_volume",
-        "reddit_matching_posts",
-        "trends_avg_interest_0_100",
+        "community_downloads",
+        "community_makes",
         "total_listings",
-        "x_matching_posts",
+        "reddit_matching_posts",
     ]
     display_cols = [c for c in display_cols if c in df.columns]
     print(df[display_cols].to_string(index=False))
@@ -204,6 +216,11 @@ if __name__ == "__main__":
         help="DataForSEO search volume CSV (skipped if missing)",
     )
     parser.add_argument(
+        "--community",
+        default="out/printables_cults_signal.csv",
+        help="Printables/Cults engagement CSV (skipped if missing)",
+    )
+    parser.add_argument(
         "--x",
         default="out/x_signal.csv",
         help="Optional X signal CSV (skipped if missing)",
@@ -217,4 +234,5 @@ if __name__ == "__main__":
         args.out,
         x_path=args.x,
         search_volume_path=args.search_volume,
+        community_path=args.community,
     )
