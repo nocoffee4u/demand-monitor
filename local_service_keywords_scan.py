@@ -666,8 +666,9 @@ def scan(
     cache = load_cache(path)
     if cache and cache_is_fresh(cache, settings["cache_ttl_days"]) and not force:
         print(f"  cache hit → {path} (use --force to refresh)")
-        ranked = cache.get("keywords") or []
-        all_rows = cache.get("all_keywords") or ranked
+        all_rows = cache.get("all_keywords") or cache.get("keywords") or []
+        # Re-rank from raw rows so filter/top_n tweaks apply without re-billing
+        ranked = rank_keywords(all_rows, settings["top_n"], settings["max_related"])
         fetched_at = cache.get("fetched_at") or ""
         out_json, out_csv = write_outputs(
             settings,

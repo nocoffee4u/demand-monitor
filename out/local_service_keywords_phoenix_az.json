@@ -108,28 +108,6 @@
       "rank": 7
     },
     {
-      "keyword": "3d printer filament near me",
-      "search_volume": 40,
-      "competition": "HIGH",
-      "competition_index": 100,
-      "cpc": 0.35,
-      "low_top_of_page_bid": 0.77,
-      "high_top_of_page_bid": 2.23,
-      "source": "keywords_for_keywords",
-      "rank": 8
-    },
-    {
-      "keyword": "3d filament near me",
-      "search_volume": 40,
-      "competition": "HIGH",
-      "competition_index": 100,
-      "cpc": 0.35,
-      "low_top_of_page_bid": 0.77,
-      "high_top_of_page_bid": 2.23,
-      "source": "keywords_for_keywords",
-      "rank": 9
-    },
-    {
       "keyword": "additive printing",
       "search_volume": 40,
       "competition": "LOW",
@@ -138,7 +116,7 @@
       "low_top_of_page_bid": 1.83,
       "high_top_of_page_bid": 6.19,
       "source": "keywords_for_keywords",
-      "rank": 10
+      "rank": 8
     },
     {
       "keyword": "3d print shop near me",
@@ -149,7 +127,7 @@
       "low_top_of_page_bid": 1.37,
       "high_top_of_page_bid": 6,
       "source": "keywords_for_keywords",
-      "rank": 11
+      "rank": 9
     },
     {
       "keyword": "fused deposition modeling fdm 3d printing",
@@ -160,7 +138,7 @@
       "low_top_of_page_bid": null,
       "high_top_of_page_bid": null,
       "source": "keywords_for_keywords",
-      "rank": 12
+      "rank": 10
     },
     {
       "keyword": "sls 3d printing",
@@ -171,7 +149,7 @@
       "low_top_of_page_bid": 2.03,
       "high_top_of_page_bid": 7.96,
       "source": "keywords_for_keywords",
-      "rank": 13
+      "rank": 11
     },
     {
       "keyword": "3d print shop",
@@ -182,7 +160,7 @@
       "low_top_of_page_bid": 1.1,
       "high_top_of_page_bid": 6.28,
       "source": "keywords_for_keywords",
-      "rank": 14
+      "rank": 12
     },
     {
       "keyword": "sls 3d printing service",
@@ -193,18 +171,7 @@
       "low_top_of_page_bid": null,
       "high_top_of_page_bid": null,
       "source": "keywords_for_keywords",
-      "rank": 15
-    },
-    {
-      "keyword": "3d print lego",
-      "search_volume": 20,
-      "competition": "LOW",
-      "competition_index": 9,
-      "cpc": 0.88,
-      "low_top_of_page_bid": null,
-      "high_top_of_page_bid": null,
-      "source": "keywords_for_keywords",
-      "rank": 16
+      "rank": 13
     },
     {
       "keyword": "3 d print shop",
@@ -215,7 +182,7 @@
       "low_top_of_page_bid": 1.1,
       "high_top_of_page_bid": 6.28,
       "source": "keywords_for_keywords",
-      "rank": 17
+      "rank": 14
     },
     {
       "keyword": "additive manufacturing service",
@@ -226,7 +193,7 @@
       "low_top_of_page_bid": null,
       "high_top_of_page_bid": null,
       "source": "keywords_for_keywords",
-      "rank": 18
+      "rank": 15
     },
     {
       "keyword": "3d printing service phoenix",
@@ -237,7 +204,7 @@
       "low_top_of_page_bid": 1.01,
       "high_top_of_page_bid": 8.98,
       "source": "keywords_for_keywords",
-      "rank": 19
+      "rank": 16
     },
     {
       "keyword": "metal 3d printing service",
@@ -247,6 +214,39 @@
       "cpc": 17.91,
       "low_top_of_page_bid": 4.22,
       "high_top_of_page_bid": 13.18,
+      "source": "keywords_for_keywords",
+      "rank": 17
+    },
+    {
+      "keyword": "cheap 3d printing service",
+      "search_volume": 10,
+      "competition": "HIGH",
+      "competition_index": 90,
+      "cpc": 16.49,
+      "low_top_of_page_bid": 4.65,
+      "high_top_of_page_bid": 40,
+      "source": "keywords_for_keywords",
+      "rank": 18
+    },
+    {
+      "keyword": "sls printing",
+      "search_volume": 10,
+      "competition": "LOW",
+      "competition_index": 32,
+      "cpc": null,
+      "low_top_of_page_bid": 3.8,
+      "high_top_of_page_bid": 19.79,
+      "source": "keywords_for_keywords",
+      "rank": 19
+    },
+    {
+      "keyword": "sls printing service",
+      "search_volume": 10,
+      "competition": "LOW",
+      "competition_index": 21,
+      "cpc": null,
+      "low_top_of_page_bid": null,
+      "high_top_of_page_bid": null,
       "source": "keywords_for_keywords",
       "rank": 20
     }
