@@ -154,6 +154,34 @@ python3 score_demand.py
 
 Pipeline env knobs: `SKIP_SEARCH_VOLUME=1`, `SKIP_COMMUNITY=1`, `SKIP_REDDIT=1`, `SKIP_X=1`.
 
+## Local 3D printing *service* keywords (city-level)
+
+Separate from product demand: discovers how people search for a **local 3D
+printing / prototype / small-batch service** in a metro area (default
+**Phoenix, AZ**).
+
+```bash
+python3 local_service_keywords_scan.py --estimate
+python3 local_service_keywords_scan.py                    # Phoenix default
+python3 local_service_keywords_scan.py --city "Austin, TX"
+python3 local_service_keywords_scan.py --force            # ignore 14-day cache
+python3 local_service_keywords_scan.py --top 15
+```
+
+Uses DataForSEO Google Ads **Keywords For Keywords** (Standard queue, ~one
+task) plus a seed **Search Volume** task so exact service phrases are covered.
+Same `DATAFORSEO_LOGIN` / `DATAFORSEO_PASSWORD` as the product volume scan.
+
+| Config | File |
+|---|---|
+| City, seeds, TTL, top_n | `config/local_service.yaml` |
+| Cache | `cache/local_service_keywords/{city}.json` (default 14 days) |
+| Output | `out/local_service_keywords_{city}.json` + `.csv` |
+
+Output columns: `keyword`, `search_volume`, `competition`, `cpc`, location,
+timestamp — easy to open in a spreadsheet or load in future reports. Does
+**not** feed `score_demand.py` (product ranking stays separate).
+
 ### Printables + Cults engagement (community demand)
 
 ```bash

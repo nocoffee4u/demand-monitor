@@ -1,0 +1,53 @@
+# ---------------------------------------------------------------------------
+# Local 3D printing *service* keyword research (not product demand).
+# Used by local_service_keywords_scan.py via DataForSEO Google Ads.
+# Credentials: DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD in .env
+# ---------------------------------------------------------------------------
+
+local_service:
+  # Default metro. Override with CLI: --city "Austin, TX"
+  city: "Phoenix, AZ"
+  # DataForSEO / Google Ads location string (more precise than city alone).
+  # Format examples: "Phoenix,Arizona,United States"
+  # Leave null to auto-build from city ("Phoenix, AZ" → "Phoenix,Arizona,United States").
+  location_name: "Phoenix,Arizona,United States"
+  # Optional numeric location_code (if set, used instead of location_name).
+  # Look up codes: GET https://api.dataforseo.com/v3/keywords_data/google_ads/locations
+  location_code: null
+
+  language_code: en
+  queue: standard              # standard | live
+  cache_ttl_days: 14
+  cache_dir: cache/local_service_keywords
+  poll_interval_s: 15
+  poll_timeout_s: 3600
+  search_partners: false
+
+  # How many ranked keywords to keep in the final report
+  top_n: 20
+  # Cap on related keywords retained from the API before ranking (cost is per task,
+  # not per keyword — this only limits post-processing noise)
+  max_related: 200
+
+  # Estimate-only pricing (update if DataForSEO changes rates)
+  cost_standard: 0.05
+  cost_live: 0.075
+
+  # High-intent service seeds. Location variants ("… phoenix") are added automatically.
+  # Max 20 seeds sent to keywords_for_keywords per task (API limit).
+  seed_keywords:
+    - "3d printing service"
+    - "3d printing near me"
+    - "custom 3d printing"
+    - "3d print service"
+    - "prototype 3d printing"
+    - "small batch 3d printing"
+    - "3d printing for business"
+    - "3d printing phoenix"
+    - "additive manufacturing service"
+    - "rapid prototyping service"
+    - "3d printing company"
+    - "hire 3d printing"
+    - "3d printed parts service"
+    - "on demand 3d printing"
+    - "local 3d printing"
