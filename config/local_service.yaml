@@ -33,6 +33,13 @@ local_service:
   cost_standard: 0.05
   cost_live: 0.075
 
+  # --- Market expansion (local_service_market_scan.py) -------------------
+  # People Also Ask: SERP organic for this many top keywords
+  paa_limit: 4
+  # Google Maps depth for local competitor snapshot
+  maps_depth: 15
+  market_cache_dir: cache/local_service_market
+
   # High-intent service seeds. Location variants ("… phoenix") are added automatically.
   # Max 20 seeds sent to keywords_for_keywords per task (API limit).
   seed_keywords:

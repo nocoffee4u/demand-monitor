@@ -182,6 +182,30 @@ Output columns: `keyword`, `search_volume`, `competition`, `cpc`, location,
 timestamp — easy to open in a spreadsheet or load in future reports. Does
 **not** feed `score_demand.py` (product ranking stays separate).
 
+### Full local market pack (keywords + questions + competitors)
+
+```bash
+python3 local_service_market_scan.py --estimate
+python3 local_service_market_scan.py                 # Phoenix default
+python3 local_service_market_scan.py --city "Austin, TX"
+python3 local_service_market_scan.py --paa-limit 3
+python3 local_service_market_scan.py --skip-maps     # keywords + PAA only
+```
+
+Adds on top of the keyword scan:
+
+1. **Intent-tagged related keywords** (near_me, online, process, prototype, …)
+2. **People Also Ask** via DataForSEO Google Organic SERP (live)
+3. **Local competitors** via DataForSEO Google Maps SERP (name, rating, reviews)
+
+| Output | Contents |
+|---|---|
+| `out/local_service_market_{city}.json` | Full structured market report |
+| `out/local_service_market_{city}.md` | Human-readable summary |
+
+Same DataForSEO credentials. Keyword data is reused from cache when fresh;
+PAA/Maps are cached under `cache/local_service_market/` (TTL from config).
+
 ### Printables + Cults engagement (community demand)
 
 ```bash

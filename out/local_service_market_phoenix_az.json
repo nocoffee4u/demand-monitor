@@ -1,0 +1,867 @@
+{
+  "city": "Phoenix, AZ",
+  "city_slug": "phoenix_az",
+  "location_name": "Phoenix,Arizona,United States",
+  "location_code": null,
+  "fetched_at": "2026-08-01T07:06:41Z",
+  "costs_reported": {
+    "serp_paa_usd": 0.0089,
+    "maps_usd": 0.002,
+    "total_serp_usd": 0.0109
+  },
+  "top_keywords": [
+    {
+      "keyword": "fdm 3d printing",
+      "search_volume": 390,
+      "competition": "LOW",
+      "competition_index": 8,
+      "cpc": 1.09,
+      "low_top_of_page_bid": null,
+      "high_top_of_page_bid": null,
+      "source": "keywords_for_keywords",
+      "rank": 1,
+      "intents": [
+        "process"
+      ]
+    },
+    {
+      "keyword": "3d printing service",
+      "search_volume": 320,
+      "competition": "LOW",
+      "competition_index": 18,
+      "cpc": 8.23,
+      "low_top_of_page_bid": 1.37,
+      "high_top_of_page_bid": 13.39,
+      "source": "keywords_for_keywords",
+      "rank": 2,
+      "intents": [
+        "general_service"
+      ]
+    },
+    {
+      "keyword": "3d print service",
+      "search_volume": 320,
+      "competition": "LOW",
+      "competition_index": 18,
+      "cpc": 8.23,
+      "low_top_of_page_bid": 1.37,
+      "high_top_of_page_bid": 13.39,
+      "source": "keywords_for_keywords",
+      "rank": 3,
+      "intents": [
+        "general_service"
+      ]
+    },
+    {
+      "keyword": "online 3d printing service",
+      "search_volume": 210,
+      "competition": "MEDIUM",
+      "competition_index": 60,
+      "cpc": 4.54,
+      "low_top_of_page_bid": 0.82,
+      "high_top_of_page_bid": 4.05,
+      "source": "keywords_for_keywords",
+      "rank": 4,
+      "intents": [
+        "online"
+      ]
+    },
+    {
+      "keyword": "fdm printing",
+      "search_volume": 50,
+      "competition": "HIGH",
+      "competition_index": 84,
+      "cpc": 3.23,
+      "low_top_of_page_bid": 1.1,
+      "high_top_of_page_bid": 11.13,
+      "source": "keywords_for_keywords",
+      "rank": 5,
+      "intents": [
+        "process"
+      ]
+    },
+    {
+      "keyword": "3d printing service near me",
+      "search_volume": 40,
+      "competition": "LOW",
+      "competition_index": 18,
+      "cpc": 1.95,
+      "low_top_of_page_bid": null,
+      "high_top_of_page_bid": null,
+      "source": "keywords_for_keywords",
+      "rank": 6,
+      "intents": [
+        "near_me"
+      ]
+    },
+    {
+      "keyword": "sla 3d printing",
+      "search_volume": 40,
+      "competition": "HIGH",
+      "competition_index": 69,
+      "cpc": null,
+      "low_top_of_page_bid": null,
+      "high_top_of_page_bid": null,
+      "source": "keywords_for_keywords",
+      "rank": 7,
+      "intents": [
+        "process"
+      ]
+    },
+    {
+      "keyword": "additive printing",
+      "search_volume": 40,
+      "competition": "LOW",
+      "competition_index": 16,
+      "cpc": null,
+      "low_top_of_page_bid": 1.83,
+      "high_top_of_page_bid": 6.19,
+      "source": "keywords_for_keywords",
+      "rank": 8,
+      "intents": [
+        "general_service"
+      ]
+    },
+    {
+      "keyword": "3d print shop near me",
+      "search_volume": 30,
+      "competition": "HIGH",
+      "competition_index": 77,
+      "cpc": 1.47,
+      "low_top_of_page_bid": 1.37,
+      "high_top_of_page_bid": 6,
+      "source": "keywords_for_keywords",
+      "rank": 9,
+      "intents": [
+        "near_me"
+      ]
+    },
+    {
+      "keyword": "fused deposition modeling fdm 3d printing",
+      "search_volume": 30,
+      "competition": null,
+      "competition_index": null,
+      "cpc": null,
+      "low_top_of_page_bid": null,
+      "high_top_of_page_bid": null,
+      "source": "keywords_for_keywords",
+      "rank": 10,
+      "intents": [
+        "process"
+      ]
+    },
+    {
+      "keyword": "sls 3d printing",
+      "search_volume": 20,
+      "competition": "MEDIUM",
+      "competition_index": 65,
+      "cpc": 3.32,
+      "low_top_of_page_bid": 2.03,
+      "high_top_of_page_bid": 7.96,
+      "source": "keywords_for_keywords",
+      "rank": 11,
+      "intents": [
+        "process"
+      ]
+    },
+    {
+      "keyword": "3d print shop",
+      "search_volume": 20,
+      "competition": "MEDIUM",
+      "competition_index": 56,
+      "cpc": 3.47,
+      "low_top_of_page_bid": 1.1,
+      "high_top_of_page_bid": 6.28,
+      "source": "keywords_for_keywords",
+      "rank": 12,
+      "intents": [
+        "general_service"
+      ]
+    },
+    {
+      "keyword": "sls 3d printing service",
+      "search_volume": 20,
+      "competition": null,
+      "competition_index": null,
+      "cpc": null,
+      "low_top_of_page_bid": null,
+      "high_top_of_page_bid": null,
+      "source": "keywords_for_keywords",
+      "rank": 13,
+      "intents": [
+        "process"
+      ]
+    },
+    {
+      "keyword": "3 d print shop",
+      "search_volume": 20,
+      "competition": "MEDIUM",
+      "competition_index": 56,
+      "cpc": 3.47,
+      "low_top_of_page_bid": 1.1,
+      "high_top_of_page_bid": 6.28,
+      "source": "keywords_for_keywords",
+      "rank": 14,
+      "intents": [
+        "general_service"
+      ]
+    },
+    {
+      "keyword": "additive manufacturing service",
+      "search_volume": 10,
+      "competition": "LOW",
+      "competition_index": 0,
+      "cpc": null,
+      "low_top_of_page_bid": null,
+      "high_top_of_page_bid": null,
+      "source": "keywords_for_keywords",
+      "rank": 15,
+      "intents": [
+        "general_service"
+      ]
+    },
+    {
+      "keyword": "3d printing service phoenix",
+      "search_volume": 10,
+      "competition": "MEDIUM",
+      "competition_index": 55,
+      "cpc": 5.43,
+      "low_top_of_page_bid": 1.01,
+      "high_top_of_page_bid": 8.98,
+      "source": "keywords_for_keywords",
+      "rank": 16,
+      "intents": [
+        "local_branded"
+      ]
+    },
+    {
+      "keyword": "metal 3d printing service",
+      "search_volume": 10,
+      "competition": "MEDIUM",
+      "competition_index": 38,
+      "cpc": 17.91,
+      "low_top_of_page_bid": 4.22,
+      "high_top_of_page_bid": 13.18,
+      "source": "keywords_for_keywords",
+      "rank": 17,
+      "intents": [
+        "material"
+      ]
+    },
+    {
+      "keyword": "cheap 3d printing service",
+      "search_volume": 10,
+      "competition": "HIGH",
+      "competition_index": 90,
+      "cpc": 16.49,
+      "low_top_of_page_bid": 4.65,
+      "high_top_of_page_bid": 40,
+      "source": "keywords_for_keywords",
+      "rank": 18,
+      "intents": [
+        "price"
+      ]
+    },
+    {
+      "keyword": "sls printing",
+      "search_volume": 10,
+      "competition": "LOW",
+      "competition_index": 32,
+      "cpc": null,
+      "low_top_of_page_bid": 3.8,
+      "high_top_of_page_bid": 19.79,
+      "source": "keywords_for_keywords",
+      "rank": 19,
+      "intents": [
+        "process"
+      ]
+    },
+    {
+      "keyword": "sls printing service",
+      "search_volume": 10,
+      "competition": "LOW",
+      "competition_index": 21,
+      "cpc": null,
+      "low_top_of_page_bid": null,
+      "high_top_of_page_bid": null,
+      "source": "keywords_for_keywords",
+      "rank": 20,
+      "intents": [
+        "process"
+      ]
+    }
+  ],
+  "related_by_intent": {
+    "process": [
+      {
+        "keyword": "fdm 3d printing",
+        "search_volume": 390,
+        "competition_index": 8,
+        "cpc": 1.09,
+        "rank": 1
+      },
+      {
+        "keyword": "fdm printing",
+        "search_volume": 50,
+        "competition_index": 84,
+        "cpc": 3.23,
+        "rank": 5
+      },
+      {
+        "keyword": "sla 3d printing",
+        "search_volume": 40,
+        "competition_index": 69,
+        "cpc": null,
+        "rank": 7
+      },
+      {
+        "keyword": "fused deposition modeling fdm 3d printing",
+        "search_volume": 30,
+        "competition_index": null,
+        "cpc": null,
+        "rank": 10
+      },
+      {
+        "keyword": "sls 3d printing",
+        "search_volume": 20,
+        "competition_index": 65,
+        "cpc": 3.32,
+        "rank": 11
+      },
+      {
+        "keyword": "sls 3d printing service",
+        "search_volume": 20,
+        "competition_index": null,
+        "cpc": null,
+        "rank": 13
+      },
+      {
+        "keyword": "sls printing",
+        "search_volume": 10,
+        "competition_index": 32,
+        "cpc": null,
+        "rank": 19
+      },
+      {
+        "keyword": "sls printing service",
+        "search_volume": 10,
+        "competition_index": 21,
+        "cpc": null,
+        "rank": 20
+      }
+    ],
+    "general_service": [
+      {
+        "keyword": "3d printing service",
+        "search_volume": 320,
+        "competition_index": 18,
+        "cpc": 8.23,
+        "rank": 2
+      },
+      {
+        "keyword": "3d print service",
+        "search_volume": 320,
+        "competition_index": 18,
+        "cpc": 8.23,
+        "rank": 3
+      },
+      {
+        "keyword": "additive printing",
+        "search_volume": 40,
+        "competition_index": 16,
+        "cpc": null,
+        "rank": 8
+      },
+      {
+        "keyword": "3d print shop",
+        "search_volume": 20,
+        "competition_index": 56,
+        "cpc": 3.47,
+        "rank": 12
+      },
+      {
+        "keyword": "3 d print shop",
+        "search_volume": 20,
+        "competition_index": 56,
+        "cpc": 3.47,
+        "rank": 14
+      },
+      {
+        "keyword": "additive manufacturing service",
+        "search_volume": 10,
+        "competition_index": 0,
+        "cpc": null,
+        "rank": 15
+      }
+    ],
+    "online": [
+      {
+        "keyword": "online 3d printing service",
+        "search_volume": 210,
+        "competition_index": 60,
+        "cpc": 4.54,
+        "rank": 4
+      }
+    ],
+    "near_me": [
+      {
+        "keyword": "3d printing service near me",
+        "search_volume": 40,
+        "competition_index": 18,
+        "cpc": 1.95,
+        "rank": 6
+      },
+      {
+        "keyword": "3d print shop near me",
+        "search_volume": 30,
+        "competition_index": 77,
+        "cpc": 1.47,
+        "rank": 9
+      }
+    ],
+    "local_branded": [
+      {
+        "keyword": "3d printing service phoenix",
+        "search_volume": 10,
+        "competition_index": 55,
+        "cpc": 5.43,
+        "rank": 16
+      }
+    ],
+    "material": [
+      {
+        "keyword": "metal 3d printing service",
+        "search_volume": 10,
+        "competition_index": 38,
+        "cpc": 17.91,
+        "rank": 17
+      }
+    ],
+    "price": [
+      {
+        "keyword": "cheap 3d printing service",
+        "search_volume": 10,
+        "competition_index": 90,
+        "cpc": 16.49,
+        "rank": 18
+      }
+    ]
+  },
+  "people_also_ask": [
+    {
+      "parent_keyword": "3d printing service",
+      "questions": [
+        {
+          "question": "How much does it cost to have someone 3D print something?",
+          "snippet": null
+        },
+        {
+          "question": "How much does it cost to get 3D printing done?",
+          "snippet": null
+        },
+        {
+          "question": "Can you 3D print at staples?",
+          "snippet": null
+        },
+        {
+          "question": "How much does a 3D print usually cost?",
+          "snippet": null
+        },
+        {
+          "question": "Is anything illegal to 3D print?",
+          "snippet": null
+        },
+        {
+          "question": "Does staples do 3D printing?",
+          "snippet": "Take your designs from the computer screen to real life with 3D printers, software and filaments at Staples. With our services, you can print just about anything, from materials including plastics and precious metals such as silver and titanium."
+        },
+        {
+          "question": "How much does it cost to have someone 3D print something for you?",
+          "snippet": null
+        },
+        {
+          "question": "What cannot be printed on a 3D printer?",
+          "snippet": null
+        }
+      ],
+      "local_pack_preview": [
+        {
+          "name": "3D Print Farm US",
+          "rating": 5,
+          "reviews": 7,
+          "snippet": "Glendale, AZ \u00b7 (323) 627-1302 \nClosed \u00b7 Opens 8\u202fAM Mon \n\"Mike's work is excellent, best quality print , I'm beyond satisfied.\" \n"
+        },
+        {
+          "name": "A&Mprinting",
+          "rating": 5,
+          "reviews": 12,
+          "snippet": "Peoria, AZ \u00b7 (480) 960-3281 \nOpen 24 hours \n\"Very responsive and good quality prints.\" \n"
+        },
+        {
+          "name": "A3D Manufacturing",
+          "rating": 4.8,
+          "reviews": 25,
+          "snippet": "15220 S 50th St Suite 105 \u00b7 (480) 454-5037 \nClosed \u00b7 Opens 8\u202fAM Mon \n\"Athena 3D does fantastic work.\" \n"
+        }
+      ],
+      "question_count": 8
+    },
+    {
+      "parent_keyword": "3d print service",
+      "questions": [
+        {
+          "question": "How much does it cost to have someone 3D print something?",
+          "snippet": null
+        },
+        {
+          "question": "How much does it cost to get 3D printing done?",
+          "snippet": null
+        },
+        {
+          "question": "How much does a 3D print usually cost?",
+          "snippet": null
+        },
+        {
+          "question": "Can I hire someone to 3D print something for me?",
+          "snippet": null
+        },
+        {
+          "question": "Is anything illegal to 3D print?",
+          "snippet": null
+        },
+        {
+          "question": "Does staples do 3D printing?",
+          "snippet": "Take your designs from the computer screen to real life with 3D printers, software and filaments at Staples. With our services, you can print just about anything, from materials including plastics and precious metals such as silver and titanium."
+        },
+        {
+          "question": "How much does it cost to have someone 3D print something for you?",
+          "snippet": null
+        },
+        {
+          "question": "What cannot be printed on a 3D printer?",
+          "snippet": null
+        }
+      ],
+      "local_pack_preview": [
+        {
+          "name": "3D Print Farm US",
+          "rating": 5,
+          "reviews": 7,
+          "snippet": "Glendale, AZ \u00b7 (323) 627-1302 \nClosed \u00b7 Opens 8\u202fAM Mon \n\"Mike's work is excellent, best quality print , I'm beyond satisfied.\" \n"
+        },
+        {
+          "name": "A&Mprinting",
+          "rating": 5,
+          "reviews": 12,
+          "snippet": "Peoria, AZ \u00b7 (480) 960-3281 \nOpen 24 hours \n\"Excellent customer service , great quality materials used.\" \n"
+        },
+        {
+          "name": "A3D Manufacturing",
+          "rating": 4.8,
+          "reviews": 25,
+          "snippet": "15220 S 50th St Suite 105 \u00b7 (480) 454-5037 \nClosed \u00b7 Opens 8\u202fAM Mon \n\"They have low prices, fast turn around time, and excellent build quality.\" \n"
+        }
+      ],
+      "question_count": 8
+    },
+    {
+      "parent_keyword": "online 3d printing service",
+      "questions": [],
+      "local_pack_preview": [],
+      "question_count": 0
+    },
+    {
+      "parent_keyword": "3d printing service near me",
+      "questions": [
+        {
+          "question": "How much does it cost to have someone 3D print something for you?",
+          "snippet": null
+        },
+        {
+          "question": "Can you 3D print stuff at staples?",
+          "snippet": null
+        },
+        {
+          "question": "What is the average cost to 3D print?",
+          "snippet": null
+        },
+        {
+          "question": "Does UPS offer 3D printing services?",
+          "snippet": "You need a 3D CAD model (created by an engineer or a 3D scanner) in order to make a 3D print. Once your file is complete, The UPS Store will offer you a quote to 3D print your object."
+        },
+        {
+          "question": "Does staples do 3D printing?",
+          "snippet": "Take your designs from the computer screen to real life with 3D printers, software and filaments at Staples. With our services, you can print just about anything, from materials including plastics and precious metals such as silver and titanium."
+        },
+        {
+          "question": "Is anything illegal to 3D print?",
+          "snippet": null
+        },
+        {
+          "question": "Does Hobby Lobby do 3D printing?",
+          "snippet": null
+        },
+        {
+          "question": "How much does it usually cost to 3D print something?",
+          "snippet": null
+        }
+      ],
+      "local_pack_preview": [
+        {
+          "name": "3D Print Farm US",
+          "rating": 5,
+          "reviews": 7,
+          "snippet": "Glendale, AZ \u00b7 (323) 627-1302 \nClosed \u00b7 Opens 8\u202fAM Mon \n\"Mike's work is excellent, best quality print , I'm beyond satisfied.\" \n"
+        },
+        {
+          "name": "A&Mprinting",
+          "rating": 5,
+          "reviews": 12,
+          "snippet": "Peoria, AZ \u00b7 (480) 960-3281 \nOpen 24 hours \n\"Excellent customer service , great quality materials used.\" \n"
+        },
+        {
+          "name": "FSE 3D Print Lab",
+          "rating": 4.8,
+          "reviews": 9,
+          "snippet": "Tempe, AZ \u00b7 (480) 727-7330 \nClosed \u00b7 Opens 10\u202fAM Mon \n\"Great resource!\" \n"
+        }
+      ],
+      "question_count": 8
+    }
+  ],
+  "local_competitors": [
+    {
+      "name": "A3D Manufacturing",
+      "rating": 4.8,
+      "review_count": 25,
+      "address": "15220 S 50th St Suite 105, Phoenix, AZ 85044",
+      "snippet": "15220 S 50th St Suite 105, Phoenix, AZ 85044",
+      "category": "3D printing service",
+      "phone": "+1480-454-5037",
+      "url": "https://www.a3dmfg.com/",
+      "place_id": "ChIJgRA2rQwFK4cRo1Tp2k1hmB4",
+      "is_claimed": true
+    },
+    {
+      "name": "Paradigm Manufacturing",
+      "rating": 4.9,
+      "review_count": 20,
+      "address": "747 W Pinnacle Peak Rd Ste A107, Phoenix, AZ 85027",
+      "snippet": "747 W Pinnacle Peak Rd Ste A107, Phoenix, AZ 85027",
+      "category": "3D printing service",
+      "phone": "+1480-685-9762",
+      "url": "https://p3dmfg.com/",
+      "place_id": "ChIJ4Ylw1AFlK4cRttPoKHKTx8o",
+      "is_claimed": true
+    },
+    {
+      "name": "Print Pro AZ",
+      "rating": 5,
+      "review_count": 67,
+      "address": "4415 S 32nd St, Phoenix, AZ 85040",
+      "snippet": "4415 S 32nd St, Phoenix, AZ 85040",
+      "category": "Manufacturer",
+      "phone": "+1602-649-5305",
+      "url": "https://printproaz.com/",
+      "place_id": "ChIJz21PGGoPK4cRXhNZV5et-aA",
+      "is_claimed": true
+    },
+    {
+      "name": "3D Print Farm US",
+      "rating": 5,
+      "review_count": 7,
+      "address": "7702 W Villa Theresa Dr, Glendale, AZ 85308",
+      "snippet": "7702 W Villa Theresa Dr, Glendale, AZ 85308",
+      "category": "3D printing service",
+      "phone": "+1323-627-1302",
+      "url": "http://www.3dprintfarmus.com/",
+      "place_id": "ChIJ03tlk_ppK4cRp0DjIr0CsCQ",
+      "is_claimed": true
+    },
+    {
+      "name": "FSE 3D Print Lab",
+      "rating": 4.8,
+      "review_count": 9,
+      "address": "951 Palm Walk, Tempe, AZ 85281",
+      "snippet": "951 Palm Walk, Tempe, AZ 85281",
+      "category": "3D printing service",
+      "phone": "+1480-727-7330",
+      "url": "https://3dprintlab.engineering.asu.edu/",
+      "place_id": "ChIJXVFcL9YJK4cRShpR5fDizwQ",
+      "is_claimed": true
+    },
+    {
+      "name": "3DQuicky",
+      "rating": 5,
+      "review_count": 3,
+      "address": "3935 E Greenway Rd Bldg 3 APT 185, Phoenix, AZ 85032",
+      "snippet": "3935 E Greenway Rd Bldg 3 APT 185, Phoenix, AZ 85032",
+      "category": "3D printing service",
+      "phone": "+1602-497-2002",
+      "url": "http://3dquicky.com/?utm_source=google&utm_medium=wix_google_business_profile&utm_campaign=10779513266890128996",
+      "place_id": "ChIJ10YbIolzK4cRUjrBRsZSxZU",
+      "is_claimed": true
+    },
+    {
+      "name": "MattyPrints4U",
+      "rating": null,
+      "review_count": null,
+      "address": "1616 N Central Ave, Phoenix, AZ 85004",
+      "snippet": "1616 N Central Ave, Phoenix, AZ 85004",
+      "category": "3D printing service",
+      "phone": "+1480-369-6079",
+      "url": null,
+      "place_id": "ChIJQepjNi0TK4cRA3azjaBvAAo",
+      "is_claimed": true
+    },
+    {
+      "name": "PHX 3D",
+      "rating": null,
+      "review_count": null,
+      "address": "4309 N 16th St Ste 3, Phoenix, AZ 85016",
+      "snippet": "4309 N 16th St Ste 3, Phoenix, AZ 85016",
+      "category": "3D printing service",
+      "phone": null,
+      "url": null,
+      "place_id": "ChIJT5JlZ2ANK4cRcVYpYVqFS-I",
+      "is_claimed": true
+    },
+    {
+      "name": "Purple Porcupine - 3D Printing Services",
+      "rating": null,
+      "review_count": null,
+      "address": "2330 W Parkside Ln g105, Phoenix, AZ 85027",
+      "snippet": "2330 W Parkside Ln g105, Phoenix, AZ 85027",
+      "category": "3D printing service",
+      "phone": "+1480-331-8361",
+      "url": "http://www.purpleporcupine.com/",
+      "place_id": "ChIJfSXwGollK4cRIRDTmaAqG6w",
+      "is_claimed": true
+    },
+    {
+      "name": "A&Mprinting",
+      "rating": 5,
+      "review_count": 12,
+      "address": "15847 N 74th Dr, Peoria, AZ 85382",
+      "snippet": "15847 N 74th Dr, Peoria, AZ 85382",
+      "category": "3D printing service",
+      "phone": "+1480-960-3281",
+      "url": null,
+      "place_id": "ChIJrzmYqWlpK4cRmWuTuL2nlzM",
+      "is_claimed": true
+    },
+    {
+      "name": "Arizona 3D Technologies",
+      "rating": 5,
+      "review_count": 1,
+      "address": "By appointment only, 3335 W Irvine Rd Bldg 2, Phoenix, AZ 85086",
+      "snippet": "By appointment only, 3335 W Irvine Rd Bldg 2, Phoenix, AZ 85086",
+      "category": "Manufacturer",
+      "phone": "+1602-292-9471",
+      "url": "https://az3dtech.com/",
+      "place_id": "ChIJO4QdqCdjK4cRG889THQIkRk",
+      "is_claimed": true
+    },
+    {
+      "name": "CREATE at Arizona Science Center\u00ae",
+      "rating": 4.7,
+      "review_count": 111,
+      "address": "105 N 5th St, Phoenix, AZ 85004",
+      "snippet": "105 N 5th St, Phoenix, AZ 85004",
+      "category": "Technology museum",
+      "phone": "+1602-716-2000",
+      "url": "https://www.azscience.org/attractions/create-makerspace/",
+      "place_id": "ChIJrdSRvh4SK4cRhuyKVpMjDRo",
+      "is_claimed": true
+    },
+    {
+      "name": "Desert Print Forge",
+      "rating": 4.5,
+      "review_count": 25,
+      "address": "7700 W Arrowhead Towne Center #2010, Glendale, AZ 85308",
+      "snippet": "7700 W Arrowhead Towne Center #2010, Glendale, AZ 85308",
+      "category": "Gift shop",
+      "phone": "+1623-250-7111",
+      "url": "http://desertprintforge.com/",
+      "place_id": "ChIJ_VyZzLJpK4cRItj0sjHdKek",
+      "is_claimed": true
+    },
+    {
+      "name": "Techniprint",
+      "rating": 4.7,
+      "review_count": 46,
+      "address": "2545 N 7th St, Phoenix, AZ 85006",
+      "snippet": "2545 N 7th St, Phoenix, AZ 85006",
+      "category": "Print shop",
+      "phone": "+1602-257-0686",
+      "url": "https://techniprintaz.com/",
+      "place_id": "ChIJa7XQR28SK4cRE54_2Wlus8w",
+      "is_claimed": true
+    },
+    {
+      "name": "Emerald's Creation's",
+      "rating": 5,
+      "review_count": 2,
+      "address": "10838 N 35th St, Phoenix, AZ 85028",
+      "snippet": "10838 N 35th St, Phoenix, AZ 85028",
+      "category": "3D printing service",
+      "phone": null,
+      "url": null,
+      "place_id": "ChIJbV5nrORzK4cRGxPTtH7xkBQ",
+      "is_claimed": true
+    }
+  ],
+  "maps_query": "3d printing service Phoenix",
+  "summary": {
+    "headline": "In Phoenix, AZ, people mainly search generic service terms (fdm 3d printing, 3d printing service, 3d print service), with 15 Maps businesses and 24 captured FAQ-style questions.",
+    "top_keywords_md": [
+      "- **fdm 3d printing** \u2014 ~390/mo, CPC $1.09",
+      "- **3d printing service** \u2014 ~320/mo, CPC $8.23",
+      "- **3d print service** \u2014 ~320/mo, CPC $8.23",
+      "- **online 3d printing service** \u2014 ~210/mo, CPC $4.54",
+      "- **fdm printing** \u2014 ~50/mo, CPC $3.23",
+      "- **3d printing service near me** \u2014 ~40/mo, CPC $1.95",
+      "- **sla 3d printing** \u2014 ~40/mo",
+      "- **additive printing** \u2014 ~40/mo"
+    ],
+    "intents_md": [
+      "- **near_me**: 3d printing service near me (40), 3d print shop near me (30)",
+      "- **online**: online 3d printing service (210)",
+      "- **process**: fdm 3d printing (390), fdm printing (50), sla 3d printing (40), fused deposition modeling fdm 3d printing (30)",
+      "- **material**: metal 3d printing service (10)",
+      "- **price**: cheap 3d printing service (10)",
+      "- **general_service**: 3d printing service (320), 3d print service (320), additive printing (40), 3d print shop (20)",
+      "- **local_branded**: 3d printing service phoenix (10)"
+    ],
+    "questions_md": [
+      "- How much does it cost to have someone 3D print something?  _(from \u201c3d printing service\u201d)_",
+      "- How much does it cost to get 3D printing done?  _(from \u201c3d printing service\u201d)_",
+      "- Can you 3D print at staples?  _(from \u201c3d printing service\u201d)_",
+      "- How much does a 3D print usually cost?  _(from \u201c3d printing service\u201d)_",
+      "- Is anything illegal to 3D print?  _(from \u201c3d printing service\u201d)_",
+      "- Does staples do 3D printing?  _(from \u201c3d printing service\u201d)_",
+      "- How much does it cost to have someone 3D print something for you?  _(from \u201c3d printing service\u201d)_",
+      "- What cannot be printed on a 3D printer?  _(from \u201c3d printing service\u201d)_",
+      "- How much does it cost to have someone 3D print something?  _(from \u201c3d print service\u201d)_",
+      "- How much does it cost to get 3D printing done?  _(from \u201c3d print service\u201d)_",
+      "- How much does a 3D print usually cost?  _(from \u201c3d print service\u201d)_",
+      "- Can I hire someone to 3D print something for me?  _(from \u201c3d print service\u201d)_"
+    ],
+    "competitors_md": [
+      "- **CREATE at Arizona Science Center\u00ae** \u2014 4.7\u2605 / 111 reviews \u2014 105 N 5th St, Phoenix, AZ 85004",
+      "- **Print Pro AZ** \u2014 5\u2605 / 67 reviews \u2014 4415 S 32nd St, Phoenix, AZ 85040",
+      "- **Techniprint** \u2014 4.7\u2605 / 46 reviews \u2014 2545 N 7th St, Phoenix, AZ 85006",
+      "- **A3D Manufacturing** \u2014 4.8\u2605 / 25 reviews \u2014 15220 S 50th St Suite 105, Phoenix, AZ 85044",
+      "- **Desert Print Forge** \u2014 4.5\u2605 / 25 reviews \u2014 7700 W Arrowhead Towne Center #2010, Glendale, AZ 85308"
+    ],
+    "actions": [
+      "Bid/page content around \u201c3d printing service\u201d / \u201c3d print service\u201d (highest commercial volume).",
+      "Answer People-Also-Ask questions on a Phoenix landing page (FAQ).",
+      "Differentiate vs local shops with strong review counts (speed, materials, prototype\u2192small batch).",
+      "Consider process-specific pages (FDM / SLA / SLS) \u2014 people search tech names.",
+      "Expect competition from national online print bureaus; emphasize local pickup/speed for Phoenix."
+    ],
+    "markdown": "# Local 3D printing service market \u2014 Phoenix, AZ\n\n_Generated 2026-08-01 07:06 UTC_\n\n## What people search for (top keywords)\n- **fdm 3d printing** \u2014 ~390/mo, CPC $1.09\n- **3d printing service** \u2014 ~320/mo, CPC $8.23\n- **3d print service** \u2014 ~320/mo, CPC $8.23\n- **online 3d printing service** \u2014 ~210/mo, CPC $4.54\n- **fdm printing** \u2014 ~50/mo, CPC $3.23\n- **3d printing service near me** \u2014 ~40/mo, CPC $1.95\n- **sla 3d printing** \u2014 ~40/mo\n- **additive printing** \u2014 ~40/mo\n\n## Intent clusters\n- **near_me**: 3d printing service near me (40), 3d print shop near me (30)\n- **online**: online 3d printing service (210)\n- **process**: fdm 3d printing (390), fdm printing (50), sla 3d printing (40), fused deposition modeling fdm 3d printing (30)\n- **material**: metal 3d printing service (10)\n- **price**: cheap 3d printing service (10)\n- **general_service**: 3d printing service (320), 3d print service (320), additive printing (40), 3d print shop (20)\n- **local_branded**: 3d printing service phoenix (10)\n\n## Real customer questions (People Also Ask)\n- How much does it cost to have someone 3D print something?  _(from \u201c3d printing service\u201d)_\n- How much does it cost to get 3D printing done?  _(from \u201c3d printing service\u201d)_\n- Can you 3D print at staples?  _(from \u201c3d printing service\u201d)_\n- How much does a 3D print usually cost?  _(from \u201c3d printing service\u201d)_\n- Is anything illegal to 3D print?  _(from \u201c3d printing service\u201d)_\n- Does staples do 3D printing?  _(from \u201c3d printing service\u201d)_\n- How much does it cost to have someone 3D print something for you?  _(from \u201c3d printing service\u201d)_\n- What cannot be printed on a 3D printer?  _(from \u201c3d printing service\u201d)_\n- How much does it cost to have someone 3D print something?  _(from \u201c3d print service\u201d)_\n- How much does it cost to get 3D printing done?  _(from \u201c3d print service\u201d)_\n- How much does a 3D print usually cost?  _(from \u201c3d print service\u201d)_\n- Can I hire someone to 3D print something for me?  _(from \u201c3d print service\u201d)_\n\n## Who already serves them (Maps, n=15)\n- **CREATE at Arizona Science Center\u00ae** \u2014 4.7\u2605 / 111 reviews \u2014 105 N 5th St, Phoenix, AZ 85004\n- **Print Pro AZ** \u2014 5\u2605 / 67 reviews \u2014 4415 S 32nd St, Phoenix, AZ 85040\n- **Techniprint** \u2014 4.7\u2605 / 46 reviews \u2014 2545 N 7th St, Phoenix, AZ 85006\n- **A3D Manufacturing** \u2014 4.8\u2605 / 25 reviews \u2014 15220 S 50th St Suite 105, Phoenix, AZ 85044\n- **Desert Print Forge** \u2014 4.5\u2605 / 25 reviews \u2014 7700 W Arrowhead Towne Center #2010, Glendale, AZ 85308\n\n## Suggested actions\n- Bid/page content around \u201c3d printing service\u201d / \u201c3d print service\u201d (highest commercial volume).\n- Answer People-Also-Ask questions on a Phoenix landing page (FAQ).\n- Differentiate vs local shops with strong review counts (speed, materials, prototype\u2192small batch).\n- Consider process-specific pages (FDM / SLA / SLS) \u2014 people search tech names.\n- Expect competition from national online print bureaus; emphasize local pickup/speed for Phoenix.\n"
+  },
+  "notes": "Keyword volumes are location-targeted Google Ads data. PAA and Maps come from live SERP/Maps and may vary by day."
+}
