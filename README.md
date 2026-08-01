@@ -264,11 +264,34 @@ Discovery keywords (good for Reddit) are often too loose for marketplaces
    queries when tighter variants exist, and scores competition from the
    best *specific* hit rather than the global max of every shortened form.
 
-## Tuning the scoring
+## Scoring: Demand vs Competition vs Opportunity
 
-Open `score_demand.py` and adjust the `WEIGHTS` dict at the top — e.g. if
-you want to chase pure whitespace opportunities over proven high-volume
-items, raise `marketplace_gap` and lower `reddit_engagement`.
+`score_demand.py` produces three scores per product (all 0–100):
+
+| Score | Meaning | Built from |
+|---|---|---|
+| **demand_score** | How strong is the pull? | Search volume, Printables/Cults downloads·makes·likes, Trends, X; Reddit only if present (tiny weight, dropped when empty) |
+| **competition_score** | How crowded is supply? | Marketplace listing counts, Google Ads competition index, incumbent download strength |
+| **opportunity_score** | **Primary rank** — demand relative to competition | Blend of `demand/(competition+floor)` and `demand × whitespace` |
+
+```bash
+python3 score_demand.py
+# → out/demand_report.csv  (sorted by opportunity_score)
+```
+
+Each row includes transparent contribution columns (`contrib_demand_*`,
+`contrib_competition_*`) and a short `score_explanation` string.
+
+Tune weights in `score_demand.py`:
+
+- `DEMAND_WEIGHTS` / `COMPETITION_WEIGHTS`
+- `OPPORTUNITY_COMPETITION_FLOOR` (default 12)
+- `OPPORTUNITY_RATIO_BLEND` (default 0.65 toward pure ratio)
+
+**Reading results:** high opportunity = real demand with relatively thin
+competition. High demand + high competition = validated market but harder
+to win (e.g. generic car phone mounts). Low demand + low competition =
+quiet niche — only interesting if you already know the pain point.
 
 ## Extending it later
 
