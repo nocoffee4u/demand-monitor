@@ -1234,12 +1234,19 @@ def write_chart_data_sheet(
     """
     Write hidden _ChartData: trend pivot at A1, category avg starting row 40.
     Returns (n_trend_rows including header, n_category_rows including header).
+
+    TODO: Category block is hard-coded at row index 40 (see cat_start below and
+    add_dashboard_charts). Weekly History currently yields one trend row per
+    run, so ~9 months (~39 runs) of data would collide with the category block.
+    Before that, switch to a dynamic boundary (e.g. start category at
+    n_trend + 2) and pass the offset into the category chart range.
     """
     blocks: list[list[Any]] = []
     trend_vals = df_to_values(trend_pivot)
     n_trend = len(trend_vals)
     blocks.extend(trend_vals)
-    # spacer
+    # Fixed spacer to row 40 — keep in sync with cat_start in add_dashboard_charts.
+    # See TODO above re: ~9 months of weekly History rows overflowing this gap.
     while len(blocks) < 40:
         blocks.append([])
     cat_vals = df_to_values(category_avg)
@@ -1412,6 +1419,7 @@ def add_dashboard_charts(
     )
 
     # Chart 3: Category comparison (from _ChartData starting row 40)
+    # Hard-coded boundary — must match write_chart_data_sheet spacer (TODO there).
     if chart_id is not None and n_category_rows >= 2:
         cat_start = 40
         cat_end = 40 + n_category_rows
@@ -1487,7 +1495,9 @@ def add_dashboard_charts(
 
     # Chart 4: Priority trend (multi-line) — P0 required
     # _ChartData A1: run_date | product1 | product2 | ...
-    if chart_id is not None and n_trend_rows >= 2 and n_trend_cols >= 2:
+    # Need ≥2 weekly data points (header + 2 rows → n_trend_rows >= 3), same
+    # “need ≥2 weekly runs” gate used for Watch-rising / churn.
+    if chart_id is not None and n_trend_rows >= 3 and n_trend_cols >= 2:
         series = []
         for col_i in range(1, n_trend_cols):
             series.append(
