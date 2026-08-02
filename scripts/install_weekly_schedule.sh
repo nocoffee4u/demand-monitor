@@ -114,3 +114,7 @@ echo
 echo "Uninstall: ./scripts/install_weekly_schedule.sh --uninstall"
 echo "Test now:  launchctl start ${LABEL}"
 echo "           (or: cd \"${ROOT}\" && ./run_all.sh)"
+echo
+echo "Sheets export: ensure GOOGLE_SERVICE_ACCOUNT_JSON and"
+echo "GOOGLE_SHEETS_SPREADSHEET_ID are set in ${ROOT}/.env"
+echo "(see docs/sheets_setup.md). run_all.sh loads .env automatically."

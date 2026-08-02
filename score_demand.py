@@ -26,8 +26,10 @@ Optional per-product overrides in config/products.yaml under `fit:`.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
+from datetime import datetime, timezone
 from typing import Iterable
 
 import pandas as pd
@@ -699,6 +701,36 @@ def main(
 
     os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
     df.to_csv(out_path, index=False)
+
+    # Run metadata for Sheets export / Dashboard (sources active, blank-vs-zero)
+    run_ts = datetime.now().astimezone()
+    run_meta = {
+        "run_id": run_ts.isoformat(timespec="seconds"),
+        "run_date": run_ts.date().isoformat(),
+        "run_time": run_ts.strftime("%H:%M:%S%z"),
+        "run_timestamp_utc": datetime.now(timezone.utc).strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        ),
+        "products_tracked": int(len(df)),
+        "demand_unused": list(demand_unused),
+        "competition_unused": list(comp_unused),
+        "sources": {
+            "search_volume": "search_volume" not in demand_unused
+            and "volume_quality" not in demand_unused,
+            "community": "community_downloads" not in demand_unused,
+            "trends": "trends_interest" not in demand_unused
+            and "momentum" not in demand_unused,
+            "x": "x_volume" not in demand_unused,
+            "reddit": "reddit_volume" not in demand_unused,
+            "marketplace": "marketplace_listings" not in comp_unused,
+        },
+        "top_priority_score": float(df["priority_score"].iloc[0]) if len(df) else None,
+        "demand_report": out_path,
+    }
+    meta_path = os.path.join(os.path.dirname(out_path) or "out", "run_meta.json")
+    with open(meta_path, "w") as f:
+        json.dump(run_meta, f, indent=2)
+    print(f"Run metadata written to {meta_path}")
 
     # --- Console -----------------------------------------------------------
     print("\n=== PRIORITY RANKING (Demand quality × Fit × Opportunity) ===\n")

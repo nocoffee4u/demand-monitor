@@ -4,3 +4,8 @@ __pycache__/
 *.pyc
 cache/
 out/logs/*.log
+# Google service account keys (never commit)
+*-service-account*.json
+service-account*.json
+credentials/google*.json
+out/sheets_dry_run/

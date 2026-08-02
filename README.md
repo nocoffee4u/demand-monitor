@@ -316,6 +316,28 @@ Discovery keywords (good for Reddit) are often too loose for marketplaces
    queries when tighter variants exist, and scores competition from the
    best *specific* hit rather than the global max of every shortened form.
 
+## Google Sheets dashboard (weekly Monday view)
+
+After scoring, push rankings into one master spreadsheet:
+
+```bash
+# One-time: docs/sheets_setup.md (service account + share sheet)
+python3 export_to_sheets.py --dry-run   # preview without Google API
+python3 export_to_sheets.py             # live export
+```
+
+Wired as the **last step** of `./run_all.sh` when:
+
+```bash
+GOOGLE_SERVICE_ACCOUNT_JSON=/path/to/sa.json
+GOOGLE_SHEETS_SPREADSHEET_ID=your_spreadsheet_id
+```
+
+Skip: `SKIP_SHEETS=1 ./run_all.sh`.  
+Tabs: Dashboard, Product Rankings, Scoring Detail, Search Volume, Marketplace,
+Local Service (Phoenix), History (append-only), Config.  
+Spec: `docs/sheets_dashboard_spec.md`. Setup: `docs/sheets_setup.md`.
+
 ## Scoring: Demand quality × Fit × Opportunity
 
 `score_demand.py` ranks products for *this stage of the business* (own

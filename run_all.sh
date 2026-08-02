@@ -21,12 +21,24 @@
 #   Estimate first: python3 search_volume_scan.py --estimate
 #
 # Reddit is optional / unreliable — skip with SKIP_REDDIT=1.
+#
+# Google Sheets export (final step):
+#   Set GOOGLE_SERVICE_ACCOUNT_JSON + GOOGLE_SHEETS_SPREADSHEET_ID in .env
+#   See docs/sheets_setup.md. Skip: SKIP_SHEETS=1 ./run_all.sh
 set -e
 cd "$(dirname "$0")"
 
+# Load .env early so scanners + export see credentials
+if [[ -f .env ]]; then
+  # shellcheck disable=SC1091
+  set -a
+  source .env || true
+  set +a
+fi
+
 REDDIT_BACKEND="${REDDIT_BACKEND:-pullpush}"
 STEP=0
-total=7
+total=8
 
 step() {
   STEP=$((STEP + 1))
@@ -40,12 +52,6 @@ fi
 
 if [[ "${SKIP_SEARCH_VOLUME:-0}" != "1" ]]; then
   step "Search volume (DataForSEO Google Ads)"
-  if [[ -n "${DATAFORSEO_LOGIN:-}" || -f .env ]]; then
-    # shellcheck disable=SC1091
-    set -a
-    [[ -f .env ]] && source .env || true
-    set +a
-  fi
   if [[ -n "${DATAFORSEO_LOGIN:-}" && -n "${DATAFORSEO_PASSWORD:-}" ]]; then
     python3 search_volume_scan.py
   else
@@ -97,5 +103,21 @@ fi
 step "Scoring & ranking"
 python3 score_demand.py
 
+if [[ "${SKIP_SHEETS:-0}" != "1" ]]; then
+  step "Export to Google Sheets"
+  if [[ -n "${GOOGLE_SERVICE_ACCOUNT_JSON:-}" && -n "${GOOGLE_SHEETS_SPREADSHEET_ID:-}" ]]; then
+    python3 export_to_sheets.py || {
+      echo "  [warn] Sheets export failed — CSV outputs still in out/"
+    }
+  else
+    echo "  skipped (set GOOGLE_SERVICE_ACCOUNT_JSON + GOOGLE_SHEETS_SPREADSHEET_ID)"
+    echo "  dry-run: python3 export_to_sheets.py --dry-run"
+  fi
+else
+  step "Export to Google Sheets"
+  echo "  skipped (SKIP_SHEETS=1)"
+fi
+
 echo
 echo "Done. See out/demand_report.csv for the full ranked list."
+echo "If Sheets is configured, open your spreadsheet Dashboard tab for the Monday view."
