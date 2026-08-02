@@ -421,15 +421,25 @@ def build_search_volume_tab() -> list[list[Any]]:
     else:
         rows.extend(df_to_values(sig))
     rows.append([])
-    rows.append(
-        [
-            "SECTION B — All queried keywords (flat audit; NOT linked to product)"
-        ]
-    )
     kws = safe_read_csv("out/search_volume_keywords.csv")
     if kws.empty:
+        rows.append(["SECTION B — Keyword-level audit"])
         rows.append(["(no search_volume_keywords.csv)"])
+    elif "product" in kws.columns and kws["product"].astype(str).str.strip().any():
+        rows.append(
+            [
+                "SECTION B — Keyword-level audit (per product; shared keywords "
+                "repeat once per product that uses them)"
+            ]
+        )
+        rows.extend(df_to_values(kws))
     else:
+        rows.append(
+            [
+                "SECTION B — All queried keywords (flat audit; no product "
+                "column — re-run search_volume_scan.py to link keywords)"
+            ]
+        )
         rows.extend(df_to_values(kws))
     return rows
 

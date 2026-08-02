@@ -424,6 +424,23 @@ def main(
     products_config: str = DEFAULT_PRODUCTS_CONFIG,
 ) -> None:
     product_meta = load_product_meta(products_config)
+    if not product_meta:
+        raise SystemExit(
+            f"No products found in {products_config} — cannot score."
+        )
+
+    # Spine = products.yaml only. Signal CSVs left-join onto it so a typo or
+    # drifted name in a scanner cannot create a phantom ranked product.
+    spine = pd.DataFrame(
+        [
+            {
+                "product": name,
+                "category": (meta.get("category") or ""),
+            }
+            for name, meta in product_meta.items()
+        ]
+    )
+    known = set(spine["product"])
 
     frames = [
         _safe_read(search_volume_path),
@@ -433,11 +450,35 @@ def main(
         _safe_read(reddit_path),
         _safe_read(x_path),
     ]
-    df = pd.DataFrame()
+    # Collect orphan product names across signals (data-integrity surface)
+    orphans: set[str] = set()
     for fr in frames:
-        df = _merge_on_product(df, fr)
+        if fr is None or fr.empty or "product" not in fr.columns:
+            continue
+        names = set(fr["product"].dropna().astype(str))
+        orphans |= names - known
+
+    if orphans:
+        print(
+            "WARNING: signal CSV product names not in products.yaml "
+            f"(ignored, not ranked): {sorted(orphans)}"
+        )
+
+    df = spine.copy()
+    for fr in frames:
+        if fr is None or fr.empty:
+            continue
+        # Drop signal category to prefer yaml category on spine
+        fr = fr.copy()
+        if "category" in fr.columns:
+            fr = fr.drop(columns=["category"])
+        # Keep only known products from this signal
+        if "product" in fr.columns:
+            fr = fr[fr["product"].isin(known)]
+        df = df.merge(fr, on="product", how="left")
+
     if df.empty:
-        raise SystemExit("No signal CSVs found to score.")
+        raise SystemExit("No products to score after merge.")
 
     _ensure_numeric(
         df,

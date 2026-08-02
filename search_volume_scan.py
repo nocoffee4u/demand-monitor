@@ -603,12 +603,21 @@ def write_keyword_csv(
     cache: dict,
     settings: dict,
     path: str,
+    by_product: dict[str, list[str]] | None = None,
 ) -> None:
+    """
+    Write keyword-level audit CSV.
+
+    When by_product is provided, emit one row per (product, keyword) so Sheets
+    can filter drill-down by product. Shared keywords appear once per product
+    that uses them (metrics are identical — cache is keyword-keyed).
+    """
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     loc = settings["location_code"]
     lang = settings["language_code"]
     entries = cache.get("entries") or {}
     fields = [
+        "product",
         "keyword",
         "search_volume",
         "competition",
@@ -620,23 +629,32 @@ def write_keyword_csv(
         "fetched_at",
         "no_data",
     ]
-    rows = []
-    for kw in keywords:
+    rows: list[dict] = []
+
+    def metric_row(product: str, kw: str) -> dict:
         e = entries.get(cache_key(kw, loc, lang)) or {}
-        rows.append(
-            {
-                "keyword": kw,
-                "search_volume": e.get("search_volume", ""),
-                "competition": e.get("competition", ""),
-                "competition_index": e.get("competition_index", ""),
-                "cpc": e.get("cpc", ""),
-                "low_top_of_page_bid": e.get("low_top_of_page_bid", ""),
-                "high_top_of_page_bid": e.get("high_top_of_page_bid", ""),
-                "spell": e.get("spell", ""),
-                "fetched_at": e.get("fetched_at", ""),
-                "no_data": e.get("no_data", False),
-            }
-        )
+        return {
+            "product": product,
+            "keyword": kw,
+            "search_volume": e.get("search_volume", ""),
+            "competition": e.get("competition", ""),
+            "competition_index": e.get("competition_index", ""),
+            "cpc": e.get("cpc", ""),
+            "low_top_of_page_bid": e.get("low_top_of_page_bid", ""),
+            "high_top_of_page_bid": e.get("high_top_of_page_bid", ""),
+            "spell": e.get("spell", ""),
+            "fetched_at": e.get("fetched_at", ""),
+            "no_data": e.get("no_data", False),
+        }
+
+    if by_product:
+        for product, kws in by_product.items():
+            for kw in kws:
+                rows.append(metric_row(product, kw))
+    else:
+        for kw in keywords:
+            rows.append(metric_row("", kw))
+
     with open(path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields)
         w.writeheader()
@@ -740,7 +758,7 @@ def scan(
             for p in (cfg.get("products") or [])
         ]
         write_product_csv(rows, out_products)
-        write_keyword_csv([], {"entries": {}}, settings, out_keywords)
+        write_keyword_csv([], {"entries": {}}, settings, out_keywords, by_product={})
         return
 
     all_kws, by_product = collect_all_keywords(cfg)
@@ -817,7 +835,9 @@ def scan(
         )
 
     write_product_csv(product_rows, out_products)
-    write_keyword_csv(all_kws, cache, settings, out_keywords)
+    write_keyword_csv(
+        all_kws, cache, settings, out_keywords, by_product=by_product
+    )
 
     # Summary table
     print(f"\nWrote {len(product_rows)} products → {out_products}")

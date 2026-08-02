@@ -30,14 +30,10 @@ fold Scoring Detail back into Product Rankings as hidden columns instead of
 a separate tab, that's a fine implementation-level call for Grok — the
 column *content* below doesn't change either way.
 
-One data gap worth flagging now, before Grok builds against it:
-**`out/search_volume_keywords.csv` has no `product` column** — it's a flat
-keyword cache (`keyword, search_volume, competition, ...`), not joinable to
-a specific product row. Section 1.3 below handles this as a global audit
-list rather than a per-product drill-down. If per-product keyword
-drill-down turns out to matter, `search_volume_scan.py` needs a `product`
-column added — that's a scanner change, out of scope for this doc, flagging
-so it's a deliberate choice and not a surprise later.
+**Resolved:** `search_volume_keywords.csv` now includes a `product` column
+(one row per product×keyword). Older flat files without `product` still
+export as a labeled audit list. Phantom product rows from signal-name drift
+are blocked in `score_demand.py` (products.yaml is the merge spine).
 
 ---
 
@@ -99,12 +95,13 @@ Two sections in one tab (stacked, not side-by-side — keeps column widths sane)
 `ads_competition_avg`, `cpc_avg`, `keywords_queried`, `keywords_with_data`.
 
 **Section B — keyword-level audit** (from `search_volume_keywords.csv`):
-`keyword`, `search_volume`, `competition`, `competition_index`, `cpc`,
-`low_top_of_page_bid`, `high_top_of_page_bid`, `fetched_at`. Per the gap
-noted in Section 0, this is a **flat global list**, not filterable by
-product — label the section header accordingly ("All queried keywords,
-unlinked to product — audit/cost-tracking only") so it doesn't get
-misread as per-product detail.
+`product`, `keyword`, `search_volume`, `competition`, `competition_index`,
+`cpc`, `low_top_of_page_bid`, `high_top_of_page_bid`, `fetched_at`.
+As of the product-link fix in `search_volume_scan.py`, this is **one row
+per (product, keyword)** so Sheets can filter by product. Shared keywords
+(e.g. a broad seed used by two products) appear once per product; metrics
+are identical (cache is still keyword-keyed). Older CSVs without `product`
+are still accepted and labeled as a flat audit list.
 
 ### 1.5 Marketplace
 Combines both "what already exists" sources into one tab per the brief's
