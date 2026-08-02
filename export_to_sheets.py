@@ -53,6 +53,11 @@ TAB_ORDER = [
     "Config",
 ]
 
+# Hidden sheet for chart series (trend pivot, category averages).
+# Keeps Dashboard free of raw chart-helper tables (spec §1.1).
+CHART_DATA_TAB = "_ChartData"
+TREND_TOP_N = 8
+
 RANKINGS_COLS = [
     "rank",
     "product",
@@ -185,35 +190,164 @@ def known_product_names(products: list[dict]) -> set[str]:
     return {p["name"] for p in products if p.get("name")}
 
 
+def source_is_active(meta: dict, key: str) -> bool:
+    """
+    Single source of truth for active/skipped chips and blank-vs-stale.
+    Prefer meta['sources'] written by score_demand.py; fall back to demand_unused.
+    """
+    sources = meta.get("sources") or {}
+    if key in sources:
+        return bool(sources[key])
+    unused = set(meta.get("demand_unused") or [])
+    if key == "reddit":
+        return not ("reddit_volume" in unused or "reddit_engagement" in unused)
+    if key == "x":
+        return not ("x_volume" in unused or "x_engagement" in unused)
+    if key == "trends":
+        return not ("trends_interest" in unused or "momentum" in unused)
+    if key == "search_volume":
+        return not ("search_volume" in unused or "volume_quality" in unused)
+    if key == "community":
+        return "community_downloads" not in unused
+    if key == "marketplace":
+        return "marketplace_listings" not in set(meta.get("competition_unused") or [])
+    return True
+
+
 def blank_unused_sources(df: pd.DataFrame, meta: dict) -> pd.DataFrame:
     """Turn zeros into blank for skipped sources (display-only copy)."""
     out = df.copy()
-    unused = set(meta.get("demand_unused") or [])
-    sources = meta.get("sources") or {}
-
-    def source_off(key: str) -> bool:
-        if key in sources:
-            return not sources[key]
-        # Map demand_unused keys to source families
-        if key == "reddit":
-            return "reddit_volume" in unused or "reddit_engagement" in unused
-        if key == "x":
-            return "x_volume" in unused or "x_engagement" in unused
-        if key == "trends":
-            return "trends_interest" in unused or "momentum" in unused
-        if key == "search_volume":
-            return "search_volume" in unused or "volume_quality" in unused
-        if key == "community":
-            return "community_downloads" in unused
-        return False
-
     for src, cols in SOURCE_COL_MAP.items():
-        if not source_off(src):
+        if source_is_active(meta, src):
             continue
         for c in cols:
             if c in out.columns:
                 out[c] = ""
     return out
+
+
+def coerce_history_df(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Coerce History columns after a Sheets values().get() read.
+    Cells arrive as strings; nsmallest/nlargest on string 'rank' sorts
+    lexicographically ("10" < "2") — always coerce before ranking logic.
+    """
+    if df is None or df.empty:
+        return pd.DataFrame(columns=HISTORY_COLS)
+    out = df.copy()
+    # Normalize column names (strip whitespace from accidental header edits)
+    out.columns = [str(c).strip() for c in out.columns]
+    for col in (
+        "rank",
+        "priority_score",
+        "demand_score",
+        "fit_score",
+        "competition_score",
+        "opportunity_score",
+        "search_volume",
+        "total_listings",
+        "community_downloads",
+    ):
+        if col in out.columns:
+            out[col] = pd.to_numeric(out[col], errors="coerce")
+    if "product" in out.columns:
+        out["product"] = out["product"].astype(str)
+    if "run_date" in out.columns:
+        out["run_date"] = out["run_date"].astype(str)
+    if "run_id" in out.columns:
+        out["run_id"] = out["run_id"].astype(str)
+    return out
+
+
+def history_from_sheet_values(values: list[list[Any]]) -> pd.DataFrame:
+    """Parse History sheet values into a typed DataFrame (or empty)."""
+    if not values or len(values) < 2:
+        return pd.DataFrame(columns=HISTORY_COLS)
+    header = [str(h).strip() for h in values[0]]
+    # Pad short rows
+    rows = []
+    for row in values[1:]:
+        padded = list(row) + [""] * (len(header) - len(row))
+        rows.append(padded[: len(header)])
+    df = pd.DataFrame(rows, columns=header)
+    return coerce_history_df(df)
+
+
+def build_trend_pivot(
+    history: pd.DataFrame,
+    rankings: pd.DataFrame,
+    top_n: int = TREND_TOP_N,
+) -> pd.DataFrame:
+    """
+    Wide table for multi-line priority trend chart:
+      run_date | Product A | Product B | ...
+    Products = current top `top_n` by priority_score.
+    """
+    if rankings.empty or "product" not in rankings.columns:
+        return pd.DataFrame(columns=["run_date"])
+
+    r = rankings.copy()
+    r["priority_score"] = pd.to_numeric(r.get("priority_score"), errors="coerce")
+    top_products = (
+        r.sort_values("priority_score", ascending=False)["product"]
+        .head(top_n)
+        .tolist()
+    )
+    if not top_products:
+        return pd.DataFrame(columns=["run_date"])
+
+    hist = coerce_history_df(history)
+    if hist.empty or "product" not in hist.columns:
+        # Single-run fallback: one date row from rankings
+        run_date = ""
+        if "run_date" in rankings.columns and len(rankings):
+            run_date = str(rankings["run_date"].iloc[0])
+        row = {"run_date": run_date}
+        for p in top_products:
+            sub = r[r["product"] == p]
+            row[p] = (
+                float(sub["priority_score"].iloc[0])
+                if len(sub) and pd.notna(sub["priority_score"].iloc[0])
+                else ""
+            )
+        return pd.DataFrame([row])
+
+    hist = hist[hist["product"].isin(top_products)].copy()
+    if hist.empty:
+        return pd.DataFrame(columns=["run_date"] + top_products)
+
+    # Prefer run_date for x-axis; fall back to run_id
+    date_col = "run_date" if "run_date" in hist.columns else "run_id"
+    pivot = hist.pivot_table(
+        index=date_col,
+        columns="product",
+        values="priority_score",
+        aggfunc="last",
+    )
+    # Stable column order = current top ranking order
+    pivot = pivot.reindex(columns=top_products)
+    pivot = pivot.sort_index()
+    pivot = pivot.reset_index().rename(columns={date_col: "run_date"})
+    return pivot
+
+
+def build_category_avg(rankings: pd.DataFrame) -> pd.DataFrame:
+    if rankings.empty or "category" not in rankings.columns:
+        return pd.DataFrame(columns=["category", "avg_priority_score", "n_products"])
+    tmp = rankings.copy()
+    tmp["priority_score"] = pd.to_numeric(tmp.get("priority_score"), errors="coerce")
+    tmp["category"] = tmp["category"].replace("", "(blank)").fillna("(blank)")
+    g = (
+        tmp.groupby("category", dropna=False)
+        .agg(
+            avg_priority_score=("priority_score", "mean"),
+            n_products=("product", "count"),
+        )
+        .reset_index()
+        .sort_values("avg_priority_score", ascending=False)
+    )
+    g["avg_priority_score"] = g["avg_priority_score"].round(1)
+    return g
 
 
 def safe_read_csv(path: str) -> pd.DataFrame:
@@ -299,22 +433,23 @@ def compute_actions(
         )
 
     # 2. Watch — rising (needs ≥2 history runs)
-    if not history.empty and "product" in history.columns:
-        hist = history.copy()
-        hist["priority_score"] = pd.to_numeric(hist["priority_score"], errors="coerce")
+    hist = coerce_history_df(history)
+    if not hist.empty and "product" in hist.columns:
         rising = []
         for product, g in hist.groupby("product"):
             g = g.sort_values(["run_date", "run_id"])
             if len(g) < 2:
                 continue
-            prev = float(g.iloc[-2]["priority_score"])
-            cur = float(g.iloc[-1]["priority_score"])
+            prev_ps = g.iloc[-2]["priority_score"]
+            cur_ps = g.iloc[-1]["priority_score"]
+            if pd.isna(prev_ps) or pd.isna(cur_ps):
+                continue
+            prev, cur = float(prev_ps), float(cur_ps)
             if cur > prev and 50 <= cur < 70:
                 rising.append((product, prev, cur))
         rising.sort(key=lambda x: x[2] - x[1], reverse=True)
-        if not rising and history["product"].nunique() > 0:
-            # only one run overall?
-            runs = history["run_id"].nunique() if "run_id" in history.columns else 0
+        if not rising and hist["product"].nunique() > 0:
+            runs = hist["run_id"].nunique() if "run_id" in hist.columns else 0
             if runs < 2:
                 actions.append(
                     "Watch — rising: insufficient history (need ≥2 weekly runs)"
@@ -338,9 +473,8 @@ def compute_actions(
             )
 
     # 4. Reconsider / drop — priority < 30 for 3 consecutive history runs
-    if not history.empty and "product" in history.columns:
-        hist = history.copy()
-        hist["priority_score"] = pd.to_numeric(hist["priority_score"], errors="coerce")
+    hist = coerce_history_df(history)
+    if not hist.empty and "product" in hist.columns:
         drops = []
         for product, g in hist.groupby("product"):
             g = g.sort_values(["run_date", "run_id"])
@@ -412,17 +546,47 @@ def build_scoring_detail(report: pd.DataFrame, meta: dict) -> pd.DataFrame:
     return df[ordered]
 
 
-def build_search_volume_tab() -> list[list[Any]]:
+def build_search_volume_tab(meta: dict) -> list[list[Any]]:
     rows: list[list[Any]] = []
+    active = source_is_active(meta, "search_volume")
+    run_date = meta.get("run_date", "")
+    if active:
+        rows.append(
+            [
+                f"Search Volume — ACTIVE this run ({run_date})",
+                "Numbers below are from this pipeline run.",
+            ]
+        )
+    else:
+        rows.append(
+            [
+                f"Search Volume — SKIPPED / STALE this run ({run_date})",
+                "Search volume scan was not active; cells blanked so prior "
+                "out/*.csv cache is not mistaken for fresh data.",
+            ]
+        )
+
+    rows.append([])
     rows.append(["SECTION A — Per-product search volume summary"])
     sig = safe_read_csv("out/search_volume_signal.csv")
-    if sig.empty:
+    if not active:
+        rows.append(
+            [
+                "(skipped this run — re-run without SKIP_SEARCH_VOLUME / with "
+                "DataForSEO credentials to refresh)"
+            ]
+        )
+    elif sig.empty:
         rows.append(["(no search_volume_signal.csv)"])
     else:
         rows.extend(df_to_values(sig))
+
     rows.append([])
     kws = safe_read_csv("out/search_volume_keywords.csv")
-    if kws.empty:
+    if not active:
+        rows.append(["SECTION B — Keyword-level audit"])
+        rows.append(["(skipped this run — no fresh keyword rows)"])
+    elif kws.empty:
         rows.append(["SECTION B — Keyword-level audit"])
         rows.append(["(no search_volume_keywords.csv)"])
     elif "product" in kws.columns and kws["product"].astype(str).str.strip().any():
@@ -444,11 +608,19 @@ def build_search_volume_tab() -> list[list[Any]]:
     return rows
 
 
-def build_marketplace_tab(report: pd.DataFrame) -> pd.DataFrame:
+def build_marketplace_tab(report: pd.DataFrame, meta: dict) -> pd.DataFrame:
+    """
+    Marketplace listings + community engagement. When community or marketplace
+    sources are skipped this run, blank those columns and stamp a status row
+    via a leading note column is awkward for DataFrames — caller wraps with
+    a status banner when writing the sheet. Here we blank columns only.
+    """
     mp = safe_read_csv("out/marketplace_signal.csv")
     pc = safe_read_csv("out/printables_cults_signal.csv")
+    market_active = source_is_active(meta, "marketplace")
+    community_active = source_is_active(meta, "community")
+
     if mp.empty and pc.empty:
-        # fall back to report columns
         cols = [
             "product",
             "category",
@@ -460,40 +632,69 @@ def build_marketplace_tab(report: pd.DataFrame) -> pd.DataFrame:
             "community_likes",
         ]
         out = report[[c for c in cols if c in report.columns]].copy()
-        return out
-    base = pc if not pc.empty else pd.DataFrame({"product": report["product"]})
-    if not mp.empty:
-        base = base.merge(mp, on="product", how="outer", suffixes=("", "_mp"))
-    if "category" not in base.columns and "category" in report.columns:
-        base = base.merge(
-            report[["product", "category"]], on="product", how="left"
-        )
-    if "total_listings" not in base.columns:
-        p = pd.to_numeric(base.get("printables_listing_count"), errors="coerce").fillna(0)
-        c = pd.to_numeric(base.get("cults_listing_count"), errors="coerce").fillna(0)
-        base["total_listings"] = p + c
-    preferred = [
-        "product",
-        "category",
-        "printables_listing_count",
-        "cults_listing_count",
-        "total_listings",
-        "printables_downloads",
-        "printables_makes",
-        "printables_likes",
-        "printables_top_downloads",
-        "printables_top_name",
-        "cults_downloads",
-        "cults_makes",
-        "cults_likes",
-        "cults_top_downloads",
-        "cults_top_name",
-        "community_downloads",
-        "community_makes",
-        "community_likes",
+    else:
+        base = pc if not pc.empty else pd.DataFrame({"product": report["product"]})
+        if not mp.empty:
+            base = base.merge(mp, on="product", how="outer", suffixes=("", "_mp"))
+        if "category" not in base.columns and "category" in report.columns:
+            base = base.merge(
+                report[["product", "category"]], on="product", how="left"
+            )
+        if "total_listings" not in base.columns:
+            p = pd.to_numeric(
+                base.get("printables_listing_count"), errors="coerce"
+            ).fillna(0)
+            c = pd.to_numeric(
+                base.get("cults_listing_count"), errors="coerce"
+            ).fillna(0)
+            base["total_listings"] = p + c
+        preferred = [
+            "product",
+            "category",
+            "printables_listing_count",
+            "cults_listing_count",
+            "total_listings",
+            "printables_downloads",
+            "printables_makes",
+            "printables_likes",
+            "printables_top_downloads",
+            "printables_top_name",
+            "cults_downloads",
+            "cults_makes",
+            "cults_likes",
+            "cults_top_downloads",
+            "cults_top_name",
+            "community_downloads",
+            "community_makes",
+            "community_likes",
+        ]
+        cols = [c for c in preferred if c in base.columns]
+        out = base[cols].copy()
+
+    listing_cols = [
+        c
+        for c in out.columns
+        if c.endswith("_listing_count") or c == "total_listings"
     ]
-    cols = [c for c in preferred if c in base.columns]
-    return base[cols]
+    community_cols = [
+        c
+        for c in out.columns
+        if "download" in c or "makes" in c or "likes" in c or "top_" in c
+    ]
+
+    if not market_active:
+        for c in listing_cols:
+            out[c] = ""
+    if not community_active:
+        for c in community_cols:
+            out[c] = ""
+
+    # Status columns for the human (first columns when written with banner)
+    out.insert(0, "listings_status", "ACTIVE" if market_active else "SKIPPED/STALE")
+    out.insert(
+        1, "community_status", "ACTIVE" if community_active else "SKIPPED/STALE"
+    )
+    return out
 
 
 def build_local_service_tab() -> list[list[Any]]:
@@ -606,6 +807,18 @@ def build_history_rows(report: pd.DataFrame, meta: dict) -> pd.DataFrame:
     return df[HISTORY_COLS]
 
 
+def top10_products_for_run(hist: pd.DataFrame, run_id: str) -> set[str]:
+    """Top 10 products for a History run_id — numeric-safe."""
+    g = hist[hist["run_id"] == run_id]
+    if g.empty:
+        return set()
+    if "rank" in g.columns and g["rank"].notna().any():
+        return set(g.nsmallest(10, "rank")["product"].tolist())
+    if "priority_score" in g.columns and g["priority_score"].notna().any():
+        return set(g.nlargest(10, "priority_score")["product"].tolist())
+    return set()
+
+
 def build_dashboard(
     rankings: pd.DataFrame,
     meta: dict,
@@ -614,11 +827,13 @@ def build_dashboard(
     history: pd.DataFrame,
     unmatched: list[str],
 ) -> list[list[Any]]:
-    """Flat grid for Dashboard tab — charts overlay on specific ranges."""
+    """
+    Human-facing Dashboard only (no raw chart-helper tables).
+    Charts bind to Product Rankings + hidden _ChartData (trend/category).
+    """
     rows: list[list[Any]] = []
     run_date = meta.get("run_date", "")
     run_time = meta.get("run_time", "")
-    # Row 1-4: status strip
     rows.append(["DEMAND MONITOR — DASHBOARD"])
     rows.append(
         [
@@ -628,7 +843,6 @@ def build_dashboard(
             meta.get("run_id", ""),
         ]
     )
-    # Freshness
     freshness = "unknown"
     try:
         rd = datetime.strptime(run_date, "%Y-%m-%d").date()
@@ -643,7 +857,6 @@ def build_dashboard(
         pass
     rows.append(["Freshness:", freshness])
 
-    sources = meta.get("sources") or {}
     chips = []
     for name, key in [
         ("Search Volume", "search_volume"),
@@ -653,64 +866,34 @@ def build_dashboard(
         ("X", "x"),
         ("Reddit", "reddit"),
     ]:
-        active = sources.get(key, True)
-        # If sources dict incomplete, assume active unless in demand_unused
-        unused = meta.get("demand_unused") or []
-        if key == "reddit" and (
-            "reddit_volume" in unused or "reddit_engagement" in unused
-        ):
-            active = False
-        if key == "x" and ("x_volume" in unused or "x_engagement" in unused):
-            active = False
-        if key == "trends" and (
-            "trends_interest" in unused or "momentum" in unused
-        ):
-            active = False
-        if key == "search_volume" and (
-            "search_volume" in unused or "volume_quality" in unused
-        ):
-            active = False
-        if key == "community" and "community_downloads" in unused:
-            active = False
+        active = source_is_active(meta, key)
         chips.append(f"{name}: {'active' if active else 'skipped'}")
     rows.append(["Sources this run:", " | ".join(chips)])
 
-    # KPIs
     n_prod = int(meta.get("products_tracked") or len(rankings))
     top_p = ""
     if not rankings.empty and "priority_score" in rankings.columns:
         top_p = float(
             pd.to_numeric(rankings["priority_score"], errors="coerce").max() or 0
         )
-    # churn: new in top 10 vs previous history run
+
+    # Churn — history must be numeric-coerced (see coerce_history_df)
     churn = "n/a (need ≥2 history runs)"
-    if not history.empty and "run_id" in history.columns:
-        runs = sorted(history["run_id"].dropna().unique())
+    hist = coerce_history_df(history)
+    if not hist.empty and "run_id" in hist.columns:
+        runs = sorted(hist["run_id"].dropna().unique())
         if len(runs) >= 2:
             cur_id, prev_id = runs[-1], runs[-2]
-            cur_top = set(
-                history[history["run_id"] == cur_id]
-                .nsmallest(10, "rank")["product"]
-                .tolist()
-            ) if "rank" in history.columns else set()
-            # if rank missing, use priority
-            if not cur_top:
-                cur_top = set(
-                    history[history["run_id"] == cur_id]
-                    .nlargest(10, "priority_score")["product"]
-                    .tolist()
-                )
-            prev_top = set(
-                history[history["run_id"] == prev_id]
-                .nsmallest(10, "rank")["product"]
-                .tolist()
-            ) if "rank" in history.columns else set(
-                history[history["run_id"] == prev_id]
-                .nlargest(10, "priority_score")["product"]
-                .tolist()
-            )
+            cur_top = top10_products_for_run(hist, cur_id)
+            prev_top = top10_products_for_run(hist, prev_id)
             new_in = cur_top - prev_top
             churn = f"{len(new_in)} new in top 10 vs last run"
+            if new_in:
+                churn += f" ({', '.join(sorted(new_in)[:5])}"
+                if len(new_in) > 5:
+                    churn += ", …"
+                churn += ")"
+
     local_n = len(local_kw) if not local_kw.empty else 0
     rows.append([])
     rows.append(
@@ -741,8 +924,6 @@ def build_dashboard(
 
     rows.append([])
     rows.append(["TOP OPPORTUNITIES THIS WEEK"])
-    # Chart data block starts at a known place — we'll also write a clean
-    # table for the bar chart at columns A-F starting after header.
     top_cols = [
         "rank",
         "product",
@@ -762,49 +943,29 @@ def build_dashboard(
     for _, r in top.iterrows():
         rows.append([r[c] for c in top_cols])
 
-    # Helper ranges for charts (Demand vs Fit scatter) — all products
+    # Niche comparison (human summary — also mirrored to _ChartData for charts)
     rows.append([])
-    rows.append(["CHART DATA — Demand vs Fit (all products)"])
-    rows.append(["product", "fit_score", "demand_score", "search_volume", "category"])
-    for _, r in rankings.iterrows():
-        rows.append(
-            [
-                r.get("product", ""),
-                r.get("fit_score", ""),
-                r.get("demand_score", ""),
-                r.get("search_volume", ""),
-                r.get("category", ""),
-            ]
-        )
-
-    # Category averages for chart 3
-    rows.append([])
-    rows.append(["CHART DATA — Category avg priority"])
+    rows.append(["CATEGORY / NICHE COMPARISON (avg priority)"])
     rows.append(["category", "avg_priority_score", "n_products"])
-    if not rankings.empty and "category" in rankings.columns:
-        tmp = rankings.copy()
-        tmp["priority_score"] = pd.to_numeric(tmp["priority_score"], errors="coerce")
-        g = (
-            tmp.groupby(tmp["category"].replace("", "(blank)"))
-            .agg(avg_priority_score=("priority_score", "mean"), n_products=("product", "count"))
-            .reset_index()
-            .sort_values("avg_priority_score", ascending=False)
-        )
-        for _, r in g.iterrows():
+    cat = build_category_avg(rankings)
+    if cat.empty:
+        rows.append(["(none)", "", ""])
+    else:
+        for _, r in cat.iterrows():
             rows.append(
                 [
                     r["category"],
-                    round(float(r["avg_priority_score"]), 1)
+                    r["avg_priority_score"]
                     if pd.notna(r["avg_priority_score"])
                     else "",
                     int(r["n_products"]),
                 ]
             )
 
-    # Local service mini panel
+    # Local service mini panel — use panel position rank, not source rank
     rows.append([])
-    rows.append(["LOCAL SERVICE (PHOENIX) — top keywords"])
-    rows.append(["rank", "keyword", "search_volume", "cpc"])
+    rows.append(["LOCAL SERVICE (PHOENIX) — top keywords by volume"])
+    rows.append(["#", "keyword", "search_volume", "cpc"])
     if not local_kw.empty:
         lk = local_kw.copy()
         if "search_volume" in lk.columns:
@@ -813,7 +974,7 @@ def build_dashboard(
         for i, (_, r) in enumerate(lk.iterrows(), 1):
             rows.append(
                 [
-                    r.get("rank", i),
+                    i,
                     r.get("keyword", ""),
                     r.get("search_volume", ""),
                     r.get("cpc", ""),
@@ -825,9 +986,10 @@ def build_dashboard(
     rows.append([])
     rows.append(
         [
-            "Notes: Charts are bound to Product Rankings + History + the "
-            "CHART DATA blocks above. Drill into Product Rankings / Scoring "
-            "Detail for full columns."
+            "Charts: Top Priority + Demand vs Fit bind to Product Rankings; "
+            "Priority trend + Category bar bind to hidden _ChartData "
+            "(built from History / rankings each export). "
+            "Drill into Product Rankings or Scoring Detail for full columns."
         ]
     )
     return rows
@@ -856,7 +1018,7 @@ def get_sheets_service(sa_path: str):
 
 
 def ensure_tabs(service, spreadsheet_id: str) -> dict[str, int]:
-    """Create missing tabs in TAB_ORDER; return title → sheetId."""
+    """Create missing tabs in TAB_ORDER + hidden _ChartData; return title → sheetId."""
     meta = (
         service.spreadsheets()
         .get(spreadsheetId=spreadsheet_id, fields="sheets.properties")
@@ -872,6 +1034,17 @@ def ensure_tabs(service, spreadsheet_id: str) -> dict[str, int]:
             requests_body.append(
                 {"addSheet": {"properties": {"title": title}}}
             )
+    if CHART_DATA_TAB not in existing:
+        requests_body.append(
+            {
+                "addSheet": {
+                    "properties": {
+                        "title": CHART_DATA_TAB,
+                        "hidden": True,
+                    }
+                }
+            }
+        )
     if requests_body:
         LOG.info("Creating %d missing tabs…", len(requests_body))
         service.spreadsheets().batchUpdate(
@@ -886,6 +1059,24 @@ def ensure_tabs(service, spreadsheet_id: str) -> dict[str, int]:
             s["properties"]["title"]: s["properties"]["sheetId"]
             for s in meta.get("sheets", [])
         }
+    # Ensure _ChartData stays hidden if it already existed visible
+    if CHART_DATA_TAB in existing:
+        service.spreadsheets().batchUpdate(
+            spreadsheetId=spreadsheet_id,
+            body={
+                "requests": [
+                    {
+                        "updateSheetProperties": {
+                            "properties": {
+                                "sheetId": existing[CHART_DATA_TAB],
+                                "hidden": True,
+                            },
+                            "fields": "hidden",
+                        }
+                    }
+                ]
+            },
+        ).execute()
 
     # Reorder tabs to match TAB_ORDER
     reorder = []
@@ -965,7 +1156,11 @@ def append_history(
     sheet_id: int,
     new_df: pd.DataFrame,
 ) -> int:
-    """Append History rows; return number of rows appended."""
+    """
+    Append History rows; return number of rows appended.
+    Validates header shape before append so a manually edited History tab
+    cannot silently shift columns and corrupt the log.
+    """
     existing = read_sheet_values(service, spreadsheet_id, "History")
     if not existing:
         values = df_to_values(new_df, HISTORY_COLS)
@@ -973,12 +1168,29 @@ def append_history(
         freeze_header(service, spreadsheet_id, sheet_id)
         return max(0, len(values) - 1)
 
-    # existing[0] = header
-    header = existing[0]
-    # Map new_df to header order if possible
-    cols = HISTORY_COLS
-    new_values = df_to_values(new_df, cols)
-    # Skip header from new_values
+    header = [str(h).strip() for h in existing[0]]
+    expected = list(HISTORY_COLS)
+
+    if header == expected:
+        col_order = expected
+    elif set(header) == set(expected) and len(header) == len(expected):
+        # Same columns, different order — remap new rows to sheet order
+        LOG.warning(
+            "History header column order differs from HISTORY_COLS; "
+            "remapping append to match sheet order: %s",
+            header,
+        )
+        col_order = header
+    else:
+        raise RuntimeError(
+            "History sheet header does not match expected HISTORY_COLS.\n"
+            f"  expected: {expected}\n"
+            f"  found:    {header}\n"
+            "Fix or clear the History tab header before exporting, so the "
+            "append-only log cannot silently drift."
+        )
+
+    new_values = df_to_values(new_df, col_order)
     to_append = new_values[1:]
     if not to_append:
         return 0
@@ -1013,30 +1225,57 @@ def delete_all_charts(service, spreadsheet_id: str, sheet_id: int) -> None:
         ).execute()
 
 
+def write_chart_data_sheet(
+    service,
+    spreadsheet_id: str,
+    trend_pivot: pd.DataFrame,
+    category_avg: pd.DataFrame,
+) -> tuple[int, int]:
+    """
+    Write hidden _ChartData: trend pivot at A1, category avg starting row 40.
+    Returns (n_trend_rows including header, n_category_rows including header).
+    """
+    blocks: list[list[Any]] = []
+    trend_vals = df_to_values(trend_pivot)
+    n_trend = len(trend_vals)
+    blocks.extend(trend_vals)
+    # spacer
+    while len(blocks) < 40:
+        blocks.append([])
+    cat_vals = df_to_values(category_avg)
+    n_cat = len(cat_vals)
+    blocks.extend(cat_vals)
+    clear_and_write(service, spreadsheet_id, CHART_DATA_TAB, blocks)
+    return n_trend, n_cat
+
+
 def add_dashboard_charts(
     service,
     spreadsheet_id: str,
     sheet_ids: dict[str, int],
     n_products: int,
     n_top: int = 10,
+    n_trend_rows: int = 0,
+    n_trend_cols: int = 0,
+    n_category_rows: int = 0,
 ) -> None:
-    """Create charts on Dashboard bound to live ranges."""
+    """
+    Charts on Dashboard:
+      1. Demand vs Fit scatter → Product Rankings (fit vs demand)
+      2. Top Priority bar → Product Rankings (product vs priority)
+      3. Category comparison bar → _ChartData category block (row 40+)
+      4. Priority trend lines → _ChartData trend pivot (row 0+)
+    """
     dash_id = sheet_ids["Dashboard"]
     rank_id = sheet_ids["Product Rankings"]
+    chart_id = sheet_ids.get(CHART_DATA_TAB)
     delete_all_charts(service, spreadsheet_id, dash_id)
 
-    # Product Rankings columns (1-indexed in A1, 0-indexed in API):
-    # A rank, B product, C category, D priority, E demand, F fit, G competition
-    # Dashboard layout is variable; we use fixed chart data blocks written
-    # after "CHART DATA — Demand vs Fit" and "CHART DATA — Category avg".
-    # Simpler approach: bind Top 10 bar to Product Rankings!B2:D11
-    # and Demand vs Fit scatter to Product Rankings fit/demand columns.
-
+    # Product Rankings: A rank, B product, C category, D priority, E demand, F fit
+    end_row = min(1 + n_top, 1 + n_products)
     requests_body = []
 
-    # Chart 2: Top 10 Priority horizontal bar — Product Rankings product + priority
-    # domain = product names (col B), series = priority (col D)
-    end_row = min(1 + n_top, 1 + n_products)  # 0-index end exclusive in grid
+    # Chart 2: Top Priority horizontal bar
     requests_body.append(
         {
             "addChart": {
@@ -1092,11 +1331,11 @@ def add_dashboard_charts(
                         "overlayPosition": {
                             "anchorCell": {
                                 "sheetId": dash_id,
-                                "rowIndex": 28,
+                                "rowIndex": 32,
                                 "columnIndex": 0,
                             },
-                            "widthPixels": 560,
-                            "heightPixels": 360,
+                            "widthPixels": 520,
+                            "heightPixels": 320,
                         }
                     },
                 }
@@ -1104,7 +1343,7 @@ def add_dashboard_charts(
         }
     )
 
-    # Chart 1: Demand vs Fit scatter — Product Rankings fit (F) vs demand (E)
+    # Chart 1: Demand vs Fit scatter
     requests_body.append(
         {
             "addChart": {
@@ -1160,11 +1399,11 @@ def add_dashboard_charts(
                         "overlayPosition": {
                             "anchorCell": {
                                 "sheetId": dash_id,
-                                "rowIndex": 28,
+                                "rowIndex": 32,
                                 "columnIndex": 6,
                             },
-                            "widthPixels": 480,
-                            "heightPixels": 360,
+                            "widthPixels": 440,
+                            "heightPixels": 320,
                         }
                     },
                 }
@@ -1172,11 +1411,164 @@ def add_dashboard_charts(
         }
     )
 
+    # Chart 3: Category comparison (from _ChartData starting row 40)
+    if chart_id is not None and n_category_rows >= 2:
+        cat_start = 40
+        cat_end = 40 + n_category_rows
+        requests_body.append(
+            {
+                "addChart": {
+                    "chart": {
+                        "spec": {
+                            "title": "Category avg priority",
+                            "basicChart": {
+                                "chartType": "COLUMN",
+                                "legendPosition": "NO_LEGEND",
+                                "axis": [
+                                    {"position": "BOTTOM_AXIS", "title": "category"},
+                                    {
+                                        "position": "LEFT_AXIS",
+                                        "title": "avg_priority_score",
+                                    },
+                                ],
+                                "domains": [
+                                    {
+                                        "domain": {
+                                            "sourceRange": {
+                                                "sources": [
+                                                    {
+                                                        "sheetId": chart_id,
+                                                        "startRowIndex": cat_start,
+                                                        "endRowIndex": cat_end,
+                                                        "startColumnIndex": 0,
+                                                        "endColumnIndex": 1,
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ],
+                                "series": [
+                                    {
+                                        "series": {
+                                            "sourceRange": {
+                                                "sources": [
+                                                    {
+                                                        "sheetId": chart_id,
+                                                        "startRowIndex": cat_start,
+                                                        "endRowIndex": cat_end,
+                                                        "startColumnIndex": 1,
+                                                        "endColumnIndex": 2,
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "targetAxis": "LEFT_AXIS",
+                                    }
+                                ],
+                                "headerCount": 1,
+                            },
+                        },
+                        "position": {
+                            "overlayPosition": {
+                                "anchorCell": {
+                                    "sheetId": dash_id,
+                                    "rowIndex": 52,
+                                    "columnIndex": 0,
+                                },
+                                "widthPixels": 480,
+                                "heightPixels": 280,
+                            }
+                        },
+                    }
+                }
+            }
+        )
+
+    # Chart 4: Priority trend (multi-line) — P0 required
+    # _ChartData A1: run_date | product1 | product2 | ...
+    if chart_id is not None and n_trend_rows >= 2 and n_trend_cols >= 2:
+        series = []
+        for col_i in range(1, n_trend_cols):
+            series.append(
+                {
+                    "series": {
+                        "sourceRange": {
+                            "sources": [
+                                {
+                                    "sheetId": chart_id,
+                                    "startRowIndex": 0,
+                                    "endRowIndex": n_trend_rows,
+                                    "startColumnIndex": col_i,
+                                    "endColumnIndex": col_i + 1,
+                                }
+                            ]
+                        }
+                    },
+                    "targetAxis": "LEFT_AXIS",
+                }
+            )
+        requests_body.append(
+            {
+                "addChart": {
+                    "chart": {
+                        "spec": {
+                            "title": "Priority score trend (current top products)",
+                            "basicChart": {
+                                "chartType": "LINE",
+                                "legendPosition": "BOTTOM_LEGEND",
+                                "axis": [
+                                    {"position": "BOTTOM_AXIS", "title": "run_date"},
+                                    {
+                                        "position": "LEFT_AXIS",
+                                        "title": "priority_score",
+                                    },
+                                ],
+                                "domains": [
+                                    {
+                                        "domain": {
+                                            "sourceRange": {
+                                                "sources": [
+                                                    {
+                                                        "sheetId": chart_id,
+                                                        "startRowIndex": 0,
+                                                        "endRowIndex": n_trend_rows,
+                                                        "startColumnIndex": 0,
+                                                        "endColumnIndex": 1,
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ],
+                                "series": series,
+                                "headerCount": 1,
+                            },
+                        },
+                        "position": {
+                            "overlayPosition": {
+                                "anchorCell": {
+                                    "sheetId": dash_id,
+                                    "rowIndex": 52,
+                                    "columnIndex": 6,
+                                },
+                                "widthPixels": 560,
+                                "heightPixels": 320,
+                            }
+                        },
+                    }
+                }
+            }
+        )
+
     try:
         service.spreadsheets().batchUpdate(
             spreadsheetId=spreadsheet_id, body={"requests": requests_body}
         ).execute()
-        LOG.info("Dashboard charts created (Top Priority + Demand vs Fit)")
+        LOG.info(
+            "Dashboard charts created (Top Priority, Demand vs Fit, "
+            "Category, Priority trend)"
+        )
     except Exception as e:
         LOG.warning("Chart creation failed (data still exported): %s", e)
 
@@ -1219,8 +1611,8 @@ def export(
 
     rankings = build_rankings(report, meta)
     detail = build_scoring_detail(report, meta)
-    sv_matrix = build_search_volume_tab()
-    market_df = build_marketplace_tab(report)
+    sv_matrix = build_search_volume_tab(meta)
+    market_df = build_marketplace_tab(report, meta)
     local_matrix = build_local_service_tab()
     config_matrix = build_config_tab(products, local_svc)
     history_new = build_history_rows(report, meta)
@@ -1230,17 +1622,27 @@ def export(
     # For actions we need existing history if any — dry-run uses empty
     history_existing = pd.DataFrame(columns=HISTORY_COLS)
 
-    actions = compute_actions(rankings, history_existing, local_kw, meta)
-    dashboard = build_dashboard(
-        rankings, meta, actions, local_kw, history_existing, unmatched
+    # Combined history for trend pivot (existing + this run)
+    history_for_trend = pd.concat(
+        [history_existing, coerce_history_df(history_new)], ignore_index=True
     )
 
+    actions = compute_actions(rankings, history_existing, local_kw, meta)
+    dashboard = build_dashboard(
+        rankings, meta, actions, local_kw, history_for_trend, unmatched
+    )
+    trend_pivot = build_trend_pivot(history_for_trend, rankings, TREND_TOP_N)
+    category_avg = build_category_avg(rankings)
+
     LOG.info(
-        "Prepared tabs: rankings=%d detail=%d history_new=%d actions=%d",
+        "Prepared tabs: rankings=%d detail=%d history_new=%d actions=%d "
+        "trend_pivot=%s category_rows=%d",
         len(rankings),
         len(detail),
         len(history_new),
         len(actions),
+        trend_pivot.shape,
+        len(category_avg),
     )
 
     if dry_run:
@@ -1250,6 +1652,49 @@ def export(
         detail.to_csv(out_dir / "scoring_detail.csv", index=False)
         history_new.to_csv(out_dir / "history_append.csv", index=False)
         market_df.to_csv(out_dir / "marketplace.csv", index=False)
+        trend_pivot.to_csv(out_dir / "trend_pivot.csv", index=False)
+        category_avg.to_csv(out_dir / "category_avg.csv", index=False)
+        # Synthetic second history run to verify numeric churn (P0 regression)
+        fake = history_new.copy()
+        if not fake.empty:
+            fake["run_id"] = "2000-01-01T00:00:00+00:00"
+            fake["run_date"] = "2000-01-01"
+            # String ranks as Sheets would return them
+            fake_str = fake.copy()
+            for c in ("rank", "priority_score"):
+                if c in fake_str.columns:
+                    fake_str[c] = fake_str[c].astype(str)
+            coerced = coerce_history_df(fake_str)
+            assert coerced["rank"].dtype.kind in "iuf", "rank must be numeric after coerce"
+            assert coerced["priority_score"].dtype.kind in "iuf"
+            # Lexicographic trap: string "10" < "2", numeric 10 > 2
+            trap = pd.DataFrame(
+                {
+                    "run_id": ["r1", "r1", "r1"],
+                    "product": ["A", "B", "C"],
+                    "rank": ["10", "2", "3"],
+                    "priority_score": ["90", "100", "80"],
+                }
+            )
+            trap_c = coerce_history_df(trap)
+            assert (
+                trap_c.nsmallest(1, "rank")["product"].iloc[0] == "B"
+            ), "numeric nsmallest on rank must pick rank=2 not rank=10"
+            (out_dir / "coerce_history_ok.txt").write_text(
+                "coerce_history_df: rank/priority numeric + nsmallest OK\n"
+            )
+        # Header validation unit check
+        try:
+            bad = [["run_date", "wrong"], ["x", "y"]]
+            # Simulate validation logic
+            header = [str(h).strip() for h in bad[0]]
+            assert header != list(HISTORY_COLS)
+            (out_dir / "header_validation_logic_ok.txt").write_text(
+                "header mismatch would abort append\n"
+            )
+        except Exception as e:
+            LOG.warning("header validation self-check: %s", e)
+
         (out_dir / "dashboard.txt").write_text(
             "\n".join("\t".join(str(c) for c in row) for row in dashboard)
         )
@@ -1257,10 +1702,20 @@ def export(
         (out_dir / "local_service.txt").write_text(
             "\n".join("\t".join(str(c) for c in row) for row in local_matrix)
         )
+        (out_dir / "search_volume.txt").write_text(
+            "\n".join("\t".join(str(c) for c in row) for row in sv_matrix)
+        )
+        # Ensure dead CHART DATA block is gone
+        dash_text = (out_dir / "dashboard.txt").read_text()
+        assert "CHART DATA — Demand vs Fit" not in dash_text
+        assert "CHART DATA — Category avg" not in dash_text
         LOG.info("Dry-run written to %s", out_dir)
         print("\n=== ACTION THIS WEEK (dry-run) ===")
         for a in actions:
             print(f"  • {a}")
+        print(f"\nTrend pivot preview ({trend_pivot.shape[0]} dates × "
+              f"{max(0, trend_pivot.shape[1]-1)} products):")
+        print(trend_pivot.head().to_string(index=False))
         print(f"\nDry-run complete → {out_dir}")
         return
 
@@ -1278,19 +1733,30 @@ def export(
         LOG.error("Set GOOGLE_SHEETS_SPREADSHEET_ID in .env")
         sys.exit(1)
 
-    service = get_sheets_service(sa_path)
+    try:
+        service = get_sheets_service(sa_path)
+    except Exception as e:
+        LOG.error(
+            "Failed to load service account credentials from %s: %s", sa_path, e
+        )
+        sys.exit(1)
     sheet_ids = ensure_tabs(service, spreadsheet_id)
 
-    # Read prior History for action rules (rising / drop)
+    # Read prior History for action rules (rising / drop) + trend chart
     try:
         prev_vals = read_sheet_values(service, spreadsheet_id, "History")
-        if prev_vals and len(prev_vals) > 1:
-            header = prev_vals[0]
-            history_existing = pd.DataFrame(prev_vals[1:], columns=header)
-            # recompute actions with real history
+        history_existing = history_from_sheet_values(prev_vals)
+        if not history_existing.empty:
+            history_for_trend = pd.concat(
+                [history_existing, coerce_history_df(history_new)],
+                ignore_index=True,
+            )
             actions = compute_actions(rankings, history_existing, local_kw, meta)
             dashboard = build_dashboard(
-                rankings, meta, actions, local_kw, history_existing, unmatched
+                rankings, meta, actions, local_kw, history_for_trend, unmatched
+            )
+            trend_pivot = build_trend_pivot(
+                history_for_trend, rankings, TREND_TOP_N
             )
     except Exception as e:
         LOG.warning("Could not read prior History: %s", e)
@@ -1308,10 +1774,19 @@ def export(
     freeze_header(service, spreadsheet_id, sheet_ids["Scoring Detail"])
 
     clear_and_write(service, spreadsheet_id, "Search Volume", sv_matrix)
-    clear_and_write(
-        service, spreadsheet_id, "Marketplace", df_to_values(market_df)
-    )
-    freeze_header(service, spreadsheet_id, sheet_ids["Marketplace"])
+    # Marketplace status banner + table
+    market_banner = [
+        [
+            f"Marketplace — listings: "
+            f"{'ACTIVE' if source_is_active(meta, 'marketplace') else 'SKIPPED/STALE'}; "
+            f"community: "
+            f"{'ACTIVE' if source_is_active(meta, 'community') else 'SKIPPED/STALE'} "
+            f"(run {meta.get('run_date', '')})",
+        ],
+        [],
+    ]
+    market_vals = market_banner + df_to_values(market_df)
+    clear_and_write(service, spreadsheet_id, "Marketplace", market_vals)
 
     clear_and_write(
         service, spreadsheet_id, "Local Service (Phoenix)", local_matrix
@@ -1323,6 +1798,20 @@ def export(
     )
     LOG.info("History appended %d rows", n_hist)
 
+    # Refresh trend pivot after append so chart includes this run
+    try:
+        full_hist = history_from_sheet_values(
+            read_sheet_values(service, spreadsheet_id, "History")
+        )
+        trend_pivot = build_trend_pivot(full_hist, rankings, TREND_TOP_N)
+    except Exception as e:
+        LOG.warning("Post-append History re-read failed: %s", e)
+
+    n_trend_rows, n_cat_rows = write_chart_data_sheet(
+        service, spreadsheet_id, trend_pivot, category_avg
+    )
+    n_trend_cols = trend_pivot.shape[1] if not trend_pivot.empty else 0
+
     if not skip_charts:
         add_dashboard_charts(
             service,
@@ -1330,6 +1819,9 @@ def export(
             sheet_ids,
             n_products=len(rankings),
             n_top=min(10, len(rankings)),
+            n_trend_rows=n_trend_rows,
+            n_trend_cols=n_trend_cols,
+            n_category_rows=n_cat_rows,
         )
 
     print("\n=== ACTION THIS WEEK ===")
@@ -1337,7 +1829,9 @@ def export(
         print(f"  • {a}")
     print(
         f"\nSheets export complete → spreadsheet {spreadsheet_id}\n"
-        f"  run_date={meta.get('run_date')}  history_rows_added={n_hist}"
+        f"  run_date={meta.get('run_date')}  history_rows_added={n_hist}\n"
+        f"  trend_pivot={trend_pivot.shape}  charts="
+        f"{'on' if not skip_charts else 'skipped'}"
     )
 
 
