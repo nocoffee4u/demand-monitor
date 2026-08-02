@@ -316,34 +316,48 @@ Discovery keywords (good for Reddit) are often too loose for marketplaces
    queries when tighter variants exist, and scores competition from the
    best *specific* hit rather than the global max of every shortened form.
 
-## Scoring: Demand vs Competition vs Opportunity
+## Scoring: Demand quality × Fit × Opportunity
 
-`score_demand.py` produces three scores per product (all 0–100):
+`score_demand.py` ranks products for *this stage of the business* (own
+products, Bambu FDM, low support), not raw Google volume alone.
 
-| Score | Meaning | Built from |
-|---|---|---|
-| **demand_score** | How strong is the pull? | Search volume, Printables/Cults downloads·makes·likes, Trends, X; Reddit only if present (tiny weight, dropped when empty) |
-| **competition_score** | How crowded is supply? | Marketplace listing counts, Google Ads competition index, incumbent download strength |
-| **opportunity_score** | **Primary rank** — demand relative to competition | Blend of `demand/(competition+floor)` and `demand × whitespace` |
+| Score | Meaning |
+|---|---|
+| **demand_score** | Quality-weighted pull: intent, specificity, problem intensity, log-volume×specificity, community engagement, momentum |
+| **fit_score** | Manufacturing + customer clarity: FDM-friendly, materials, clear buyer, low support burden |
+| **competition_score** | Listing counts + ads competition + incumbent downloads |
+| **opportunity_score** | Demand vs competition (market whitespace) |
+| **priority_score** | **Primary rank** = opportunity × fit |
 
 ```bash
 python3 score_demand.py
-# → out/demand_report.csv  (sorted by opportunity_score)
+# → out/demand_report.csv  (sorted by priority_score)
 ```
 
-Each row includes transparent contribution columns (`contrib_demand_*`,
-`contrib_competition_*`) and a short `score_explanation` string.
+Demand quality factors are **rule-based and visible**:
+`contrib_demand_intent`, `contrib_demand_specificity`,
+`contrib_demand_volume_quality`, etc., plus `intent_notes` /
+`specificity_notes` / `fit_flags`.
 
-Tune weights in `score_demand.py`:
+Broad high-volume terms (e.g. “car phone holder”) are **penalized** on
+specificity/intent so they don’t dominate. Reddit is optional and dropped
+when empty.
 
-- `DEMAND_WEIGHTS` / `COMPETITION_WEIGHTS`
-- `OPPORTUNITY_COMPETITION_FLOOR` (default 12)
-- `OPPORTUNITY_RATIO_BLEND` (default 0.65 toward pure ratio)
+Optional per-product fit overrides in `config/products.yaml`:
 
-**Reading results:** high opportunity = real demand with relatively thin
-competition. High demand + high competition = validated market but harder
-to win (e.g. generic car phone mounts). Low demand + low competition =
-quiet niche — only interesting if you already know the pain point.
+```yaml
+fit:
+  fdm_fit: 90
+  material_fit: 85
+  customer_clarity: 95
+  support_burden: 90   # high = low support burden
+```
+
+Tune constants at the top of `score_demand.py`: `DEMAND_WEIGHTS`,
+`FIT_WEIGHTS`, `PRIORITY_FIT_FLOOR`, etc.
+
+**Reading results:** high **priority** = quality demand + thin competition +
+good FDM/customer fit. High volume alone is not enough.
 
 ## Extending it later
 

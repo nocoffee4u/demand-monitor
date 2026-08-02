@@ -8,6 +8,12 @@
 #   marketplace_keywords   - tighter competition queries (optional)
 #   x_keywords             - optional tighter X search phrases
 #   category               - "rad_power_bikes", "mtb_general", etc.
+#   fit:                   - optional overrides for manufacturing-fit score
+#                            (0–100 each; omit to use rule-based defaults)
+#     fdm_fit              - works on Bambu FDM (P1S+AMS)?
+#     material_fit         - PLA/PETG/PETG-CF/Nylon-CF friendly?
+#     customer_clarity     - obvious buyer + use case?
+#     support_burden       - high = low support (simple/robust)
 # ---------------------------------------------------------------------------
 
 products:
