@@ -4,6 +4,11 @@ __pycache__/
 *.pyc
 cache/
 out/logs/*.log
+# Pipeline run outputs (regenerated every run — do not commit)
+out/*.csv
+out/*.json
+out/*.md
+!out/logs/.gitkeep
 # Google service account keys (never commit)
 *-service-account*.json
 service-account*.json
