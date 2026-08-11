@@ -7,6 +7,7 @@
 #                            (used by search_volume_scan.py / DataForSEO)
 #   marketplace_keywords   - tighter competition queries (optional)
 #   x_keywords             - optional tighter X search phrases
+#   youtube_keywords       - optional YouTube search phrases (else keywords)
 #   category               - "rad_power_bikes", "mtb_general", etc.
 #   fit:                   - optional overrides for manufacturing-fit score
 #                            (0–100 each; omit to use rule-based defaults)

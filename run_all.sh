@@ -15,6 +15,11 @@
 #   Otherwise x_scan.py falls back to x_manual_log.csv.
 #   Skip entirely: SKIP_X=1 ./run_all.sh
 #
+# YouTube signal (optional, free API key):
+#   Set YOUTUBE_API_KEY in .env (YouTube Data API v3).
+#   Estimate quota: python3 youtube_scan.py --estimate
+#   Skip: SKIP_YOUTUBE=1 ./run_all.sh
+#
 # Search volume (DataForSEO Google Ads — primary demand signal):
 #   Set DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD in .env.
 #   Cached weekly by default. Skip: SKIP_SEARCH_VOLUME=1 ./run_all.sh
@@ -38,7 +43,7 @@ fi
 
 REDDIT_BACKEND="${REDDIT_BACKEND:-pullpush}"
 STEP=0
-total=8
+total=9
 
 step() {
   STEP=$((STEP + 1))
@@ -98,6 +103,20 @@ if [[ "${SKIP_X:-0}" != "1" ]]; then
 else
   step "X (Twitter) scan"
   echo "  skipped (SKIP_X=1)"
+fi
+
+if [[ "${SKIP_YOUTUBE:-0}" != "1" ]]; then
+  step "YouTube scan (optional social/content signal)"
+  if [[ -n "${YOUTUBE_API_KEY:-}" ]]; then
+    python3 youtube_scan.py || echo "  [warn] YouTube scan failed — continuing"
+  else
+    echo "  skipped (no YOUTUBE_API_KEY — set in .env; scoring redistributes)"
+    # Still write empty rows so score_demand sees a consistent path
+    python3 youtube_scan.py || true
+  fi
+else
+  step "YouTube scan"
+  echo "  skipped (SKIP_YOUTUBE=1)"
 fi
 
 step "Scoring & ranking"

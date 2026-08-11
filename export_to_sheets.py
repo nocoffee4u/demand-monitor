@@ -53,10 +53,14 @@ TAB_ORDER = [
     "Config",
 ]
 
-# Hidden sheet for chart series (trend pivot, category averages).
+# Hidden sheet for chart series (trend pivot, category averages, labeled scatter).
 # Keeps Dashboard free of raw chart-helper tables (spec §1.1).
 CHART_DATA_TAB = "_ChartData"
 TREND_TOP_N = 8
+# _ChartData layout: trend @ row 0, category @ 40, Demand-vs-Fit multi-series @ 80
+CHART_CATEGORY_START = 40
+CHART_SCATTER_START = 80
+SCATTER_TOP_N = 12  # labeled points (legend + KEY); keeps chart readable
 
 RANKINGS_COLS = [
     "rank",
@@ -65,6 +69,7 @@ RANKINGS_COLS = [
     "priority_score",
     "demand_score",
     "fit_score",
+    "h2s_fit",
     "competition_score",
     "opportunity_score",
     "search_volume",
@@ -81,6 +86,157 @@ RANKINGS_COLS = [
     "score_explanation",
     "run_date",
 ]
+
+# H2S equipment-match (Dashboard V1) — answers: "Does this product *use*
+# H2S strengths?" NOT "Is it easy FDM?" (that is already fit_score).
+# Axes: build volume, structural load, eng-materials / heated chamber.
+# Intentionally ignores fdm_friendly / single_piece / high fit_score.
+
+# Larger physical size / envelope (strong positive for H2S volume)
+_H2S_SIZE_LARGE = (
+    "bash guard",
+    "chain guide",
+    "frame protector",
+    "chainstay",
+    "fender",
+    "mudguard",
+    "snorkel",
+    "storage",
+    "cup holder",
+    "kickstand",
+)
+_H2S_SIZE_MEDIUM = (
+    "crash guard",
+    "arm / frame",
+    "frame crash",
+    "cargo",
+    "bracket",
+    "holder",
+    "widener",
+    "base widener",
+)
+# Explicitly small / commodity geometry (no volume benefit)
+_H2S_SIZE_SMALL = (
+    "dust cap",
+    "charge port",
+    "charging port",
+    "fuse cover",
+    "terminal cover",
+    "terminal / fuse",
+    "clip",
+    "clips",
+    "trim clip",
+    "antenna",
+    "vtx",
+    "phone mount",
+    "display / phone",
+    "gopro",
+    "action cam",
+    "action-cam",
+    "tablet mount",
+)
+
+# Structural / load-bearing use
+_H2S_STRUCT_HIGH = (
+    "bash",
+    "chain guide",
+    "kickstand",
+    "crash guard",
+    "frame protector",
+    "chainstay",
+    "crash",
+    "structural",
+    "load",
+)
+_H2S_STRUCT_MED = (
+    "mount",
+    "bracket",
+    "holder",
+    "cargo",
+    "snorkel",
+    "storage",
+    "guard",
+    "protector",
+    "routing",
+)
+_H2S_STRUCT_LOW = (
+    "cap",
+    "cover",
+    "clip",
+    "antenna",
+    "vtx",
+    "trim",
+    "dust",
+    "fuse",
+    "terminal",
+    "phone",
+    "gopro",
+    "action cam",
+    "action-cam",
+)
+
+# Heated chamber / engineering materials benefit (heat, UV, outdoor, vibration)
+_H2S_CHAMBER_HIGH = (
+    "snorkel",
+    "fender",
+    "mudguard",
+    "battery",
+    "engine",
+    "heat",
+    "outdoor",
+    "uv",
+    "under hood",
+    "under-hood",
+    "asa",
+    "nylon",
+    "petg-cf",
+    "pc-cf",
+)
+_H2S_CHAMBER_MED = (
+    "utv",
+    "rzr",
+    "atv",
+    "mtb",
+    "ebike",
+    "rad power",
+    "radrunner",
+    "bash",
+    "crash",
+    "chainstay",
+    "frame protector",
+    "kickstand",
+    "automotive",
+    "cable routing",
+)
+# Indoor / low-stress / PLA-friendly → little chamber benefit
+_H2S_CHAMBER_LOW = (
+    "phone",
+    "tablet",
+    "display",
+    "gopro",
+    "action cam",
+    "action-cam",
+    "interior trim",
+    "trim clip",
+    "dust cap",
+    "charge port",
+    "charging port",
+    "antenna",
+    "vtx",
+)
+
+_H2S_PROCESS_MISMATCH = (
+    "resin",
+    "sla",
+    "metal",
+    "titanium",
+    "aluminum print",
+    "flexible",
+    "tpu",
+    "rubber",
+    "multi-color",
+    "multicolor",
+)
 
 HISTORY_COLS = [
     "run_date",
@@ -114,6 +270,15 @@ SOURCE_COL_MAP = {
         "x_example_links",
         "x_backend",
         "x_notes",
+    ],
+    "youtube": [
+        "youtube_matching_videos",
+        "youtube_total_views",
+        "youtube_total_likes",
+        "youtube_total_comments",
+        "youtube_example_links",
+        "youtube_keywords_used",
+        "youtube_notes",
     ],
     "trends": [
         "trends_avg_interest_0_100",
@@ -203,6 +368,10 @@ def source_is_active(meta: dict, key: str) -> bool:
         return not ("reddit_volume" in unused or "reddit_engagement" in unused)
     if key == "x":
         return not ("x_volume" in unused or "x_engagement" in unused)
+    if key == "youtube":
+        return not (
+            "youtube_volume" in unused or "youtube_engagement" in unused
+        )
     if key == "trends":
         return not ("trends_interest" in unused or "momentum" in unused)
     if key == "search_volume":
@@ -331,6 +500,60 @@ def build_trend_pivot(
     return pivot
 
 
+def short_product_name(name: str, max_len: int = 28) -> str:
+    """Compact product label for chart legends / keys."""
+    s = " ".join(str(name or "").split())
+    if len(s) <= max_len:
+        return s
+    return s[: max_len - 1].rstrip() + "…"
+
+
+def demand_fit_zone(fit: float, demand: float) -> str:
+    """Quadrant label for Demand vs Fit (midpoint 50)."""
+    high_f, high_d = fit >= 50, demand >= 50
+    if high_f and high_d:
+        return "top-right ★ build"
+    if high_d and not high_f:
+        return "top-left (demand, low fit)"
+    if high_f and not high_d:
+        return "bottom-right (easy, low demand)"
+    return "bottom-left (ignore)"
+
+
+def build_scatter_series_matrix(
+    rankings: pd.DataFrame, n_top: int = SCATTER_TOP_N
+) -> tuple[list[list[Any]], int, int]:
+    """
+    Multi-series scatter table for Google Sheets (one series per product so the
+    chart legend names each point).
+
+    Header: fit_score | #1 short name | #2 short name | ...
+    Row i:  fit_i     | (blank)       | demand only in column i | ...
+    """
+    if rankings.empty:
+        return [["fit_score"]], 1, 1
+    top = rankings.head(n_top).copy()
+    for c in ("fit_score", "demand_score"):
+        if c in top.columns:
+            top[c] = pd.to_numeric(top[c], errors="coerce")
+    labels: list[str] = []
+    for i, (_, r) in enumerate(top.iterrows(), 1):
+        labels.append(f"#{i} {short_product_name(r.get('product', ''), 26)}")
+    header: list[Any] = ["fit_score"] + labels
+    rows: list[list[Any]] = [header]
+    for i, (_, r) in enumerate(top.iterrows()):
+        fit = r.get("fit_score")
+        demand = r.get("demand_score")
+        row: list[Any] = ["" if pd.isna(fit) else float(fit)]
+        for j in range(len(labels)):
+            if j == i and pd.notna(demand):
+                row.append(float(demand))
+            else:
+                row.append("")
+        rows.append(row)
+    return rows, len(rows), len(header)
+
+
 def build_category_avg(rankings: pd.DataFrame) -> pd.DataFrame:
     if rankings.empty or "category" not in rankings.columns:
         return pd.DataFrame(columns=["category", "avg_priority_score", "n_products"])
@@ -397,6 +620,121 @@ def df_to_values(df: pd.DataFrame, columns: list[str] | None = None) -> list[lis
 
 
 # ---------------------------------------------------------------------------
+# H2S equipment-match (Dashboard V1 — light label only)
+# ---------------------------------------------------------------------------
+
+def _h2s_axis_score(name: str, cat: str) -> tuple[int, int, int]:
+    """
+    Score three H2S-specific axes 0–3 each (max 9). Does not use fit_score,
+    fdm_friendly, or single_piece — those already live in Fit Score.
+    Returns (size, structural, chamber_eng).
+    """
+    blob = f"{name} {cat}".lower()
+
+    # --- Size / build volume ---------------------------------------------
+    if any(k in blob for k in _H2S_SIZE_LARGE):
+        size = 3
+    elif any(k in blob for k in _H2S_SIZE_MEDIUM):
+        size = 2
+    elif any(k in blob for k in _H2S_SIZE_SMALL):
+        size = 0
+    else:
+        size = 1  # unknown mid-size default
+
+    # Category nudges for volume (vehicle-scale vs tiny drone bits)
+    if cat in ("atv_utv",) and size < 3:
+        size = min(3, size + 1)
+    if cat == "drone_fpv" and size > 0 and not any(
+        k in blob for k in ("crash", "arm / frame", "frame crash")
+    ):
+        size = max(0, size - 1)  # most FPV accessories are small
+
+    # --- Structural / load-bearing ---------------------------------------
+    if any(k in blob for k in _H2S_STRUCT_HIGH):
+        structural = 3
+    elif any(k in blob for k in _H2S_STRUCT_MED) and not any(
+        k in blob for k in _H2S_STRUCT_LOW
+    ):
+        structural = 2
+    elif any(k in blob for k in _H2S_STRUCT_LOW):
+        structural = 0
+    else:
+        structural = 1
+
+    # Phone/GoPro mounts: light fixture, not load-bearing eng.
+    if any(
+        k in blob
+        for k in ("phone", "gopro", "action cam", "action-cam", "tablet", "display")
+    ):
+        structural = min(structural, 1)
+
+    # --- Chamber / eng materials -----------------------------------------
+    if any(k in blob for k in _H2S_CHAMBER_HIGH):
+        chamber = 3
+    elif any(k in blob for k in _H2S_CHAMBER_MED):
+        chamber = 2
+    elif any(k in blob for k in _H2S_CHAMBER_LOW):
+        chamber = 0
+    else:
+        chamber = 1
+
+    # Outdoor vehicle niches benefit from ASA / eng filaments
+    if cat in ("atv_utv", "mtb_general") and chamber < 3:
+        chamber = min(3, chamber + 1)
+    # Cabin/interior / generic consumer mounts: little heat/UV need
+    if any(k in blob for k in ("interior", "phone", "tablet", "display / phone")):
+        chamber = min(chamber, 1)
+    if cat == "automotive" and "trim" in blob:
+        chamber = min(chamber, 1)
+
+    return size, structural, chamber
+
+
+def h2s_fit_label(row: pd.Series | dict) -> str:
+    """
+    Does this product specifically benefit from H2S strengths?
+
+    Axes (equal weight): larger build volume, structural/load-bearing,
+    engineering materials + heated chamber. Explicitly does NOT reward
+    generic easy-FDM traits (those are fit_score).
+    """
+    if hasattr(row, "get"):
+        get = row.get
+    else:
+        get = lambda k, d="": d  # noqa: E731
+
+    name = str(get("product") or "").lower()
+    cat = str(get("category") or "").lower()
+    blob = f"{name} {cat}"
+
+    if any(w in blob for w in _H2S_PROCESS_MISMATCH):
+        return "Weak — process/material mismatch for H2S FDM fleet"
+
+    size, structural, chamber = _h2s_axis_score(name, cat)
+    total = size + structural + chamber  # 0–9
+
+    # Require at least one real H2S-strength signal for Strong/Good
+    if total >= 7 and max(size, structural, chamber) >= 3:
+        return (
+            "Strong — benefits from H2S volume and/or eng. materials + chamber "
+            f"(size {size}/3, load {structural}/3, chamber {chamber}/3)"
+        )
+    if total >= 5:
+        return (
+            "Good — clear H2S upside on size, load, or chamber/eng materials "
+            f"(size {size}/3, load {structural}/3, chamber {chamber}/3)"
+        )
+    if total >= 3:
+        return (
+            "OK — prints on H2S but little unique need for volume/chamber/eng "
+            f"(size {size}/3, load {structural}/3, chamber {chamber}/3)"
+        )
+    return (
+        "Weak — small/low-stress or poor match; H2S strengths mostly unused "
+        f"(size {size}/3, load {structural}/3, chamber {chamber}/3)"
+    )
+
+
 # Action This Week (spec §4)
 # ---------------------------------------------------------------------------
 
@@ -406,6 +744,10 @@ def compute_actions(
     local_kw: pd.DataFrame,
     meta: dict,
 ) -> list[str]:
+    """
+    Monday decision list (spec §4). Same thresholds; clearer Phase-1 wording.
+    Labels: PROTOTYPE | WATCH | NEEDS DATA | DROP | LOCAL | NONE
+    """
     actions: list[str] = []
     r = rankings.copy()
     for col in (
@@ -418,18 +760,44 @@ def compute_actions(
     ):
         if col in r.columns:
             r[col] = pd.to_numeric(r[col], errors="coerce")
+    if "h2s_fit" not in r.columns:
+        r["h2s_fit"] = r.apply(h2s_fit_label, axis=1)
 
-    # 1. Prototype this week
+    # 1. Prototype this week — high priority, Bambu-friendly, not saturated
     proto = r[
         (r["priority_score"] >= 70)
         & (r["fit_score"] >= 60)
         & (r["competition_score"] <= 60)
     ].head(3)
     for _, row in proto.iterrows():
+        h2s = str(row.get("h2s_fit") or h2s_fit_label(row))
+        h2s_short = h2s.split("—")[0].strip() if "—" in h2s else h2s
+        if h2s_short.startswith("Strong"):
+            print_hint = (
+                "CAD → print on H2S using volume and/or eng materials "
+                "(Nylon-CF / PETG-CF / ASA + chamber as needed) → list if it works"
+            )
+        elif h2s_short.startswith("Good"):
+            print_hint = (
+                "CAD → print on H2S; lean chamber/eng materials where load or "
+                "outdoor/heat exposure warrants it"
+            )
+        elif h2s_short.startswith("OK"):
+            print_hint = (
+                "CAD → first print on H2S with standard materials OK "
+                "(no special volume/chamber need) → list if it works"
+            )
+        else:
+            print_hint = (
+                "CAD only if design justifies H2S strengths; otherwise "
+                "deprioritize vs higher H2S-fit opportunities"
+            )
         actions.append(
-            f"Prototype this week: {row['product']} "
-            f"(priority {row['priority_score']:.0f}, fit {row['fit_score']:.0f}, "
-            f"comp {row['competition_score']:.0f})"
+            f"PROTOTYPE — {row['product']}: priority {row['priority_score']:.0f}, "
+            f"fit {row['fit_score']:.0f}, "
+            f"comp {row['competition_score']:.0f}, "
+            f"H2S {h2s_short}. "
+            f"Next: {print_hint}."
         )
 
     # 2. Watch — rising (needs ≥2 history runs)
@@ -452,12 +820,13 @@ def compute_actions(
             runs = hist["run_id"].nunique() if "run_id" in hist.columns else 0
             if runs < 2:
                 actions.append(
-                    "Watch — rising: insufficient history (need ≥2 weekly runs)"
+                    "WATCH — rising: need ≥2 weekly runs before momentum shows. "
+                    "Check again next Monday."
                 )
         for product, prev, cur in rising[:3]:
             actions.append(
-                f"Watch — rising: {product} "
-                f"(priority {prev:.0f} → {cur:.0f})"
+                f"WATCH — {product}: priority rising {prev:.0f} → {cur:.0f}. "
+                f"Not ready to commit — keep on radar; no prototype yet."
             )
 
     # 3. Needs more data
@@ -469,7 +838,9 @@ def compute_actions(
         ].head(2)
         for _, row in need.iterrows():
             actions.append(
-                f"Needs more data (keyword tuning, not 'no demand'): {row['product']}"
+                f"NEEDS DATA — {row['product']}: scanners returned empty "
+                f"(not proof of zero demand). Next: retune keywords in "
+                f"products.yaml, then re-run search volume."
             )
 
     # 4. Reconsider / drop — priority < 30 for 3 consecutive history runs
@@ -483,11 +854,11 @@ def compute_actions(
                 drops.append(product)
         for product in drops[:2]:
             actions.append(
-                f"Reconsider / drop: {product} "
-                f"(priority < 30 for 3 consecutive runs — prune from products.yaml?)"
+                f"DROP? — {product}: priority < 30 for 3 weeks. "
+                f"Consider pruning from products.yaml so the list stays focused."
             )
 
-    # 5. Local service note
+    # 5. Local service note (Phase 2, lowest priority)
     if not local_kw.empty and "search_volume" in local_kw.columns:
         lk = local_kw.copy()
         lk["search_volume"] = pd.to_numeric(lk["search_volume"], errors="coerce")
@@ -511,12 +882,31 @@ def compute_actions(
         if not low.empty:
             top = low.sort_values("search_volume", ascending=False).iloc[0]
             actions.append(
-                f"Local service (Phase 2 note): “{top.get('keyword')}” "
-                f"~{int(top['search_volume'])}/mo in Phoenix — keep on radar"
+                f"LOCAL (Phase 2) — “{top.get('keyword')}” "
+                f"~{int(top['search_volume'])}/mo Phoenix, low competition. "
+                f"Note only — own products still come first."
+            )
+
+    # Soft near-miss only when no PROTOTYPE and we still have room (cap 5)
+    if (
+        not any(a.startswith("PROTOTYPE") for a in actions)
+        and len(actions) < 5
+        and not r.empty
+    ):
+        top = r.sort_values("priority_score", ascending=False).iloc[0]
+        p = float(top.get("priority_score") or 0)
+        if p > 0 and p < 70:
+            actions.append(
+                f"CLOSEST — {top['product']}: highest priority this week "
+                f"({p:.0f}) but under prototype bar (need priority≥70, fit≥60, "
+                f"comp≤60). Review fit/keywords before building."
             )
 
     if not actions:
-        actions.append("Nothing crossed the bar this week — no forced recommendations.")
+        actions.append(
+            "NONE — Nothing crossed the bar this week. "
+            "No forced build; scan Top Opportunities and wait for clearer signal."
+        )
     return actions[:5]
 
 
@@ -526,6 +916,8 @@ def compute_actions(
 
 def build_rankings(report: pd.DataFrame, meta: dict) -> pd.DataFrame:
     df = blank_unused_sources(report, meta)
+    # Light H2S equipment-match before column trim (uses fit_flags + optional fit parts)
+    df["h2s_fit"] = df.apply(h2s_fit_label, axis=1)
     for c in RANKINGS_COLS:
         if c not in df.columns and c != "run_date":
             df[c] = ""
@@ -826,23 +1218,26 @@ def build_dashboard(
     local_kw: pd.DataFrame,
     history: pd.DataFrame,
     unmatched: list[str],
-) -> list[list[Any]]:
+) -> tuple[list[list[Any]], int]:
     """
     Human-facing Dashboard only (no raw chart-helper tables).
-    Charts bind to Product Rankings + hidden _ChartData (trend/category).
+
+    Layout (top → bottom, laptop-friendly):
+      1. Status strip + stacked KPIs (full text, no crammed multi-KPI row)
+      2. Action This Week (decision list — full text in column B)
+      3. How to read this Dashboard (metric explainers)
+      4. Top Opportunities + category/local mini panels
+      5. Demand vs Fit KEY + reserved CHARTS zone
+
+    Returns (rows, charts_start_row) where charts_start_row is the 0-based
+    row index of the first blank row in the charts zone (for overlay anchors).
     """
     rows: list[list[Any]] = []
     run_date = meta.get("run_date", "")
     run_time = meta.get("run_time", "")
     rows.append(["DEMAND MONITOR — DASHBOARD"])
-    rows.append(
-        [
-            "Last updated:",
-            f"{run_date} {run_time}",
-            "run_id:",
-            meta.get("run_id", ""),
-        ]
-    )
+    rows.append(["Last updated:", f"{run_date} {run_time}"])
+    rows.append(["run_id:", meta.get("run_id", "")])
     freshness = "unknown"
     try:
         rd = datetime.strptime(run_date, "%Y-%m-%d").date()
@@ -863,6 +1258,7 @@ def build_dashboard(
         ("Community", "community"),
         ("Marketplace", "marketplace"),
         ("Trends", "trends"),
+        ("YouTube", "youtube"),
         ("X", "x"),
         ("Reddit", "reddit"),
     ]:
@@ -895,19 +1291,13 @@ def build_dashboard(
                 churn += ")"
 
     local_n = len(local_kw) if not local_kw.empty else 0
+    # Stacked KPIs (label | value) so churn text is never clipped by neighbors
     rows.append([])
-    rows.append(
-        [
-            "KPI: products tracked",
-            n_prod,
-            "KPI: top priority_score",
-            top_p,
-            "KPI: top-10 churn",
-            churn,
-            "KPI: local-service keywords",
-            local_n,
-        ]
-    )
+    rows.append(["KPIs THIS RUN"])
+    rows.append(["Products tracked", n_prod])
+    rows.append(["Top priority_score", top_p])
+    rows.append(["Top-10 churn", churn])
+    rows.append(["Local-service keywords", local_n])
 
     if unmatched:
         rows.append(
@@ -917,13 +1307,151 @@ def build_dashboard(
             ]
         )
 
+    # --- Action This Week first (decision list above explainers) ---------
+    # Layout: A = section / #, B = full text (wide column + wrap on export)
     rows.append([])
-    rows.append(["ACTION THIS WEEK"])
-    for i, a in enumerate(actions, 1):
-        rows.append([f"{i}.", a])
+    rows.append(["★ ACTION THIS WEEK — do these next"])
+    rows.append(
+        [
+            "Focus",
+            "Phase 1: own products first · Bambu Lab H2S only · low support burden",
+        ]
+    )
+    rows.append(
+        [
+            "Legend",
+            "PROTOTYPE = design/print this week  |  "
+            "WATCH = rising, not ready  |  "
+            "NEEDS DATA = retune keywords  |  "
+            "DROP? = prune candidate  |  "
+            "LOCAL = Phase 2 note only  |  "
+            "CLOSEST = best under the bar",
+        ]
+    )
+    if not actions:
+        rows.append(["1.", "NONE — no recommendations this week."])
+    else:
+        for i, a in enumerate(actions, 1):
+            rows.append([f"{i}.", a])
 
+    # --- How to read (metric explainers — below Action for scanability) --
     rows.append([])
-    rows.append(["TOP OPPORTUNITIES THIS WEEK"])
+    rows.append(["HOW TO READ THIS DASHBOARD"])
+    rows.append(
+        [
+            "Metric",
+            "What it means (solo operator cheat-sheet)",
+            "",
+            "Quick rule of thumb",
+        ]
+    )
+    rows.append(
+        [
+            "Priority Score (0–100)",
+            "Primary rank = opportunity × manufacturing fit. "
+            "Answers: “What should I work on next for own products?”",
+            "",
+            "Higher = do first. Prototype bar ≈ 70+ with good fit.",
+        ]
+    )
+    rows.append(
+        [
+            "Demand Score (0–100)",
+            "Quality-weighted pull (search intent, specificity, community) "
+            "— not raw volume alone.",
+            "",
+            "High = real interest signal; still check Fit before building.",
+        ]
+    )
+    rows.append(
+        [
+            "Fit Score (0–100)",
+            "Manufacturing + customer fit for this stage: FDM-friendly on H2S, "
+            "materials OK, clear buyer, low support burden.",
+            "",
+            "≥60 preferred for prototypes. Low fit = hard/painful to sell.",
+        ]
+    )
+    rows.append(
+        [
+            "Competition (0–100)",
+            "How crowded supply is (marketplace listings + ads). "
+            "Higher = harder to stand out.",
+            "",
+            "Lower is better for acting. Prototype bar prefers ≤60.",
+        ]
+    )
+    rows.append(
+        [
+            "Demand vs Fit chart",
+            "Scatter: X = Fit, Y = Demand. Midpoint ≈ 50/50 splits four zones.",
+            "",
+            "See quadrant guide below.",
+        ]
+    )
+    rows.append(
+        [
+            "  → Top-right",
+            "High demand + high fit → best build candidates (prototype zone).",
+            "",
+            "Act first.",
+        ]
+    )
+    rows.append(
+        [
+            "  → Top-left",
+            "High demand + low fit → wanted but hard to make / high support.",
+            "",
+            "Usually skip or redesign for fit.",
+        ]
+    )
+    rows.append(
+        [
+            "  → Bottom-right",
+            "Low demand + high fit → easy to make, weak market pull.",
+            "",
+            "Only if strategic / learning print.",
+        ]
+    )
+    rows.append(
+        [
+            "  → Bottom-left",
+            "Low demand + low fit → ignore for now.",
+            "",
+            "Don't force a build.",
+        ]
+    )
+    rows.append(
+        [
+            "H2S Fit (label)",
+            "Does this product *use* H2S strengths? Larger volume, structural load, "
+            "and eng materials + heated chamber (Nylon-CF / PETG-CF / ASA). "
+            "Not the same as Fit Score (easy FDM).",
+            "",
+            "Strong/Good = real H2S upside. OK = prints fine, little unique need. "
+            "Weak = strengths mostly unused or process mismatch.",
+        ]
+    )
+    rows.append(
+        [
+            "Phase focus",
+            "Phase 1 now: own products (mounts/accessories) on Bambu Lab H2S only, "
+            "low support. Phase 2 later: local print services (Phoenix).",
+            "",
+            "Prefer PROTOTYPE over LOCAL notes.",
+        ]
+    )
+
+    # --- Top opportunities table ----------------------------------------
+    rows.append([])
+    rows.append(
+        [
+            "TOP OPPORTUNITIES THIS WEEK",
+            "",
+            "h2s_fit = benefits from H2S volume / structural load / chamber+eng materials "
+            "(not generic easy-FDM)",
+        ]
+    )
     top_cols = [
         "rank",
         "product",
@@ -931,11 +1459,14 @@ def build_dashboard(
         "priority_score",
         "demand_score",
         "fit_score",
+        "h2s_fit",
         "competition_score",
         "opportunity_score",
         "score_explanation",
     ]
     top = rankings.head(10).copy()
+    if "h2s_fit" not in top.columns:
+        top["h2s_fit"] = top.apply(h2s_fit_label, axis=1)
     for c in top_cols:
         if c not in top.columns:
             top[c] = ""
@@ -983,16 +1514,65 @@ def build_dashboard(
     else:
         rows.append(["", "(no local service data)", "", ""])
 
+    # --- Demand vs Fit KEY (matches multi-series chart legend #) ---------
     rows.append([])
     rows.append(
         [
-            "Charts: Top Priority + Demand vs Fit bind to Product Rankings; "
-            "Priority trend + Category bar bind to hidden _ChartData "
-            "(built from History / rankings each export). "
-            "Drill into Product Rankings or Scoring Detail for full columns."
+            "DEMAND VS FIT KEY",
+            "Chart legend uses the same #. Top-right zone = best to build "
+            "(high demand + high fit).",
         ]
     )
-    return rows
+    rows.append(["#", "product", "fit", "demand", "zone"])
+    scatter_src = rankings.head(SCATTER_TOP_N).copy()
+    for c in ("fit_score", "demand_score"):
+        if c in scatter_src.columns:
+            scatter_src[c] = pd.to_numeric(scatter_src[c], errors="coerce")
+    if scatter_src.empty:
+        rows.append(["", "(no products)", "", "", ""])
+    else:
+        for i, (_, r) in enumerate(scatter_src.iterrows(), 1):
+            fit = r.get("fit_score")
+            dem = r.get("demand_score")
+            fit_v = float(fit) if pd.notna(fit) else 0.0
+            dem_v = float(dem) if pd.notna(dem) else 0.0
+            rows.append(
+                [
+                    i,
+                    r.get("product", ""),
+                    fit_v if pd.notna(fit) else "",
+                    dem_v if pd.notna(dem) else "",
+                    demand_fit_zone(fit_v, dem_v),
+                ]
+            )
+
+    # --- Charts zone (overlays only — never over tables above) ----------
+    rows.append([])
+    rows.append(
+        [
+            "CHARTS — visual overview (below KEY / tables so nothing is hidden)",
+        ]
+    )
+    rows.append(
+        [
+            "Left→Right row 1: Top Priority bar · Demand vs Fit scatter "
+            "(legend = product #). "
+            "Row 2: Category avg · Priority trend. "
+            "Drill into Product Rankings or Scoring Detail for full columns.",
+        ]
+    )
+    # Blank spacer rows so floating charts sit in empty space, not over text.
+    # ~15 sheet rows ≈ 300px chart height; two chart rows + small gap.
+    rows.append([])
+    charts_start_row = len(rows)  # first blank row of chart canvas
+    for _ in range(36):
+        rows.append([])
+    rows.append(
+        [
+            "End of Dashboard. History tab holds weekly snapshots for trend/churn.",
+        ]
+    )
+    return rows, charts_start_row
 
 
 # ---------------------------------------------------------------------------
@@ -1140,6 +1720,87 @@ def freeze_header(service, spreadsheet_id: str, sheet_id: int) -> None:
     ).execute()
 
 
+def format_dashboard_layout(
+    service, spreadsheet_id: str, sheet_id: int, n_rows: int
+) -> None:
+    """
+    Column widths + text wrap so Action / KPI / KEY text is fully readable
+    (not clipped by narrow adjacent cells).
+    """
+    end_row = max(n_rows + 5, 40)
+    # A labels ~150px, B main prose ~560px, C–E KEY/table columns
+    col_widths = [
+        (0, 1, 150),
+        (1, 2, 560),
+        (2, 3, 120),
+        (3, 4, 100),
+        (4, 5, 180),
+        (5, 6, 140),
+        (6, 8, 160),
+    ]
+    requests: list[dict[str, Any]] = []
+    for start, end, px in col_widths:
+        requests.append(
+            {
+                "updateDimensionProperties": {
+                    "range": {
+                        "sheetId": sheet_id,
+                        "dimension": "COLUMNS",
+                        "startIndex": start,
+                        "endIndex": end,
+                    },
+                    "properties": {"pixelSize": px},
+                    "fields": "pixelSize",
+                }
+            }
+        )
+    requests.append(
+        {
+            "repeatCell": {
+                "range": {
+                    "sheetId": sheet_id,
+                    "startRowIndex": 0,
+                    "endRowIndex": end_row,
+                    "startColumnIndex": 0,
+                    "endColumnIndex": 10,
+                },
+                "cell": {
+                    "userEnteredFormat": {
+                        "wrapStrategy": "WRAP",
+                        "verticalAlignment": "TOP",
+                    }
+                },
+                "fields": (
+                    "userEnteredFormat.wrapStrategy,"
+                    "userEnteredFormat.verticalAlignment"
+                ),
+            }
+        }
+    )
+    # Taller default rows so wrapped Action lines show fully
+    requests.append(
+        {
+            "updateDimensionProperties": {
+                "range": {
+                    "sheetId": sheet_id,
+                    "dimension": "ROWS",
+                    "startIndex": 0,
+                    "endRowIndex": end_row,
+                },
+                "properties": {"pixelSize": 24},
+                "fields": "pixelSize",
+            }
+        }
+    )
+    try:
+        service.spreadsheets().batchUpdate(
+            spreadsheetId=spreadsheet_id, body={"requests": requests}
+        ).execute()
+        LOG.info("Dashboard layout formatted (column widths + wrap)")
+    except Exception as e:
+        LOG.warning("Dashboard layout format failed (data still written): %s", e)
+
+
 def read_sheet_values(service, spreadsheet_id: str, title: str) -> list[list[Any]]:
     result = (
         service.spreadsheets()
@@ -1230,30 +1891,41 @@ def write_chart_data_sheet(
     spreadsheet_id: str,
     trend_pivot: pd.DataFrame,
     category_avg: pd.DataFrame,
-) -> tuple[int, int]:
+    rankings: pd.DataFrame,
+) -> tuple[int, int, int, int, int]:
     """
-    Write hidden _ChartData: trend pivot at A1, category avg starting row 40.
-    Returns (n_trend_rows including header, n_category_rows including header).
+    Write hidden _ChartData:
+      - trend pivot at A1
+      - category avg at row CHART_CATEGORY_START (40)
+      - Demand vs Fit multi-series (labeled) at CHART_SCATTER_START (80)
 
-    TODO: Category block is hard-coded at row index 40 (see cat_start below and
-    add_dashboard_charts). Weekly History currently yields one trend row per
-    run, so ~9 months (~39 runs) of data would collide with the category block.
-    Before that, switch to a dynamic boundary (e.g. start category at
-    n_trend + 2) and pass the offset into the category chart range.
+    Returns
+      (n_trend_rows, n_category_rows, n_scatter_rows, n_scatter_cols,
+       scatter_start_row) — row counts include header.
+
+    TODO: Category block is hard-coded at row index 40. Weekly History yields
+    one trend row per run, so ~9 months (~39 runs) would collide with the
+    category block. Switch to a dynamic boundary before then.
     """
     blocks: list[list[Any]] = []
     trend_vals = df_to_values(trend_pivot)
     n_trend = len(trend_vals)
     blocks.extend(trend_vals)
-    # Fixed spacer to row 40 — keep in sync with cat_start in add_dashboard_charts.
-    # See TODO above re: ~9 months of weekly History rows overflowing this gap.
-    while len(blocks) < 40:
+    # Fixed spacer to category block — keep in sync with add_dashboard_charts.
+    while len(blocks) < CHART_CATEGORY_START:
         blocks.append([])
     cat_vals = df_to_values(category_avg)
     n_cat = len(cat_vals)
     blocks.extend(cat_vals)
+
+    while len(blocks) < CHART_SCATTER_START:
+        blocks.append([])
+    scatter_vals, n_scat_rows, n_scat_cols = build_scatter_series_matrix(
+        rankings, SCATTER_TOP_N
+    )
+    blocks.extend(scatter_vals)
     clear_and_write(service, spreadsheet_id, CHART_DATA_TAB, blocks)
-    return n_trend, n_cat
+    return n_trend, n_cat, n_scat_rows, n_scat_cols, CHART_SCATTER_START
 
 
 def add_dashboard_charts(
@@ -1265,18 +1937,33 @@ def add_dashboard_charts(
     n_trend_rows: int = 0,
     n_trend_cols: int = 0,
     n_category_rows: int = 0,
+    charts_start_row: int = 40,
+    n_scatter_rows: int = 0,
+    n_scatter_cols: int = 0,
+    scatter_start_row: int = CHART_SCATTER_START,
 ) -> None:
     """
-    Charts on Dashboard:
-      1. Demand vs Fit scatter → Product Rankings (fit vs demand)
+    Charts on Dashboard (overlays only in the reserved CHARTS zone):
+      1. Demand vs Fit scatter → _ChartData multi-series (legend = product #)
       2. Top Priority bar → Product Rankings (product vs priority)
       3. Category comparison bar → _ChartData category block (row 40+)
       4. Priority trend lines → _ChartData trend pivot (row 0+)
+
+    charts_start_row is the 0-based Dashboard row from build_dashboard() where
+    blank spacer rows begin — keeps charts from covering text/tables above.
     """
     dash_id = sheet_ids["Dashboard"]
     rank_id = sheet_ids["Product Rankings"]
     chart_id = sheet_ids.get(CHART_DATA_TAB)
     delete_all_charts(service, spreadsheet_id, dash_id)
+
+    # 2×2 grid in the reserved blank zone (laptop-friendly sizes)
+    row1 = max(0, charts_start_row)
+    row2 = row1 + 17  # ~300px ≈ 14–16 default rows between anchors
+    col_left = 0
+    col_right = 6
+    w_left, w_right = 500, 560  # scatter wider for legend
+    h_main, h_lower = 320, 280
 
     # Product Rankings: A rank, B product, C category, D priority, E demand, F fit
     end_row = min(1 + n_top, 1 + n_products)
@@ -1338,11 +2025,11 @@ def add_dashboard_charts(
                         "overlayPosition": {
                             "anchorCell": {
                                 "sheetId": dash_id,
-                                "rowIndex": 32,
-                                "columnIndex": 0,
+                                "rowIndex": row1,
+                                "columnIndex": col_left,
                             },
-                            "widthPixels": 520,
-                            "heightPixels": 320,
+                            "widthPixels": w_left,
+                            "heightPixels": h_main,
                         }
                     },
                 }
@@ -1350,79 +2037,175 @@ def add_dashboard_charts(
         }
     )
 
-    # Chart 1: Demand vs Fit scatter
-    requests_body.append(
-        {
-            "addChart": {
-                "chart": {
-                    "spec": {
-                        "title": "Demand vs Fit",
-                        "basicChart": {
-                            "chartType": "SCATTER",
-                            "legendPosition": "NO_LEGEND",
-                            "axis": [
-                                {"position": "BOTTOM_AXIS", "title": "fit_score"},
-                                {"position": "LEFT_AXIS", "title": "demand_score"},
-                            ],
-                            "domains": [
+    # Chart 1: Demand vs Fit scatter — multi-series so legend names each product
+    if (
+        chart_id is not None
+        and n_scatter_rows >= 2
+        and n_scatter_cols >= 2
+    ):
+        scat_end = scatter_start_row + n_scatter_rows
+        scatter_series = []
+        for col_i in range(1, n_scatter_cols):
+            scatter_series.append(
+                {
+                    "series": {
+                        "sourceRange": {
+                            "sources": [
                                 {
-                                    "domain": {
-                                        "sourceRange": {
-                                            "sources": [
-                                                {
-                                                    "sheetId": rank_id,
-                                                    "startRowIndex": 0,
-                                                    "endRowIndex": n_products + 1,
-                                                    "startColumnIndex": 5,
-                                                    "endColumnIndex": 6,
-                                                }
-                                            ]
-                                        }
-                                    }
+                                    "sheetId": chart_id,
+                                    "startRowIndex": scatter_start_row,
+                                    "endRowIndex": scat_end,
+                                    "startColumnIndex": col_i,
+                                    "endColumnIndex": col_i + 1,
                                 }
-                            ],
-                            "series": [
-                                {
-                                    "series": {
-                                        "sourceRange": {
-                                            "sources": [
-                                                {
-                                                    "sheetId": rank_id,
-                                                    "startRowIndex": 0,
-                                                    "endRowIndex": n_products + 1,
-                                                    "startColumnIndex": 4,
-                                                    "endColumnIndex": 5,
-                                                }
-                                            ]
-                                        }
-                                    },
-                                    "targetAxis": "LEFT_AXIS",
-                                }
-                            ],
-                            "headerCount": 1,
-                        },
-                    },
-                    "position": {
-                        "overlayPosition": {
-                            "anchorCell": {
-                                "sheetId": dash_id,
-                                "rowIndex": 32,
-                                "columnIndex": 6,
-                            },
-                            "widthPixels": 440,
-                            "heightPixels": 320,
+                            ]
                         }
                     },
+                    "targetAxis": "LEFT_AXIS",
+                }
+            )
+        requests_body.append(
+            {
+                "addChart": {
+                    "chart": {
+                        "spec": {
+                            "title": (
+                                "Demand vs Fit — top-right = build "
+                                "(legend # = KEY above)"
+                            ),
+                            "basicChart": {
+                                "chartType": "SCATTER",
+                                "legendPosition": "RIGHT_LEGEND",
+                                "axis": [
+                                    {
+                                        "position": "BOTTOM_AXIS",
+                                        "title": "fit_score →",
+                                    },
+                                    {
+                                        "position": "LEFT_AXIS",
+                                        "title": "demand_score ↑",
+                                    },
+                                ],
+                                "domains": [
+                                    {
+                                        "domain": {
+                                            "sourceRange": {
+                                                "sources": [
+                                                    {
+                                                        "sheetId": chart_id,
+                                                        "startRowIndex": scatter_start_row,
+                                                        "endRowIndex": scat_end,
+                                                        "startColumnIndex": 0,
+                                                        "endColumnIndex": 1,
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ],
+                                "series": scatter_series,
+                                "headerCount": 1,
+                            },
+                        },
+                        "position": {
+                            "overlayPosition": {
+                                "anchorCell": {
+                                    "sheetId": dash_id,
+                                    "rowIndex": row1,
+                                    "columnIndex": col_right,
+                                },
+                                "widthPixels": w_right,
+                                "heightPixels": h_main + 40,
+                            }
+                        },
+                    }
                 }
             }
-        }
-    )
+        )
+    elif n_products > 0:
+        # Fallback: unlabeled scatter from Product Rankings (should be rare)
+        LOG.warning(
+            "Scatter multi-series unavailable; falling back to Product Rankings"
+        )
+        # RANKINGS: E=demand (4), F=fit (5)
+        requests_body.append(
+            {
+                "addChart": {
+                    "chart": {
+                        "spec": {
+                            "title": "Demand vs Fit (top-right = build) — see KEY",
+                            "basicChart": {
+                                "chartType": "SCATTER",
+                                "legendPosition": "NO_LEGEND",
+                                "axis": [
+                                    {
+                                        "position": "BOTTOM_AXIS",
+                                        "title": "fit_score →",
+                                    },
+                                    {
+                                        "position": "LEFT_AXIS",
+                                        "title": "demand_score ↑",
+                                    },
+                                ],
+                                "domains": [
+                                    {
+                                        "domain": {
+                                            "sourceRange": {
+                                                "sources": [
+                                                    {
+                                                        "sheetId": rank_id,
+                                                        "startRowIndex": 0,
+                                                        "endRowIndex": n_products + 1,
+                                                        "startColumnIndex": 5,
+                                                        "endColumnIndex": 6,
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ],
+                                "series": [
+                                    {
+                                        "series": {
+                                            "sourceRange": {
+                                                "sources": [
+                                                    {
+                                                        "sheetId": rank_id,
+                                                        "startRowIndex": 0,
+                                                        "endRowIndex": n_products + 1,
+                                                        "startColumnIndex": 4,
+                                                        "endColumnIndex": 5,
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "targetAxis": "LEFT_AXIS",
+                                    }
+                                ],
+                                "headerCount": 1,
+                            },
+                        },
+                        "position": {
+                            "overlayPosition": {
+                                "anchorCell": {
+                                    "sheetId": dash_id,
+                                    "rowIndex": row1,
+                                    "columnIndex": col_right,
+                                },
+                                "widthPixels": w_right,
+                                "heightPixels": h_main,
+                            }
+                        },
+                    }
+                }
+            }
+        )
 
     # Chart 3: Category comparison (from _ChartData starting row 40)
     # Hard-coded boundary — must match write_chart_data_sheet spacer (TODO there).
     if chart_id is not None and n_category_rows >= 2:
-        cat_start = 40
-        cat_end = 40 + n_category_rows
+        cat_start = CHART_CATEGORY_START
+        cat_end = CHART_CATEGORY_START + n_category_rows
         requests_body.append(
             {
                 "addChart": {
@@ -1481,11 +2264,11 @@ def add_dashboard_charts(
                             "overlayPosition": {
                                 "anchorCell": {
                                     "sheetId": dash_id,
-                                    "rowIndex": 52,
-                                    "columnIndex": 0,
+                                    "rowIndex": row2,
+                                    "columnIndex": col_left,
                                 },
-                                "widthPixels": 480,
-                                "heightPixels": 280,
+                                "widthPixels": w_left,
+                                "heightPixels": h_lower,
                             }
                         },
                     }
@@ -1559,11 +2342,11 @@ def add_dashboard_charts(
                             "overlayPosition": {
                                 "anchorCell": {
                                     "sheetId": dash_id,
-                                    "rowIndex": 52,
-                                    "columnIndex": 6,
+                                    "rowIndex": row2,
+                                    "columnIndex": col_right,
                                 },
-                                "widthPixels": 560,
-                                "heightPixels": 320,
+                                "widthPixels": w_right + 20,
+                                "heightPixels": h_lower + 20,
                             }
                         },
                     }
@@ -1576,8 +2359,9 @@ def add_dashboard_charts(
             spreadsheetId=spreadsheet_id, body={"requests": requests_body}
         ).execute()
         LOG.info(
-            "Dashboard charts created (Top Priority, Demand vs Fit, "
-            "Category, Priority trend)"
+            "Dashboard charts created at row %d (Top Priority, Demand vs Fit, "
+            "Category, Priority trend)",
+            charts_start_row,
         )
     except Exception as e:
         LOG.warning("Chart creation failed (data still exported): %s", e)
@@ -1638,7 +2422,7 @@ def export(
     )
 
     actions = compute_actions(rankings, history_existing, local_kw, meta)
-    dashboard = build_dashboard(
+    dashboard, charts_start_row = build_dashboard(
         rankings, meta, actions, local_kw, history_for_trend, unmatched
     )
     trend_pivot = build_trend_pivot(history_for_trend, rankings, TREND_TOP_N)
@@ -1646,13 +2430,14 @@ def export(
 
     LOG.info(
         "Prepared tabs: rankings=%d detail=%d history_new=%d actions=%d "
-        "trend_pivot=%s category_rows=%d",
+        "trend_pivot=%s category_rows=%d charts_start_row=%d",
         len(rankings),
         len(detail),
         len(history_new),
         len(actions),
         trend_pivot.shape,
         len(category_avg),
+        charts_start_row,
     )
 
     if dry_run:
@@ -1715,14 +2500,81 @@ def export(
         (out_dir / "search_volume.txt").write_text(
             "\n".join("\t".join(str(c) for c in row) for row in sv_matrix)
         )
-        # Ensure dead CHART DATA block is gone
+        # Ensure dead CHART DATA block is gone; UX sections present
         dash_text = (out_dir / "dashboard.txt").read_text()
         assert "CHART DATA — Demand vs Fit" not in dash_text
         assert "CHART DATA — Category avg" not in dash_text
+        assert "HOW TO READ THIS DASHBOARD" in dash_text
+        assert "★ ACTION THIS WEEK" in dash_text
+        assert "CHARTS — visual overview" in dash_text
+        assert "DEMAND VS FIT KEY" in dash_text
+        assert "KPIs THIS RUN" in dash_text
+        assert "Priority Score" in dash_text
+        assert "top-right" in dash_text.lower()
+        assert "H2S Fit" in dash_text
+        assert "h2s_fit" in dash_text
+        assert "P1S" not in dash_text and "p1s" not in dash_text
+        # Action text lives in column B (index 1) as full strings between
+        # ACTION header and HOW TO READ (not Top Opportunities rank numbers).
+        action_rows = []
+        in_actions = False
+        for r in dashboard:
+            if not r:
+                continue
+            head = str(r[0])
+            if head.startswith("★ ACTION THIS WEEK"):
+                in_actions = True
+                continue
+            if head.startswith("HOW TO READ"):
+                break
+            if in_actions and head.rstrip(".").isdigit() and len(r) >= 2:
+                action_rows.append(r)
+        assert action_rows, "expected numbered action rows"
+        assert all(len(str(r[1])) > 20 for r in action_rows), (
+            "action text should be full-length in column B"
+        )
+        # Charts zone must start after Action + Top Opportunities + KEY
+        assert charts_start_row > 20, charts_start_row
+        # H2S labels present on rankings
+        assert "h2s_fit" in rankings.columns
+        assert rankings["h2s_fit"].astype(str).str.len().gt(0).any()
+        # Scatter multi-series matrix has one labeled series per product
+        scat, n_scat_r, n_scat_c = build_scatter_series_matrix(rankings)
+        assert n_scat_r >= 2 and n_scat_c >= 2
+        assert str(scat[0][1]).startswith("#1")
+        (out_dir / "scatter_series_preview.txt").write_text(
+            "\n".join("\t".join(str(c) for c in row) for row in scat[:5])
+            + f"\n... rows={n_scat_r} cols={n_scat_c}\n"
+        )
+        (out_dir / "charts_layout.txt").write_text(
+            f"charts_start_row={charts_start_row}\n"
+            f"dashboard_total_rows={len(dashboard)}\n"
+            f"scatter_rows={n_scat_r} scatter_cols={n_scat_c}\n"
+        )
+        rankings[["product", "category", "h2s_fit", "fit_score"]].to_csv(
+            out_dir / "h2s_fit_preview.csv", index=False
+        )
+        # Label distribution must not collapse to almost-all Strong
+        tier = rankings["h2s_fit"].astype(str).str.split("—").str[0].str.strip()
+        dist = tier.value_counts().to_dict()
+        (out_dir / "h2s_fit_distribution.txt").write_text(
+            "\n".join(f"{k}: {v}" for k, v in sorted(dist.items())) + "\n"
+        )
+        n = len(rankings)
+        n_strong = int(dist.get("Strong", 0))
+        assert n_strong < n * 0.6, (
+            f"H2S Fit too collapsed to Strong: {dist} (n={n})"
+        )
+        assert len(dist) >= 2, f"H2S Fit needs ≥2 label tiers, got {dist}"
         LOG.info("Dry-run written to %s", out_dir)
         print("\n=== ACTION THIS WEEK (dry-run) ===")
         for a in actions:
             print(f"  • {a}")
+        print(f"\nDashboard charts_start_row={charts_start_row} "
+              f"(total rows={len(dashboard)})")
+        print(f"Scatter series: {n_scat_r} rows × {n_scat_c} cols "
+              f"(header + {n_scat_c - 1} labeled products)")
+        print(f"H2S Fit distribution: {dist}")
         print(f"\nTrend pivot preview ({trend_pivot.shape[0]} dates × "
               f"{max(0, trend_pivot.shape[1]-1)} products):")
         print(trend_pivot.head().to_string(index=False))
@@ -1762,7 +2614,7 @@ def export(
                 ignore_index=True,
             )
             actions = compute_actions(rankings, history_existing, local_kw, meta)
-            dashboard = build_dashboard(
+            dashboard, charts_start_row = build_dashboard(
                 rankings, meta, actions, local_kw, history_for_trend, unmatched
             )
             trend_pivot = build_trend_pivot(
@@ -1773,6 +2625,12 @@ def export(
 
     # Write regenerated tabs
     clear_and_write(service, spreadsheet_id, "Dashboard", dashboard)
+    format_dashboard_layout(
+        service,
+        spreadsheet_id,
+        sheet_ids["Dashboard"],
+        n_rows=len(dashboard),
+    )
     clear_and_write(
         service, spreadsheet_id, "Product Rankings", df_to_values(rankings, RANKINGS_COLS)
     )
@@ -1817,8 +2675,14 @@ def export(
     except Exception as e:
         LOG.warning("Post-append History re-read failed: %s", e)
 
-    n_trend_rows, n_cat_rows = write_chart_data_sheet(
-        service, spreadsheet_id, trend_pivot, category_avg
+    (
+        n_trend_rows,
+        n_cat_rows,
+        n_scatter_rows,
+        n_scatter_cols,
+        scatter_start_row,
+    ) = write_chart_data_sheet(
+        service, spreadsheet_id, trend_pivot, category_avg, rankings
     )
     n_trend_cols = trend_pivot.shape[1] if not trend_pivot.empty else 0
 
@@ -1832,6 +2696,10 @@ def export(
             n_trend_rows=n_trend_rows,
             n_trend_cols=n_trend_cols,
             n_category_rows=n_cat_rows,
+            charts_start_row=charts_start_row,
+            n_scatter_rows=n_scatter_rows,
+            n_scatter_cols=n_scatter_cols,
+            scatter_start_row=scatter_start_row,
         )
 
     print("\n=== ACTION THIS WEEK ===")

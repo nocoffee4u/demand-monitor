@@ -8,4 +8,5 @@ out/logs/*.log
 *-service-account*.json
 service-account*.json
 credentials/google*.json
+config/*.json
 out/sheets_dry_run/

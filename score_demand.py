@@ -12,10 +12,10 @@ Merges signal CSVs and ranks products with transparent scores:
 
 Demand quality factors (rule-based, explainable):
   intent, specificity, problem intensity, momentum, volume_quality,
-  plus community engagement / trends / X / Reddit when present.
+  plus community engagement / trends / YouTube / X / Reddit when present.
 
-Empty optional sources (Reddit, X, Trends) redistribute weights so missing
-data never invents signal or breaks ranking.
+Empty optional sources (Reddit, X, YouTube, Trends) redistribute weights so
+missing data never invents signal or breaks ranking.
 
 USAGE:
   python3 score_demand.py
@@ -39,21 +39,24 @@ import yaml
 # Weights
 # ---------------------------------------------------------------------------
 
-# Quality-first demand (sums ~1.0 before empty-source redistribution)
+# Quality-first demand (sums ~1.0 before empty-source redistribution).
+# YouTube is a small optional social/content signal (not primary demand).
 DEMAND_WEIGHTS = {
     "volume_quality": 0.22,  # log volume × specificity (not raw volume)
     "intent": 0.16,
     "specificity": 0.16,
     "problem_intensity": 0.10,
-    "momentum": 0.08,
+    "momentum": 0.07,
     "community_downloads": 0.10,
     "community_makes": 0.07,
-    "community_likes": 0.04,
-    "trends_interest": 0.03,
-    "x_volume": 0.02,
-    "x_engagement": 0.01,
-    "reddit_volume": 0.005,
-    "reddit_engagement": 0.005,
+    "community_likes": 0.03,
+    "trends_interest": 0.02,
+    "youtube_volume": 0.03,
+    "youtube_engagement": 0.02,
+    "x_volume": 0.01,
+    "x_engagement": 0.005,
+    "reddit_volume": 0.003,
+    "reddit_engagement": 0.002,
 }
 
 COMPETITION_WEIGHTS = {
@@ -419,6 +422,7 @@ def main(
     marketplace_path: str,
     out_path: str,
     x_path: str | None = None,
+    youtube_path: str | None = None,
     search_volume_path: str | None = None,
     community_path: str | None = None,
     products_config: str = DEFAULT_PRODUCTS_CONFIG,
@@ -449,6 +453,7 @@ def main(
         _safe_read(trends_path),
         _safe_read(reddit_path),
         _safe_read(x_path),
+        _safe_read(youtube_path),
     ]
     # Collect orphan product names across signals (data-integrity surface)
     orphans: set[str] = set()
@@ -496,6 +501,10 @@ def main(
             "x_total_likes",
             "x_total_replies",
             "x_total_reposts",
+            "youtube_matching_videos",
+            "youtube_total_views",
+            "youtube_total_likes",
+            "youtube_total_comments",
             "ads_competition_avg",
             "cpc_avg",
         ],
@@ -583,6 +592,23 @@ def main(
     df["n_x_engagement"] = normalize(
         df["x_total_likes"] + df["x_total_replies"] + df["x_total_reposts"]
     )
+    # YouTube: views dominate raw counts — scale views down vs likes/comments
+    if "youtube_matching_videos" not in df.columns:
+        df["youtube_matching_videos"] = 0.0
+    for c in (
+        "youtube_total_views",
+        "youtube_total_likes",
+        "youtube_total_comments",
+    ):
+        if c not in df.columns:
+            df[c] = 0.0
+    df["youtube_engagement_raw"] = (
+        df["youtube_total_views"] * 0.001
+        + df["youtube_total_likes"]
+        + df["youtube_total_comments"] * 2.0
+    )
+    df["n_youtube_volume"] = normalize(df["youtube_matching_videos"])
+    df["n_youtube_engagement"] = normalize(df["youtube_engagement_raw"])
     df["n_marketplace_listings"] = normalize(df["total_listings"])
     if df["ads_competition_avg"].sum() == 0:
         df["n_ads_competition"] = 50.0
@@ -594,6 +620,10 @@ def main(
     df["n_community_downloads_adj"] = (
         df["n_community_downloads"] * (0.35 + 0.65 * df["n_specificity"] / 100.0)
     )
+    # Same dampening for YouTube (generic review videos ≠ product demand)
+    spec_dampen = 0.35 + 0.65 * df["n_specificity"] / 100.0
+    df["n_youtube_volume_adj"] = df["n_youtube_volume"] * spec_dampen
+    df["n_youtube_engagement_adj"] = df["n_youtube_engagement"] * spec_dampen
 
     # --- Demand ------------------------------------------------------------
     demand_w = dict(DEMAND_WEIGHTS)
@@ -619,6 +649,16 @@ def main(
         df, ["x_matching_posts", "x_total_likes", "x_total_replies", "x_total_reposts"]
     ):
         demand_unused.extend(["x_volume", "x_engagement"])
+    if _signal_empty(
+        df,
+        [
+            "youtube_matching_videos",
+            "youtube_total_views",
+            "youtube_total_likes",
+            "youtube_total_comments",
+        ],
+    ):
+        demand_unused.extend(["youtube_volume", "youtube_engagement"])
     demand_w = _redistribute(demand_w, demand_unused)
 
     demand_cols = {
@@ -631,6 +671,8 @@ def main(
         "community_makes": "n_community_makes",
         "community_likes": "n_community_likes",
         "trends_interest": "n_trends_interest",
+        "youtube_volume": "n_youtube_volume_adj",
+        "youtube_engagement": "n_youtube_engagement_adj",
         "x_volume": "n_x_volume",
         "x_engagement": "n_x_engagement",
         "reddit_volume": "n_reddit_volume",
@@ -762,6 +804,7 @@ def main(
             "trends": "trends_interest" not in demand_unused
             and "momentum" not in demand_unused,
             "x": "x_volume" not in demand_unused,
+            "youtube": "youtube_volume" not in demand_unused,
             "reddit": "reddit_volume" not in demand_unused,
             "marketplace": "marketplace_listings" not in comp_unused,
         },
@@ -825,6 +868,7 @@ if __name__ == "__main__":
     parser.add_argument("--search-volume", default="out/search_volume_signal.csv")
     parser.add_argument("--community", default="out/printables_cults_signal.csv")
     parser.add_argument("--x", default="out/x_signal.csv")
+    parser.add_argument("--youtube", default="out/youtube_signal.csv")
     parser.add_argument(
         "--products-config",
         default=DEFAULT_PRODUCTS_CONFIG,
@@ -838,6 +882,7 @@ if __name__ == "__main__":
         args.marketplace,
         args.out,
         x_path=args.x,
+        youtube_path=args.youtube,
         search_volume_path=args.search_volume,
         community_path=args.community,
         products_config=args.products_config,

@@ -1,9 +1,9 @@
 # Demand Monitor
 
 Scores candidate 3D-printed products by real demand signal before you spend
-filament and time on them: Reddit conversation volume/engagement, Google
-Trends search interest, marketplace competition/saturation, and optional
-X (Twitter) chatter.
+filament and time on them: Google Ads search volume (primary), community
+engagement, marketplace competition, Google Trends, optional YouTube
+coverage, X (Twitter) chatter, and optional Reddit.
 
 `out/*.csv` currently contains sample/demo data from a test run so you can
 see the report format — running the pipeline for real will overwrite them.
@@ -26,9 +26,18 @@ you've decided rather than guessing upfront.
 | Printables + Cults downloads / makes / likes | Yes | `printables_cults_scan.py` (community demand) |
 | Existing listing count on Printables / Cults / Thangs | Yes | `marketplace_scan.py` (competition count) |
 | Google Trends relative search interest + momentum | Yes | `trends_scan.py` (pytrends) |
+| YouTube matching videos + views/likes/comments | Yes (API key) | `youtube_scan.py` — needs `YOUTUBE_API_KEY`. Skip with `SKIP_YOUTUBE=1` |
 | X / Twitter keyword + brand-account chatter | Yes (API) or manual | `x_scan.py` — needs `X_BEARER_TOKEN` or `x_manual_log.csv` |
 | Reddit posts/upvotes/comments | Optional / unreliable | `reddit_scan.py` (PullPush default; PRAW optional). Skip with `SKIP_REDDIT=1` |
 | Facebook / Pinkbike / MTBR | **No — manual** | `facebook_manual_log.csv` |
+
+**YouTube (optional, free quota):** MTB / e-bike / FPV niches are heavy on
+review and repair video. The scanner is a *secondary* awareness signal
+(small weight in `score_demand.py`), not a substitute for search volume.
+Setup: enable YouTube Data API v3 → API key → `YOUTUBE_API_KEY` in `.env`.
+Estimate: `python3 youtube_scan.py --estimate`. Weekly cache under
+`cache/youtube_cache.json`. Without a key, zeros are written and weights
+redistribute automatically.
 
 Facebook actively blocks automated scraping and its ToS prohibits it.
 Pinkbike Forum and MTBR Forum were tested directly (July 2026) and both run
@@ -345,7 +354,7 @@ products, Bambu FDM, low support), not raw Google volume alone.
 
 | Score | Meaning |
 |---|---|
-| **demand_score** | Quality-weighted pull: intent, specificity, problem intensity, log-volume×specificity, community engagement, momentum |
+| **demand_score** | Quality-weighted pull: intent, specificity, problem intensity, log-volume×specificity, community, trends, optional YouTube / X / Reddit |
 | **fit_score** | Manufacturing + customer clarity: FDM-friendly, materials, clear buyer, low support burden |
 | **competition_score** | Listing counts + ads competition + incumbent downloads |
 | **opportunity_score** | Demand vs competition (market whitespace) |
@@ -362,8 +371,9 @@ Demand quality factors are **rule-based and visible**:
 `specificity_notes` / `fit_flags`.
 
 Broad high-volume terms (e.g. “car phone holder”) are **penalized** on
-specificity/intent so they don’t dominate. Reddit is optional and dropped
-when empty.
+specificity/intent so they don’t dominate. YouTube / X / Reddit are optional
+and dropped when empty (weights redistribute). YouTube is also dampened by
+specificity so generic viral review videos don’t dominate product ranking.
 
 Optional per-product fit overrides in `config/products.yaml`:
 
