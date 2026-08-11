@@ -383,6 +383,7 @@ good FDM/customer fit. High volume alone is not enough.
 
 ## Extending it later
 
+- **Planned next signals** (eBay sold listings, Etsy, expanded maker platforms, etc.): see [`docs/future_signals.md`](docs/future_signals.md).
 - Add more subreddits in `config/products.yaml` — no code changes needed.
 - New marketplaces: prefer a built-in adapter, or use `adapter: html` with a
   `search_url_template` + `result_selector` (and `total_regex` when possible).
