@@ -280,6 +280,19 @@ SOURCE_COL_MAP = {
         "youtube_keywords_used",
         "youtube_notes",
     ],
+    "ebay": [
+        "ebay_sold_count_30d",
+        "ebay_sold_count_90d",
+        "ebay_avg_sold_price",
+        "ebay_median_sold_price",
+        "ebay_min_sold_price",
+        "ebay_max_sold_price",
+        "ebay_sell_through_proxy",
+        "ebay_top_title",
+        "ebay_keywords_used",
+        "ebay_notes",
+        "fetched_at",
+    ],
     "trends": [
         "trends_avg_interest_0_100",
         "trends_recent_vs_prior_pct_change",
@@ -371,6 +384,10 @@ def source_is_active(meta: dict, key: str) -> bool:
     if key == "youtube":
         return not (
             "youtube_volume" in unused or "youtube_engagement" in unused
+        )
+    if key == "ebay":
+        return not (
+            "ebay_sold_volume" in unused or "ebay_price_signal" in unused
         )
     if key == "trends":
         return not ("trends_interest" in unused or "momentum" in unused)
@@ -1259,6 +1276,7 @@ def build_dashboard(
         ("Marketplace", "marketplace"),
         ("Trends", "trends"),
         ("YouTube", "youtube"),
+        ("eBay", "ebay"),
         ("X", "x"),
         ("Reddit", "reddit"),
     ]:

@@ -1,7 +1,8 @@
 # Future Demand Signals — Integration Plan & Roadmap
 
-**Status:** Planning / not yet implemented  
+**Status:** Active roadmap (eBay sold: **implemented**)  
 **Created:** 2026-08-10  
+**Updated:** 2026-08-10 — eBay sold scanner shipped on `feature/demand-pipeline-v2`  
 **Owner:** Project (Grok + Claude)  
 **Location:** This file lives in `docs/` so it is easy to find and reference later.
 
@@ -29,10 +30,14 @@ All new scanners should follow the same contract as the recent YouTube integrati
 
 ## 1. eBay Sold Listings (Priority 1 — Near-term)
 
+**Status: implemented** (2026-08-10) — `ebay_sold_scan.py`, SoldComps provider,
+weights `ebay_sold_volume` 0.04 + `ebay_price_signal` 0.015, `SKIP_EBAY=1`,
+`run_meta.sources.ebay`, Sheets chip. See README + `.env.example`.
+
 ### Why
 Actual completed sales + sold prices + sell-through velocity are the strongest proof that people are paying money for a category of part. Extremely valuable for replacement / functional parts ("discontinued", "OEM no longer available", bash guards, mounts, clips, etc.).
 
-### Suggested scanner: `ebay_sold_scan.py`
+### Scanner: `ebay_sold_scan.py`
 
 **Keyword strategy** (same fallback style as YouTube):
 ```
@@ -62,7 +67,7 @@ Prefer specific phrases that include platform/brand + part type when available.
 - Official eBay Marketplace Insights is restricted; treat as optional later
 - Soft-fail cleanly if no `EBAY_SOLD_API_KEY` (or equivalent)
 
-**Cache:** `cache/ebay_sold_cache.json` (weekly TTL)
+**Cache:** `cache/ebay_sold_cache.json` (default TTL **28 days** so weekly runs reuse results)
 
 ### Scoring integration (`score_demand.py`)
 
@@ -81,11 +86,11 @@ Rules of thumb:
 **Competition note:** High active listing counts on eBay can later feed a light competition signal, but start with sold data only.
 
 ### Wiring checklist
-- [ ] `run_all.sh` — new step + `SKIP_EBAY=1`
-- [ ] `.env.example` — `EBAY_SOLD_API_KEY=...`
-- [ ] `score_demand.py` — weights + numeric ensure + empty-source redistribution + `run_meta.sources.ebay`
-- [ ] `export_to_sheets.py` — Dashboard source chip + blank-on-skip columns on Product Rankings / Scoring Detail
-- [ ] `README.md` + `config/products.yaml` header for optional `ebay_keywords`
+- [x] `run_all.sh` — new step + `SKIP_EBAY=1`
+- [x] `.env.example` — `EBAY_SOLD_API_KEY=...`
+- [x] `score_demand.py` — weights + numeric ensure + empty-source redistribution + `run_meta.sources.ebay`
+- [x] `export_to_sheets.py` — Dashboard source chip + blank-on-skip columns
+- [x] `README.md` + `config/products.yaml` header for optional `ebay_keywords`
 
 ---
 
@@ -216,12 +221,9 @@ These can be added as separate markdown sections or issues when we are ready.
 
 ## Next concrete steps
 
-When ready to implement:
-
-1. Start with **eBay sold** (highest decision value for functional/replacement parts).
-2. Mirror the YouTube scanner structure exactly (`--estimate`, `--smoke`, cache, soft-fail, run_meta).
-3. After one clean weekly run with real data, decide whether to raise or lower the 0.04 weight.
-4. Then Etsy, then deepen the community scanner.
+1. ~~Start with **eBay sold**~~ — done (`ebay_sold_scan.py` + scoring + wiring).
+2. After one clean weekly run with real SoldComps data, decide whether to raise or lower the 0.04 weight.
+3. Next: **Etsy**, then deepen the community scanner (MakerWorld / Thangs).
 
 Reference this file in future Claude/Grok prompts as:
 `See docs/future_signals.md for the agreed eBay / Etsy / maker-platform plan.`

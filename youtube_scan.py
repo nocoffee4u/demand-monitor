@@ -32,7 +32,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import json
 import os
 import sys
 import time
@@ -40,6 +39,8 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import yaml
+
+from cache_utils import cache_get, cache_put, load_cache, save_cache
 
 try:
     from dotenv import load_dotenv
@@ -135,43 +136,6 @@ def write_rows(rows: list[dict], out_path: str) -> None:
         w.writeheader()
         for r in rows:
             w.writerow({k: r.get(k, "") for k in FIELDNAMES})
-
-
-def load_cache(path: Path) -> dict:
-    if not path.exists():
-        return {}
-    try:
-        return json.loads(path.read_text())
-    except (json.JSONDecodeError, OSError):
-        return {}
-
-
-def save_cache(path: Path, cache: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(cache, indent=2))
-
-
-def cache_get(cache: dict, key: str, ttl_days: int) -> dict | None:
-    entry = cache.get(key)
-    if not entry:
-        return None
-    fetched = entry.get("fetched_at")
-    if not fetched:
-        return None
-    try:
-        ts = datetime.fromisoformat(fetched.replace("Z", "+00:00"))
-    except ValueError:
-        return None
-    if datetime.now(timezone.utc) - ts > timedelta(days=ttl_days):
-        return None
-    return entry.get("data")
-
-
-def cache_put(cache: dict, key: str, data: dict) -> None:
-    cache[key] = {
-        "fetched_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "data": data,
-    }
 
 
 def get_youtube_client():
