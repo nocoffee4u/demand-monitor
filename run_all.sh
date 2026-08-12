@@ -25,6 +25,11 @@
 #   Estimate: python3 ebay_sold_scan.py --estimate
 #   Skip: SKIP_EBAY=1 ./run_all.sh
 #
+# Etsy active listings (optional, Open API v3):
+#   Set ETSY_API_KEY=keystring:shared_secret in .env (etsy.com/developers).
+#   Estimate: python3 etsy_scan.py --estimate
+#   Skip: SKIP_ETSY=1 ./run_all.sh
+#
 # Search volume (DataForSEO Google Ads — primary demand signal):
 #   Set DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD in .env.
 #   Cached weekly by default. Skip: SKIP_SEARCH_VOLUME=1 ./run_all.sh
@@ -48,7 +53,7 @@ fi
 
 REDDIT_BACKEND="${REDDIT_BACKEND:-pullpush}"
 STEP=0
-total=10
+total=11
 
 step() {
   STEP=$((STEP + 1))
@@ -135,6 +140,19 @@ if [[ "${SKIP_EBAY:-0}" != "1" ]]; then
 else
   step "eBay sold listings"
   echo "  skipped (SKIP_EBAY=1)"
+fi
+
+if [[ "${SKIP_ETSY:-0}" != "1" ]]; then
+  step "Etsy active listings (Open API v3 — optional marketplace signal)"
+  if [[ -n "${ETSY_API_KEY:-}" || -n "${ETSY_KEYSTRING:-}" ]]; then
+    python3 etsy_scan.py || echo "  [warn] Etsy scan failed — continuing"
+  else
+    echo "  skipped (no ETSY_API_KEY — set in .env; scoring redistributes)"
+    python3 etsy_scan.py || true
+  fi
+else
+  step "Etsy scan"
+  echo "  skipped (SKIP_ETSY=1)"
 fi
 
 step "Scoring & ranking"

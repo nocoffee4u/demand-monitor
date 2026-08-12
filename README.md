@@ -28,6 +28,7 @@ you've decided rather than guessing upfront.
 | Google Trends relative search interest + momentum | Yes | `trends_scan.py` (pytrends) |
 | YouTube matching videos + views/likes/comments | Yes (API key) | `youtube_scan.py` — needs `YOUTUBE_API_KEY`. Skip with `SKIP_YOUTUBE=1` |
 | eBay sold / completed listings + sold prices | Yes (API key) | `ebay_sold_scan.py` — SoldComps `EBAY_SOLD_API_KEY`. Skip with `SKIP_EBAY=1` |
+| Etsy active listings + favorites (sold proxy limited) | Yes (API key) | `etsy_scan.py` — Open API v3 `ETSY_API_KEY`. Skip with `SKIP_ETSY=1` |
 | X / Twitter keyword + brand-account chatter | Yes (API) or manual | `x_scan.py` — needs `X_BEARER_TOKEN` or `x_manual_log.csv` |
 | Reddit posts/upvotes/comments | Optional / unreliable | `reddit_scan.py` (PullPush default; PRAW optional). Skip with `SKIP_REDDIT=1` |
 | Facebook / Pinkbike / MTBR | **No — manual** | `facebook_manual_log.csv` |
@@ -46,6 +47,14 @@ for replacement/functional parts. Small transaction signal
 https://sold-comps.com (keys start with `sc_`) → `EBAY_SOLD_API_KEY` in `.env`.
 Estimate: `python3 ebay_sold_scan.py --estimate`. Cache:
 `cache/ebay_sold_cache.json`. Soft-fails without a key.
+
+**Etsy (optional, Open API v3):** Active listing density + prices + favorites
+for 3D-print marketplace interest. **No public sold totals** from Etsy’s API —
+`etsy_sold_proxy` stays 0; demand uses favorites via `etsy_engagement_volume`
+(0.02); listing density is **competition** (`etsy_listing_saturation` 0.05),
+not a demand bonus. Setup: register app at etsy.com/developers →
+`ETSY_API_KEY=keystring:shared_secret` in `.env`. Estimate:
+`python3 etsy_scan.py --estimate`. Cache: `cache/etsy_cache.json` (28d TTL).
 
 Facebook actively blocks automated scraping and its ToS prohibits it.
 Pinkbike Forum and MTBR Forum were tested directly (July 2026) and both run
@@ -362,7 +371,7 @@ products, Bambu FDM, low support), not raw Google volume alone.
 
 | Score | Meaning |
 |---|---|
-| **demand_score** | Quality-weighted pull: intent, specificity, problem intensity, log-volume×specificity, community, trends, optional eBay sold / YouTube / X / Reddit |
+| **demand_score** | Quality-weighted pull: intent, specificity, problem intensity, log-volume×specificity, community, trends, optional Etsy / eBay / YouTube / X / Reddit |
 | **fit_score** | Manufacturing + customer clarity: FDM-friendly, materials, clear buyer, low support burden |
 | **competition_score** | Listing counts + ads competition + incumbent downloads |
 | **opportunity_score** | Demand vs competition (market whitespace) |
@@ -379,9 +388,10 @@ Demand quality factors are **rule-based and visible**:
 `specificity_notes` / `fit_flags`.
 
 Broad high-volume terms (e.g. “car phone holder”) are **penalized** on
-specificity/intent so they don’t dominate. eBay / YouTube / X / Reddit are
-optional and dropped when empty (weights redistribute). YouTube and eBay are
-also dampened by specificity so generic viral hits don’t dominate ranking.
+specificity/intent so they don’t dominate. Etsy / eBay / YouTube / X / Reddit
+are optional and dropped when empty (weights redistribute). Marketplace and
+social optional signals are dampened by specificity so generic hits don’t
+dominate ranking.
 
 Optional per-product fit overrides in `config/products.yaml`:
 

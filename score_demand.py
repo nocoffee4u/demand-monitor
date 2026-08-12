@@ -41,29 +41,34 @@ import yaml
 # ---------------------------------------------------------------------------
 
 # Quality-first demand (sums ~1.0 before empty-source redistribution).
-# Optional social/transaction signals stay small (YouTube, eBay sold, X, Reddit).
+# Optional marketplace/social signals stay small (Etsy, eBay, YouTube, X, Reddit).
 DEMAND_WEIGHTS = {
     "volume_quality": 0.22,  # log volume × specificity (not raw volume)
     "intent": 0.16,
     "specificity": 0.16,
     "problem_intensity": 0.10,
-    "momentum": 0.055,
+    "momentum": 0.05,
     "community_downloads": 0.10,
-    "community_makes": 0.065,
+    "community_makes": 0.06,
     "community_likes": 0.02,
     "trends_interest": 0.01,
     "ebay_sold_volume": 0.04,  # log-scaled sold_count_30d + specificity dampen
-    "ebay_price_signal": 0.015,  # light boost for sensible FDM sold-price bands
+    "ebay_price_signal": 0.01,  # light boost for sensible FDM sold-price bands
+    # Etsy Open API has no public sold counts — this is favorites (or sold_proxy if ever set)
+    "etsy_engagement_volume": 0.02,
     "youtube_volume": 0.025,
-    "youtube_engagement": 0.015,
+    "youtube_engagement": 0.01,
     "x_volume": 0.005,
     "x_engagement": 0.005,
     "reddit_volume": 0.003,
     "reddit_engagement": 0.002,
 }
 
+# Higher = more crowded supply (penalized via opportunity). Etsy listing density
+# sits here with marketplace listings, not as a demand bonus.
 COMPETITION_WEIGHTS = {
-    "marketplace_listings": 0.65,
+    "marketplace_listings": 0.60,
+    "etsy_listing_saturation": 0.05,  # log active Etsy listing density for keyword
     "ads_competition": 0.15,
     "incumbent_strength": 0.20,
 }
@@ -444,6 +449,7 @@ def main(
     x_path: str | None = None,
     youtube_path: str | None = None,
     ebay_path: str | None = None,
+    etsy_path: str | None = None,
     search_volume_path: str | None = None,
     community_path: str | None = None,
     products_config: str = DEFAULT_PRODUCTS_CONFIG,
@@ -476,6 +482,7 @@ def main(
         _safe_read(x_path),
         _safe_read(youtube_path),
         _safe_read(ebay_path),
+        _safe_read(etsy_path),
     ]
     # Collect orphan product names across signals (data-integrity surface)
     orphans: set[str] = set()
@@ -534,6 +541,10 @@ def main(
             "ebay_min_sold_price",
             "ebay_max_sold_price",
             "ebay_sell_through_proxy",
+            "etsy_listing_count",
+            "etsy_sold_proxy",
+            "etsy_avg_price",
+            "etsy_favorites_proxy",
             "ads_competition_avg",
             "cpc_avg",
         ],
@@ -670,6 +681,32 @@ def main(
     df["n_youtube_engagement_adj"] = df["n_youtube_engagement"] * spec_dampen
     df["n_ebay_sold_volume_adj"] = df["n_ebay_sold_volume"] * spec_dampen
     df["n_ebay_price_signal_adj"] = df["n_ebay_price_signal"] * spec_dampen
+    # Etsy: Open API has no true sold counts — use sold_proxy if present,
+    # else favorites as engagement proxy; listing count = commercial density
+    if "etsy_listing_count" not in df.columns:
+        df["etsy_listing_count"] = 0.0
+    if "etsy_sold_proxy" not in df.columns:
+        df["etsy_sold_proxy"] = 0.0
+    if "etsy_favorites_proxy" not in df.columns:
+        df["etsy_favorites_proxy"] = 0.0
+    sold_p = pd.to_numeric(df["etsy_sold_proxy"], errors="coerce").fillna(0.0)
+    fav_p = pd.to_numeric(df["etsy_favorites_proxy"], errors="coerce").fillna(0.0)
+    # Prefer true sold_proxy when non-zero; else favorites (half weight via log)
+    df["etsy_engagement_raw"] = sold_p.where(sold_p > 0, fav_p)
+    df["etsy_engagement_log"] = df["etsy_engagement_raw"].map(
+        lambda x: math.log1p(float(x))
+    )
+    df["n_etsy_engagement_volume"] = normalize(df["etsy_engagement_log"])
+    df["etsy_listings_log"] = (
+        pd.to_numeric(df["etsy_listing_count"], errors="coerce")
+        .fillna(0.0)
+        .map(lambda x: math.log1p(float(x)))
+    )
+    # Competition column (no demand-side specificity dampen — same as marketplace)
+    df["n_etsy_listing_saturation"] = normalize(df["etsy_listings_log"])
+    df["n_etsy_engagement_volume_adj"] = (
+        df["n_etsy_engagement_volume"] * spec_dampen
+    )
 
     # --- Demand ------------------------------------------------------------
     demand_w = dict(DEMAND_WEIGHTS)
@@ -714,6 +751,8 @@ def main(
         ],
     ):
         demand_unused.extend(["ebay_sold_volume", "ebay_price_signal"])
+    if _signal_empty(df, ["etsy_sold_proxy", "etsy_favorites_proxy"]):
+        demand_unused.append("etsy_engagement_volume")
     demand_w = _redistribute(demand_w, demand_unused)
 
     demand_cols = {
@@ -728,6 +767,7 @@ def main(
         "trends_interest": "n_trends_interest",
         "ebay_sold_volume": "n_ebay_sold_volume_adj",
         "ebay_price_signal": "n_ebay_price_signal_adj",
+        "etsy_engagement_volume": "n_etsy_engagement_volume_adj",
         "youtube_volume": "n_youtube_volume_adj",
         "youtube_engagement": "n_youtube_engagement_adj",
         "x_volume": "n_x_volume",
@@ -749,6 +789,8 @@ def main(
     comp_unused: list[str] = []
     if _signal_empty(df, ["total_listings"]):
         comp_unused.append("marketplace_listings")
+    if _signal_empty(df, ["etsy_listing_count"]):
+        comp_unused.append("etsy_listing_saturation")
     if _signal_empty(df, ["ads_competition_avg"]):
         comp_unused.append("ads_competition")
     if _signal_empty(df, ["community_downloads"]):
@@ -757,6 +799,7 @@ def main(
 
     comp_cols = {
         "marketplace_listings": "n_marketplace_listings",
+        "etsy_listing_saturation": "n_etsy_listing_saturation",
         "ads_competition": "n_ads_competition",
         "incumbent_strength": "n_incumbent_strength",
     }
@@ -863,6 +906,10 @@ def main(
             "x": "x_volume" not in demand_unused,
             "youtube": "youtube_volume" not in demand_unused,
             "ebay": "ebay_sold_volume" not in demand_unused,
+            "etsy": (
+                "etsy_engagement_volume" not in demand_unused
+                or "etsy_listing_saturation" not in comp_unused
+            ),
             "reddit": "reddit_volume" not in demand_unused,
             "marketplace": "marketplace_listings" not in comp_unused,
         },
@@ -928,6 +975,7 @@ if __name__ == "__main__":
     parser.add_argument("--x", default="out/x_signal.csv")
     parser.add_argument("--youtube", default="out/youtube_signal.csv")
     parser.add_argument("--ebay", default="out/ebay_sold_signal.csv")
+    parser.add_argument("--etsy", default="out/etsy_signal.csv")
     parser.add_argument(
         "--products-config",
         default=DEFAULT_PRODUCTS_CONFIG,
@@ -943,6 +991,7 @@ if __name__ == "__main__":
         x_path=args.x,
         youtube_path=args.youtube,
         ebay_path=args.ebay,
+        etsy_path=args.etsy,
         search_volume_path=args.search_volume,
         community_path=args.community,
         products_config=args.products_config,

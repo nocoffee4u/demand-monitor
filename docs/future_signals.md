@@ -1,8 +1,8 @@
 # Future Demand Signals — Integration Plan & Roadmap
 
-**Status:** Active roadmap (eBay sold: **implemented**)  
+**Status:** Active roadmap (eBay sold + Etsy: **implemented**)  
 **Created:** 2026-08-10  
-**Updated:** 2026-08-10 — eBay sold scanner shipped on `feature/demand-pipeline-v2`  
+**Updated:** 2026-08-11 — Etsy scanner shipped; eBay sold already on branch  
 **Owner:** Project (Grok + Claude)  
 **Location:** This file lives in `docs/` so it is easy to find and reference later.
 
@@ -96,10 +96,17 @@ Rules of thumb:
 
 ## 2. Etsy Demand / Sold Proxies (Priority 2 — Near-term)
 
+**Status: implemented** (2026-08-11) — `etsy_scan.py` via Etsy Open API v3
+active listings search. Demand: `etsy_engagement_volume` 0.02 (favorites
+proxy; not true solds). Competition: `etsy_listing_saturation` 0.05 (listing
+density, parallel to marketplace listings). **Deviation:** true public sold
+counts are not available from Open API; `etsy_sold_proxy` is 0. `SKIP_ETSY=1`,
+`run_meta.sources.etsy`, Sheets chip. See README + `.env.example`.
+
 ### Why
 Etsy is one of the closest marketplaces to people actually buying 3D-printed functional and decorative parts. Search volume + sold counts + "people also bought" style signals are high-value.
 
-### Suggested scanner: `etsy_scan.py`
+### Scanner: `etsy_scan.py`
 
 **Keyword strategy:** same fallback chain, max 2 per product. Prefer `etsy_keywords` override when present.
 
@@ -121,19 +128,26 @@ Etsy is one of the closest marketplaces to people actually buying 3D-printed fun
 - Careful, rate-limited scraping as a fallback (document fragility)
 - Soft-fail if no credentials / tool unavailable
 
-**Cache:** `cache/etsy_cache.json`
+**Cache:** `cache/etsy_cache.json` (default TTL **28 days**)
 
 ### Scoring integration
 
 ```python
-"etsy_sold_volume": 0.03,
-"etsy_listing_saturation": 0.01,   # light competition contribution (or fold into existing marketplace)
+# demand
+"etsy_engagement_volume": 0.02,    # favorites (or sold_proxy if ever non-zero)
+# competition (not demand)
+"etsy_listing_saturation": 0.05,   # log active listing density — supply crowding
 ```
 
-Keep weights small. Prefer sold/engagement over pure listing count so we don't double-count competition already covered by Printables/Cults + marketplace_scan.
+Listing density is competition (like Printables/Cults counts), not a demand bonus.
+Engagement stays small because favorites are weaker evidence than completed sales.
 
 ### Wiring checklist
-Same pattern as eBay: `SKIP_ETSY=1`, env key, run_meta, blank-on-skip, Dashboard chip, optional `etsy_keywords` in products.yaml.
+- [x] `run_all.sh` — step + `SKIP_ETSY=1`
+- [x] `.env.example` — `ETSY_API_KEY=keystring:shared_secret`
+- [x] `score_demand.py` — weights + redistribute + `run_meta.sources.etsy`
+- [x] `export_to_sheets.py` — Dashboard chip + blank-on-skip
+- [x] `README.md` + `config/products.yaml` optional `etsy_keywords`
 
 ---
 
@@ -221,9 +235,10 @@ These can be added as separate markdown sections or issues when we are ready.
 
 ## Next concrete steps
 
-1. ~~Start with **eBay sold**~~ — done (`ebay_sold_scan.py` + scoring + wiring).
-2. After one clean weekly run with real SoldComps data, decide whether to raise or lower the 0.04 weight.
-3. Next: **Etsy**, then deepen the community scanner (MakerWorld / Thangs).
+1. ~~Start with **eBay sold**~~ — done.
+2. ~~**Etsy**~~ — done (`etsy_scan.py`; sold_proxy limited by Open API).
+3. After weekly runs with real keys, tune eBay 0.04 / Etsy 0.03 weights if needed.
+4. Next: deepen the community scanner (MakerWorld / Thangs).
 
 Reference this file in future Claude/Grok prompts as:
 `See docs/future_signals.md for the agreed eBay / Etsy / maker-platform plan.`
