@@ -328,6 +328,12 @@ SOURCE_COL_MAP = {
         "cults_downloads",
         "cults_makes",
         "cults_likes",
+        "makerworld_downloads",
+        "makerworld_makes",
+        "makerworld_likes",
+        "thangs_downloads",
+        "thangs_makes",
+        "thangs_likes",
     ],
 }
 
@@ -416,6 +422,40 @@ def source_is_active(meta: dict, key: str) -> bool:
     if key == "marketplace":
         return "marketplace_listings" not in set(meta.get("competition_unused") or [])
     return True
+
+
+def community_source_chip(meta: dict, active: bool) -> str:
+    """
+    Community chip with platform coverage, e.g.
+      Community: active (3/4)
+      Community: partial (2/4)
+      Community: skipped
+    """
+    platforms = meta.get("community_platforms") or {}
+    ok = meta.get("community_platforms_ok")
+    total = meta.get("community_platforms_total")
+    if platforms and (ok is None or total is None):
+        ok = sum(
+            1
+            for v in platforms.values()
+            if (v.get("status") if isinstance(v, dict) else v) == "ok"
+        )
+        total = len(platforms)
+    try:
+        ok_i = int(ok) if ok is not None else None
+        tot_i = int(total) if total is not None else None
+    except (TypeError, ValueError):
+        ok_i, tot_i = None, None
+
+    if tot_i and tot_i > 0 and ok_i is not None:
+        if ok_i <= 0:
+            if not active:
+                return f"Community: skipped (0/{tot_i})"
+            return f"Community: error (0/{tot_i})"
+        if ok_i >= tot_i:
+            return f"Community: active ({ok_i}/{tot_i})"
+        return f"Community: partial ({ok_i}/{tot_i})"
+    return f"Community: {'active' if active else 'skipped'}"
 
 
 def blank_unused_sources(df: pd.DataFrame, meta: dict) -> pd.DataFrame:
@@ -1300,7 +1340,10 @@ def build_dashboard(
         ("Reddit", "reddit"),
     ]:
         active = source_is_active(meta, key)
-        chips.append(f"{name}: {'active' if active else 'skipped'}")
+        if key == "community":
+            chips.append(community_source_chip(meta, active))
+        else:
+            chips.append(f"{name}: {'active' if active else 'skipped'}")
     rows.append(["Sources this run:", " | ".join(chips)])
 
     n_prod = int(meta.get("products_tracked") or len(rankings))

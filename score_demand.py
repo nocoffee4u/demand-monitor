@@ -887,6 +887,24 @@ def main(
 
     # Run metadata for Sheets export / Dashboard (sources active, blank-vs-zero)
     run_ts = datetime.now().astimezone()
+    # Optional sidecar from printables_cults_scan (per-platform ok/skipped/error)
+    community_platforms: dict = {}
+    community_ok = community_total = 0
+    cp_meta_path = os.path.join(
+        os.path.dirname(out_path) or "out", "community_platforms_meta.json"
+    )
+    if os.path.isfile(cp_meta_path):
+        try:
+            with open(cp_meta_path) as f:
+                cp_raw = json.load(f)
+            community_platforms = cp_raw.get("platforms") or {}
+            community_ok = int(cp_raw.get("ok_count") or 0)
+            community_total = int(
+                cp_raw.get("total") or len(community_platforms) or 0
+            )
+        except (json.JSONDecodeError, OSError, TypeError, ValueError):
+            community_platforms = {}
+
     run_meta = {
         "run_id": run_ts.isoformat(timespec="seconds"),
         "run_date": run_ts.date().isoformat(),
@@ -913,6 +931,9 @@ def main(
             "reddit": "reddit_volume" not in demand_unused,
             "marketplace": "marketplace_listings" not in comp_unused,
         },
+        "community_platforms": community_platforms,
+        "community_platforms_ok": community_ok,
+        "community_platforms_total": community_total,
         "top_priority_score": float(df["priority_score"].iloc[0]) if len(df) else None,
         "demand_report": out_path,
     }
@@ -920,6 +941,10 @@ def main(
     with open(meta_path, "w") as f:
         json.dump(run_meta, f, indent=2)
     print(f"Run metadata written to {meta_path}")
+    if community_platforms:
+        print(
+            f"Community platforms: {community_ok}/{community_total or len(community_platforms)} ok"
+        )
 
     # --- Console -----------------------------------------------------------
     print("\n=== PRIORITY RANKING (Demand quality × Fit × Opportunity) ===\n")

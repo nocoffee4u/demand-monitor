@@ -1,6 +1,6 @@
 """
 Shared weekly JSON cache helpers for demand-monitor scanners
-(youtube_scan, ebay_sold_scan, …).
+(youtube_scan, ebay_sold_scan, etsy_scan, printables_cults_scan, …).
 
 Behavior is intentionally simple and identical for all callers:
 load/save whole dict, TTL via fetched_at ISO timestamp, opaque data blob.
@@ -49,3 +49,15 @@ def cache_put(cache: dict, key: str, data: dict[str, Any]) -> None:
         "fetched_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "data": data,
     }
+
+
+def clamp_limit(limit: int, *, lo: int = 1, hi: int = 50) -> int:
+    """
+    Clamp a page-size / result-limit so request params and cache keys match.
+    Default hi=50 matches MakerWorld; callers may pass hi=100 (Etsy) etc.
+    """
+    try:
+        n = int(limit)
+    except (TypeError, ValueError):
+        n = lo
+    return max(lo, min(hi, n))

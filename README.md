@@ -23,7 +23,7 @@ you've decided rather than guessing upfront.
 | Signal | Automated? | Tool |
 |---|---|---|
 | **Google Ads monthly search volume / CPC / competition** | Yes | `search_volume_scan.py` (DataForSEO — **primary demand signal**) |
-| Printables + Cults downloads / makes / likes | Yes | `printables_cults_scan.py` (community demand) |
+| Printables + Cults + MakerWorld + Thangs downloads / makes / likes | Yes | `printables_cults_scan.py` (community demand; soft-fail per platform) |
 | Existing listing count on Printables / Cults / Thangs | Yes | `marketplace_scan.py` (competition count) |
 | Google Trends relative search interest + momentum | Yes | `trends_scan.py` (pytrends) |
 | YouTube matching videos + views/likes/comments | Yes (API key) | `youtube_scan.py` — needs `YOUTUBE_API_KEY`. Skip with `SKIP_YOUTUBE=1` |
@@ -232,25 +232,45 @@ Adds on top of the keyword scan:
 Same DataForSEO credentials. Keyword data is reused from cache when fresh;
 PAA/Maps are cached under `cache/local_service_market/` (TTL from config).
 
-### Printables + Cults engagement (community demand)
+### Community engagement (Printables + Cults + MakerWorld + Thangs)
 
 ```bash
-python3 printables_cults_scan.py           # all products
+python3 printables_cults_scan.py --estimate
+python3 printables_cults_scan.py           # all products / all platforms
 python3 printables_cults_scan.py --smoke   # first product only
 python3 printables_cults_scan.py --top 5 --delay 2
+python3 printables_cults_scan.py --skip-thangs   # if Cloudflare blocks Thangs
 # → out/printables_cults_signal.csv
 ```
 
-For each product, searches by `marketplace_keywords` (else broader keywords),
-samples the top N models on each site, and sums **downloads / makes / likes**.
+For each product, searches by `marketplace_keywords` (else broader keywords;
+optional `makerworld_keywords` / `thangs_keywords`), samples the top N models
+per site, and sums **downloads / makes / likes**. Soft-fails **per platform**
+so one site down does not kill the community row. MakerWorld/Thangs results
+are cached under `cache/community_platforms_cache.json` (28d TTL). Per-run
+platform coverage (ok/skipped/error per site) is written to
+`out/community_platforms_meta.json` for the Dashboard coverage chip.
 
 | Site | How stats are collected |
 |---|---|
-| **Printables** | Search HTML → model ids → public GraphQL (`downloadCount`, `makesCount`, `likesCount`) |
-| **Cults3D** | Search HTML → model pages → parse download/like/make text |
+| **Printables** | Search HTML → model ids → public GraphQL for stats. **As of Aug 2026, the search HTML page is often behind a Cloudflare managed challenge** (same class of block as Thangs — confirmed via manual inspection, not fixable via headers/retry/UA). The GraphQL stats endpoint itself is unaffected and still returns real data once a model id is known; only *finding new ids via search* is blocked when this happens. |
+| **Cults3D** | Search HTML → model pages → parse metrics |
+| **MakerWorld** | Public JSON `search/design` API (`downloadCount`, `printCount`, `likeCount`) |
+| **Thangs** | Best-effort HTML (often Cloudflare 403 → zeros + note, no invented data) |
 
-`community_downloads` / `community_makes` / `community_likes` feed scoring as
-demand-side engagement (separate from listing *counts* in `marketplace_scan.py`).
+`community_downloads` / `community_makes` / `community_likes` = sum across
+platforms and feed existing community weights in scoring (no new big weights).
+
+**Operating policy while Printables/Thangs are Cloudflare-challenged:**
+MakerWorld + Cults are currently the reliable carriers of the community
+signal; treat Printables/Thangs contributions as a bonus, not a guarantee,
+on any given week. No action needed — soft-fail already keeps the row
+scoring on the remaining platforms — but don't be surprised to see
+`printables_downloads` / `thangs_downloads` as `ERR` in
+`out/printables_cults_signal.csv` some weeks. If `community_platforms_meta.json`
+shows sustained `0-1/4 ok` over several weekly runs, that's worth
+revisiting (e.g. re-checking whether Cloudflare's challenge behavior has
+changed), but a single blocked week is expected, not a bug.
 
 Output: `out/demand_report.csv`, ranked highest-demand-score first, plus a
 printed table in the terminal.

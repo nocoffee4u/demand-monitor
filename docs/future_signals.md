@@ -1,8 +1,8 @@
 # Future Demand Signals — Integration Plan & Roadmap
 
-**Status:** Active roadmap (eBay sold + Etsy: **implemented**)  
+**Status:** Active roadmap (eBay + Etsy + MakerWorld/Thangs community: **implemented**)  
 **Created:** 2026-08-10  
-**Updated:** 2026-08-11 — Etsy scanner shipped; eBay sold already on branch  
+**Updated:** 2026-08-12 — MakerWorld + Thangs extended community scanner  
 **Owner:** Project (Grok + Claude)  
 **Location:** This file lives in `docs/` so it is easy to find and reference later.
 
@@ -153,27 +153,31 @@ Engagement stays small because favorites are weaker evidence than completed sale
 
 ## 3. Expanded Maker Platforms (Priority 3 — Near + Long-term)
 
+**Status: implemented** (2026-08-12) — Option A: extended
+`printables_cults_scan.py` with MakerWorld (public search API) + Thangs
+(best-effort HTML; often Cloudflare 403 → soft zeros + notes).
+Aggregates still `community_downloads/makes/likes` so `score_demand.py`
+unchanged. Cache: `cache/community_platforms_cache.json` (28d).
+Dashboard chip: “Community (Printables/Cults/MakerWorld/Thangs)”.
+
 ### Why
 Current community signal is Printables + Cults. Adding **MakerWorld** (strong Bambu ecosystem, high traffic) and **Thangs** (geometric / functional search) improves coverage of what people are actually downloading and making.
 
-### Approach options
-
-**A. Extend existing `printables_cults_scan.py`** (preferred short-term)  
-Rename conceptually to a broader community scanner or keep the file and add sources inside it so `out/printables_cults_signal.csv` (or a new `out/community_signal.csv`) gains columns:
-
-- `makerworld_downloads` / `makerworld_makes` / `makerworld_likes`
-- `thangs_downloads` or equivalent engagement proxy
-- Keep aggregated `community_downloads`, `community_makes`, `community_likes` as the summed/weighted total so `score_demand.py` needs minimal change.
-
-**B. Separate scanners** only if the sites diverge too much in HTML/API shape.
+### Approach chosen: **A** (extend existing scanner)
+- New columns: `makerworld_*`, `thangs_*` (downloads/makes/likes + sampled + top)
+- Aggregates: `community_*` = sum across all platforms that returned numbers
+- Soft-fail per platform; one site down does not null the whole community row
+- **Deviation:** Thangs is often Cloudflare-blocked from non-browser clients;
+  when blocked, thangs_* are 0 with a note — no invented engagement
 
 ### Scoring impact
 Mostly improves the *quality* of the existing community weights rather than adding brand-new large weights. Optionally give MakerWorld a slight emphasis for Bambu-centric products later.
 
 ### Wiring
-- Update marketplace / community tab in Sheets
-- Dashboard chip can stay "Community" or become "Community (Printables/Cults/MakerWorld/Thangs)"
-- Soft-fail per-source inside the scanner so one site being down doesn't kill the whole community signal
+- [x] Extended `printables_cults_scan.py` + `--estimate` / `--skip-makerworld` / `--skip-thangs`
+- [x] Sheets community blank-on-skip columns include MakerWorld/Thangs
+- [x] Dashboard chip label expanded
+- [x] `products.yaml` header documents optional `makerworld_keywords` / `thangs_keywords`
 
 ---
 
@@ -237,8 +241,8 @@ These can be added as separate markdown sections or issues when we are ready.
 
 1. ~~Start with **eBay sold**~~ — done.
 2. ~~**Etsy**~~ — done (`etsy_scan.py`; sold_proxy limited by Open API).
-3. After weekly runs with real keys, tune eBay 0.04 / Etsy 0.03 weights if needed.
-4. Next: deepen the community scanner (MakerWorld / Thangs).
+3. ~~Deepen community (MakerWorld / Thangs)~~ — done (extend printables_cults_scan).
+4. After weekly runs with real keys/data, tune eBay / Etsy / community weights if needed.
 
 Reference this file in future Claude/Grok prompts as:
 `See docs/future_signals.md for the agreed eBay / Etsy / maker-platform plan.`
