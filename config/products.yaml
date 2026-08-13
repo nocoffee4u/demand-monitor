@@ -10,6 +10,8 @@
 #   youtube_keywords       - optional YouTube search phrases (else keywords)
 #   ebay_keywords          - optional eBay sold-search phrases (else keywords)
 #   etsy_keywords          - optional Etsy search phrases (else keywords)
+#   makerworld_keywords    - optional MakerWorld search phrases
+#   thangs_keywords        - optional Thangs search phrases
 #   category               - "rad_power_bikes", "mtb_general", etc.
 #   fit:                   - optional overrides for manufacturing-fit score
 #                            (0–100 each; omit to use rule-based defaults)
