@@ -51,6 +51,11 @@ import yaml
 from bs4 import BeautifulSoup
 
 from cache_utils import cache_get, cache_put, clamp_limit, load_cache, save_cache
+from http_browser import (
+    cloudflare_softfail_message,
+    http_get_browser,
+    is_cloudflare_challenge,
+)
 
 BROWSER_HEADERS = {
     "User-Agent": (
@@ -283,24 +288,27 @@ def printables_search_ids(
     session: requests.Session,
     limit: int,
 ) -> list[str]:
+    """
+    HTML search for model ids. Uses optional curl_cffi Chrome impersonation
+    when CF fingerprints plain requests. GraphQL stats stay on requests.
+    """
     url = (
         "https://www.printables.com/search/models?q="
         + urllib.parse.quote(query)
     )
-    resp = http_get(url, session=session)
-    if resp.status_code == 403:
-        # Confirmed via manual inspection (2026-08): the search HTML page is
-        # behind a Cloudflare managed challenge ("Just a moment...",
-        # cf-mitigated: challenge) — same class of block as Thangs. Not a
-        # header/UA/rate issue: requests/curl cannot solve a JS challenge, so
-        # retrying or tweaking headers here won't help. The GraphQL API
-        # (api.printables.com/graphql/, used by printables_model_stats) is
-        # NOT behind this challenge and continues to work normally — only
-        # the HTML search page is blocked.
-        raise RuntimeError(
-            "printables search HTTP 403 (Cloudflare managed challenge — "
-            "soft-fail this source; not fixable via headers/retry)"
-        )
+    # Challenged HTML surface — browser-impersonated GET when available
+    resp = http_get_browser(
+        url,
+        headers=BROWSER_HEADERS,
+        timeout=DEFAULT_TIMEOUT_S,
+        session=session,
+    )
+    if is_cloudflare_challenge(resp.status_code, resp.text, resp.headers) or (
+        resp.status_code == 403
+    ):
+        # Fingerprint-only CF: curl_cffi may help; Turnstile still can block.
+        # GraphQL at api.printables.com is NOT behind this challenge.
+        raise RuntimeError(cloudflare_softfail_message("printables search"))
     if resp.status_code != 200:
         raise RuntimeError(f"printables search HTTP {resp.status_code}")
     # /model/12345-slug or "id":"12345"
@@ -730,7 +738,7 @@ def thangs_search_urls(
         if cached is not None:
             return list(cached.get("urls") or [])
 
-    # Public search URL variants — Cloudflare often returns 403
+    # Public search URL variants — Cloudflare often fingerprints plain requests
     candidates = [
         "https://thangs.com/search/"
         + urllib.parse.quote(query)
@@ -740,21 +748,19 @@ def thangs_search_urls(
     ]
     last_status = None
     text = ""
+    hdrs = {**BROWSER_HEADERS, "Referer": "https://thangs.com/"}
     for url in candidates:
-        resp = session.get(
+        resp = http_get_browser(
             url,
-            headers={
-                **BROWSER_HEADERS,
-                "Referer": "https://thangs.com/",
-            },
+            headers=hdrs,
             timeout=DEFAULT_TIMEOUT_S,
+            session=session,
         )
         last_status = resp.status_code
-        if resp.status_code == 403:
-            # Cloudflare challenge — not retryable without browser
-            raise RuntimeError(
-                "thangs HTTP 403 (Cloudflare blocked — soft-fail this source)"
-            )
+        if is_cloudflare_challenge(resp.status_code, resp.text, resp.headers) or (
+            resp.status_code == 403
+        ):
+            raise RuntimeError(cloudflare_softfail_message("thangs"))
         if resp.status_code == 200 and len(resp.text) > 500:
             text = resp.text
             break
@@ -793,16 +799,19 @@ def thangs_search_urls(
 def thangs_model_stats(url: str, session: requests.Session) -> ModelEngagement:
     mid = url.rstrip("/").split("/")[-1][:80]
     try:
-        resp = session.get(
+        resp = http_get_browser(
             url,
             headers={**BROWSER_HEADERS, "Referer": "https://thangs.com/"},
             timeout=DEFAULT_TIMEOUT_S,
+            session=session,
         )
     except Exception as e:
         return ModelEngagement(
             site="thangs", model_id=mid, name="", url=url, detail=str(e)
         )
-    if resp.status_code == 403:
+    if is_cloudflare_challenge(resp.status_code, resp.text, resp.headers) or (
+        resp.status_code == 403
+    ):
         return ModelEngagement(
             site="thangs",
             model_id=mid,

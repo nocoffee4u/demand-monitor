@@ -253,24 +253,23 @@ platform coverage (ok/skipped/error per site) is written to
 
 | Site | How stats are collected |
 |---|---|
-| **Printables** | Search HTML → model ids → public GraphQL for stats. **As of Aug 2026, the search HTML page is often behind a Cloudflare managed challenge** (same class of block as Thangs — confirmed via manual inspection, not fixable via headers/retry/UA). The GraphQL stats endpoint itself is unaffected and still returns real data once a model id is known; only *finding new ids via search* is blocked when this happens. |
+| **Printables** | Search HTML → model ids → public GraphQL for stats. HTML search is often Cloudflare-fingerprinted for plain `requests`; optional **`curl_cffi`** (Chrome impersonation) can recover it when the block is TLS/JA3-only. GraphQL stats at `api.printables.com` are **not** challenged. |
 | **Cults3D** | Search HTML → model pages → parse metrics |
 | **MakerWorld** | Public JSON `search/design` API (`downloadCount`, `printCount`, `likeCount`) |
-| **Thangs** | Best-effort HTML (often Cloudflare 403 → zeros + note, no invented data) |
+| **Thangs** | Best-effort HTML; same optional `curl_cffi` path as Printables. Still soft-fails (zeros + note) if CF returns a managed challenge/Turnstile. |
 
 `community_downloads` / `community_makes` / `community_likes` = sum across
 platforms and feed existing community weights in scoring (no new big weights).
 
-**Operating policy while Printables/Thangs are Cloudflare-challenged:**
-MakerWorld + Cults are currently the reliable carriers of the community
-signal; treat Printables/Thangs contributions as a bonus, not a guarantee,
-on any given week. No action needed — soft-fail already keeps the row
-scoring on the remaining platforms — but don't be surprised to see
-`printables_downloads` / `thangs_downloads` as `ERR` in
-`out/printables_cults_signal.csv` some weeks. If `community_platforms_meta.json`
-shows sustained `0-1/4 ok` over several weekly runs, that's worth
-revisiting (e.g. re-checking whether Cloudflare's challenge behavior has
-changed), but a single blocked week is expected, not a bug.
+**Optional `curl_cffi`:** `pip install curl_cffi` (also in `requirements.txt`).
+Improves Printables/Thangs HTML search against Cloudflare *fingerprint*
+blocking. Without it, those platforms soft-fail as before. This is **not** a
+guaranteed bypass — escalated challenges can still block.
+
+**Operating policy:** MakerWorld + Cults remain the most reliable carriers when
+Printables/Thangs are blocked. Soft-fail keeps the community row scoring on
+remaining platforms. Durable long-term for Printables is GraphQL-based search
+(if/when exposed), not HTML.
 
 Output: `out/demand_report.csv`, ranked highest-demand-score first, plus a
 printed table in the terminal.

@@ -7,3 +7,6 @@ beautifulsoup4>=4.12
 python-dotenv>=1.0
 google-api-python-client>=2.100
 google-auth>=2.23
+# Optional: Chrome TLS impersonation for Cloudflare-fingerprinted HTML
+# (Printables / Thangs search). Soft-fails without it.
+curl_cffi>=0.7

@@ -44,6 +44,8 @@ import requests
 import yaml
 from bs4 import BeautifulSoup
 
+from http_browser import http_get_browser, is_cloudflare_challenge
+
 BROWSER_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -152,13 +154,19 @@ def count_printables(query: str, session: requests.Session) -> CountResult:
         "https://www.printables.com/search/models?q="
         + urllib.parse.quote(query)
     )
-    resp = http_get(url, session=session)
+    # Optional curl_cffi Chrome impersonation for CF fingerprint challenges
+    resp = http_get_browser(
+        url, headers=BROWSER_HEADERS, timeout=DEFAULT_TIMEOUT_S, session=session
+    )
+    if is_cloudflare_challenge(resp.status_code, resp.text, resp.headers) or (
+        resp.status_code == 403
+    ):
+        return CountResult(None, "cloudflare challenge (printables HTML)", "error")
     if resp.status_code != 200:
         return CountResult(None, f"HTTP {resp.status_code}", "error")
-    if looks_like_cloudflare(resp):
-        return CountResult(None, "cloudflare challenge", "error")
+    page_text = resp.text
 
-    soup = BeautifulSoup(resp.text, "html.parser")
+    soup = BeautifulSoup(page_text, "html.parser")
     text = soup.get_text("\n", strip=True)
 
     # Prefer the site's own total ("2,340 models").
@@ -174,6 +182,9 @@ def count_printables(query: str, session: requests.Session) -> CountResult:
         mm = re.search(r"/model/(\d+)", a.get("href") or "")
         if mm:
             ids.add(mm.group(1))
+    # Also regex raw HTML when JS shell leaves few anchors
+    for mid in re.findall(r"/model/(\d+)", page_text):
+        ids.add(mid)
     return CountResult(
         len(ids),
         f"{len(ids)} unique /model/ ids on first page (lower bound)",
@@ -225,13 +236,21 @@ def count_thangs(query: str, session: requests.Session) -> CountResult:
         + urllib.parse.quote(query)
         + "?scope=all"
     )
-    resp = http_get(url, session=session)
+    resp = http_get_browser(
+        url,
+        headers={**BROWSER_HEADERS, "Referer": "https://thangs.com/"},
+        timeout=DEFAULT_TIMEOUT_S,
+        session=session,
+    )
+    if is_cloudflare_challenge(resp.status_code, resp.text, resp.headers) or (
+        resp.status_code == 403
+    ):
+        return CountResult(None, "cloudflare challenge (thangs HTML)", "error")
     if resp.status_code != 200:
         return CountResult(None, f"HTTP {resp.status_code}", "error")
-    if looks_like_cloudflare(resp):
-        return CountResult(None, "cloudflare challenge", "error")
+    page_text = resp.text
 
-    soup = BeautifulSoup(resp.text, "html.parser")
+    soup = BeautifulSoup(page_text, "html.parser")
     text = soup.get_text(" ", strip=True)
     # Require a plausible count: no leading zeros, up to 7 digits, word "Model(s)".
     # Avoid matching CSS/IDs like "0001 Model" fragments.
@@ -411,12 +430,19 @@ def count_for_marketplace(
     query: str,
     session: requests.Session,
 ) -> CountResult:
+    """
+    Dispatch to a marketplace adapter. Any unexpected exception becomes a
+    soft-fail CountResult so weekly run_all.sh (set -e) is not killed.
+    """
     name = resolve_adapter_name(mp)
-    if name in ADAPTERS:
-        return ADAPTERS[name](query, session)
-    if name == "html" or mp.get("search_url_template"):
-        return count_generic_html(query, mp, session)
-    return CountResult(None, f"unknown adapter '{name}'", "error")
+    try:
+        if name in ADAPTERS:
+            return ADAPTERS[name](query, session)
+        if name == "html" or mp.get("search_url_template"):
+            return count_generic_html(query, mp, session)
+        return CountResult(None, f"unknown adapter '{name}'", "error")
+    except Exception as e:
+        return CountResult(None, str(e), "error")
 
 
 _STOPWORDS = {
