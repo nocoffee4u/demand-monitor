@@ -269,8 +269,9 @@ new product line. Note this in `products.yaml` comments when it happens.
 
 **Zero vs. blank vs. skipped.** A `0` in a signal column should mean "we
 looked and found nothing," not "we didn't look." When a source is skipped
-for a run (`SKIP_REDDIT=1`, an X API failure falling back to manual log,
-etc.), the corresponding Sheet cells should render **blank**, not `0` —
+for a run (Reddit default-off / no `INCLUDE_REDDIT=1`, an X API failure
+falling back to manual log, etc.), the corresponding Sheet cells should
+render **blank**, not `0` —
 `score_demand.py` already tracks this distinction internally via its
 `demand_unused` weight-redistribution list; that same list should drive
 which columns get left blank on export instead of re-deriving "was this
@@ -324,9 +325,9 @@ invisible.
    trend chart (#4) picks up new History rows on future runs without a
    manual re-bind.
 7. Cells for a skipped/failed source render blank, not `0` — verified by
-   running once with `SKIP_REDDIT=1` and confirming Reddit-related cells
-   are empty (not zero) and the Dashboard's "sources active" chip for
-   Reddit shows skipped.
+   a default `./run_all.sh` (Reddit off without `INCLUDE_REDDIT=1`) and
+   confirming Reddit-related cells are empty (not zero) and the
+   Dashboard's "sources active" chip for Reddit shows skipped.
 8. Action This Week (Section 4) is generated from the exact rules and
    thresholds specified — verified by checking the output changes
    correctly across two consecutive weekly runs with different underlying

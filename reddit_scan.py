@@ -15,23 +15,28 @@ USAGE:
   python3 reddit_scan.py
   python3 reddit_scan.py --backend pullpush
   python3 reddit_scan.py --backend praw
+  python3 reddit_scan.py --write-empty   # zeros only (weekly pipeline default)
   python3 reddit_scan.py --backend pullpush --config config/products.yaml \\
       --out out/reddit_signal.csv
 
-SETUP — pullpush (default, no credentials):
-  Nothing to configure. Uses the public PullPush submission search API.
+  Weekly pipeline: Reddit is OFF by default. Opt in with:
+    INCLUDE_REDDIT=1 ./run_all.sh
+
+SETUP — pullpush (manual / opt-in, no credentials):
+  Uses the public PullPush submission search API. Often flaky (429 / lag).
   CAVEATS:
     - Volunteer archive; uptime and freshness vary. The index can lag live
       Reddit by weeks or months. This script probes the archive tip and, if
       the tip is older than your lookback window, scores the most recent
       lookback_days of *indexed* data instead so relative rankings still work.
-    - Rate-limit politely (default ~1.2s between requests). Weekly runs only.
-    - Not an official Reddit product; treat as a research stopgap until your
-      Reddit API approval lands.
+    - Rate-limit politely (default ~1.2s between requests). Not for tight loops.
+    - Not an official Reddit product; research stopgap only.
 
-SETUP — praw (official Reddit API):
-  1. Request API access under Reddit's Responsible Builder Policy, then
-     create a "script" app at https://www.reddit.com/prefs/apps
+SETUP — praw (official Reddit API — approval-gated, not self-serve):
+  Unauthenticated reddit.com/.json endpoints are effectively dead for bulk use.
+  Official API access requires Reddit approval under the Responsible Builder
+  Policy (manual review; not a quick self-serve signup). After approval:
+  1. Create a "script" app at https://www.reddit.com/prefs/apps
   2. Redirect URI: http://localhost:8080 (required field, unused)
   3. Copy .env.example to .env and fill in:
        REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET / REDDIT_USER_AGENT
@@ -704,7 +709,26 @@ if __name__ == "__main__":
         help="PullPush only: query each subreddit separately (slower, more "
         "thorough for generic keywords).",
     )
+    parser.add_argument(
+        "--write-empty",
+        action="store_true",
+        help="Write zeroed rows for every product (no network). Used when the "
+        "weekly pipeline skips Reddit so scoring redistributes cleanly.",
+    )
     args = parser.parse_args()
+    if args.write_empty:
+        cfg = load_config(args.config)
+        products = cfg.get("products") or []
+        if not products:
+            print("ERROR: no products in config")
+            sys.exit(1)
+        rows = [
+            empty_product_row(p["name"], p.get("category", ""))
+            for p in products
+        ]
+        write_rows(rows, args.out)
+        print("Reddit signal empty (skipped / --write-empty); scoring will redistribute.")
+        sys.exit(0)
     scan(
         config_path=args.config,
         out_path=args.out,

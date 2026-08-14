@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
 # Runs the full demand-scan pipeline in order and prints the ranked report.
 #
-# Reddit scan defaults to the PullPush backend (no credentials). To use the
-# official Reddit API once approved:
-#   REDDIT_BACKEND=praw ./run_all.sh
-# and set REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET (see reddit_scan.py).
-#
-# If PullPush is flaky, wait until healthy first:
-#   WAIT_FOR_PULLPUSH=1 ./run_all.sh
-#   # or: python3 wait_for_pullpush.py --full-pipeline
+# Reddit is OFF by default (no PullPush wait on weekly runs). Opt in:
+#   INCLUDE_REDDIT=1 ./run_all.sh
+#   INCLUDE_REDDIT=1 REDDIT_BACKEND=praw ./run_all.sh   # needs approved PRAW creds
+#   INCLUDE_REDDIT=1 WAIT_FOR_PULLPUSH=1 ./run_all.sh   # poll PullPush first
+# Or run alone: python3 reddit_scan.py / python3 wait_for_pullpush.py
 #
 # X signal (optional):
 #   Set X_BEARER_TOKEN in .env to use the official API (pay-per-use).
@@ -35,8 +32,6 @@
 #   Cached weekly by default. Skip: SKIP_SEARCH_VOLUME=1 ./run_all.sh
 #   Estimate first: python3 search_volume_scan.py --estimate
 #
-# Reddit is optional / unreliable — skip with SKIP_REDDIT=1.
-#
 # Google Sheets export (final step):
 #   Set GOOGLE_SERVICE_ACCOUNT_JSON + GOOGLE_SHEETS_SPREADSHEET_ID in .env
 #   See docs/sheets_setup.md. Skip: SKIP_SHEETS=1 ./run_all.sh
@@ -60,7 +55,7 @@ step() {
   echo "== ${STEP}/${total} $1 =="
 }
 
-if [[ "${WAIT_FOR_PULLPUSH:-0}" == "1" && "${REDDIT_BACKEND}" == "pullpush" && "${SKIP_REDDIT:-0}" != "1" ]]; then
+if [[ "${INCLUDE_REDDIT:-0}" == "1" && "${WAIT_FOR_PULLPUSH:-0}" == "1" && "${REDDIT_BACKEND}" == "pullpush" ]]; then
   step "Waiting for PullPush to be healthy"
   python3 wait_for_pullpush.py --wait-only
 fi
@@ -77,8 +72,8 @@ else
   echo "  skipped (SKIP_SEARCH_VOLUME=1)"
 fi
 
-if [[ "${SKIP_REDDIT:-0}" != "1" ]]; then
-  step "Reddit scan (backend: ${REDDIT_BACKEND}) [optional]"
+if [[ "${INCLUDE_REDDIT:-0}" == "1" ]]; then
+  step "Reddit scan (backend: ${REDDIT_BACKEND}) [opt-in]"
   if [[ "${REDDIT_BACKEND}" == "pullpush" ]]; then
     python3 reddit_scan.py --backend pullpush --delay "${REDDIT_DELAY:-5}" || {
       echo "  [warn] reddit scan failed — continuing (Reddit is optional)"
@@ -90,7 +85,9 @@ if [[ "${SKIP_REDDIT:-0}" != "1" ]]; then
   fi
 else
   step "Reddit scan"
-  echo "  skipped (SKIP_REDDIT=1)"
+  echo "  Reddit skipped (optional; set INCLUDE_REDDIT=1 to run)"
+  # Soft-empty signal so score_demand redistributes Reddit (no stale prior run)
+  python3 reddit_scan.py --write-empty || true
 fi
 
 step "Google Trends scan"

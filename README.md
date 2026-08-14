@@ -30,7 +30,7 @@ you've decided rather than guessing upfront.
 | eBay sold / completed listings + sold prices | Yes (API key) | `ebay_sold_scan.py` — SoldComps `EBAY_SOLD_API_KEY`. Skip with `SKIP_EBAY=1` |
 | Etsy active listings + favorites (sold proxy limited) | Yes (API key) | `etsy_scan.py` — Open API v3 `ETSY_API_KEY`. Skip with `SKIP_ETSY=1` |
 | X / Twitter keyword + brand-account chatter | Yes (API) or manual | `x_scan.py` — needs `X_BEARER_TOKEN` or `x_manual_log.csv` |
-| Reddit posts/upvotes/comments | Optional / unreliable | `reddit_scan.py` (PullPush default; PRAW optional). Skip with `SKIP_REDDIT=1` |
+| Reddit posts/upvotes/comments | **Optional / off by default** | `reddit_scan.py` (PullPush or PRAW). Weekly path skips unless `INCLUDE_REDDIT=1` |
 | Facebook / Pinkbike / MTBR | **No — manual** | `facebook_manual_log.csv` |
 
 **YouTube (optional, free quota):** MTB / e-bike / FPV niches are heavy on
@@ -110,54 +110,44 @@ Outputs:
 Optional per-product override in `config/products.yaml`:
 `search_volume_keywords: [...]` (else uses `keywords`).
 
-### Reddit data (two backends, optional)
+### Reddit data (optional — off in the weekly pipeline)
 
-**Default: PullPush** — no Reddit API credentials. Uses the public
-[PullPush](https://pullpush.io/) archive to keyword-search submissions in your
-configured subreddits. Good enough for weekly demand ranking while Reddit's
-API approval is pending.
+Reddit is **not** part of the default `./run_all.sh` path (PullPush waits
+and flaky 429s used to stall the weekly job). Scoring already redistributes
+tiny Reddit weights when the signal is empty; Dashboard chips show Reddit
+inactive/skipped.
+
+**Opt in for a full pipeline run:**
 
 ```bash
-python3 reddit_scan.py                  # same as --backend pullpush
-python3 reddit_scan.py --per-subreddit  # slower, more thorough for generic keywords
-python3 reddit_scan.py --delay 5        # if you hit rate limits (HTTP 429)
-
-# If PullPush is down / rate-limiting, wait until healthy then scan:
-python3 wait_for_pullpush.py            # polls, then reddit_scan.py --delay 5
-python3 wait_for_pullpush.py --full-pipeline   # then ./run_all.sh
-python3 wait_for_pullpush.py --check-only      # one-shot health check
-python3 wait_for_pullpush.py --timeout 7200 --interval 60
-python3 wait_for_pullpush.py -- --per-subreddit   # extra args to reddit_scan.py
+INCLUDE_REDDIT=1 ./run_all.sh
+INCLUDE_REDDIT=1 WAIT_FOR_PULLPUSH=1 ./run_all.sh   # poll PullPush first
+INCLUDE_REDDIT=1 REDDIT_BACKEND=praw ./run_all.sh   # needs approved creds
 ```
 
-Caveats: PullPush is a volunteer archive. Index freshness can lag live Reddit
-(sometimes by weeks/months). The scanner probes the archive tip and, if the
-tip is older than `reddit_lookback_days`, scores the most recent lookback
-window of *indexed* data so relative product rankings still work. Prefer the
-official API once approved.
+**Or run the scanner alone:**
 
-PullPush also rate-limits shared traffic. The scanner backs off and retries on
-HTTP 429; if a run still comes back all zeros, wait a few minutes and re-run
-with `--delay 5` (or higher), or use `wait_for_pullpush.py` so it polls for
-you. Weekly cadence is the intended use.
+```bash
+python3 reddit_scan.py                  # PullPush backend
+python3 reddit_scan.py --per-subreddit  # slower, more thorough
+python3 reddit_scan.py --delay 5        # if you hit rate limits (HTTP 429)
+python3 reddit_scan.py --write-empty    # zeros only (what weekly skip writes)
 
-**Optional: official Reddit API (PRAW)** — requires approval under Reddit's
-Responsible Builder Policy (manual review; no longer self-serve):
+# If PullPush is down / rate-limiting:
+python3 wait_for_pullpush.py            # polls, then reddit_scan.py --delay 5
+python3 wait_for_pullpush.py --check-only
+```
 
-1. Get approved API access, then create a "script" app at
-   https://www.reddit.com/prefs/apps
-2. Redirect URI: `http://localhost:8080` (required field, unused)
-3. Copy `.env.example` to `.env` and fill in the three values:
-   ```bash
-   cp .env.example .env
-   # then edit .env with your client ID, secret, and user agent
-   ```
-   `.env` is gitignored, so credentials never get committed. `reddit_scan.py`
-   loads it automatically via `python-dotenv`.
-4. Run with the praw backend:
-   ```bash
-   python3 reddit_scan.py --backend praw
-   ```
+**Status in 2026 (often degraded):**
+- **PullPush** — volunteer archive; frequently 429s / lags live Reddit by
+  weeks–months. Fine as a manual research tool, not a reliable weekly carrier.
+- **Official Reddit API (PRAW)** — **approval-gated** under the Responsible
+  Builder Policy (manual review). Not a quick self-serve signup; do not plan
+  on “register in five minutes.” Unauthenticated `reddit.com/.../.json`
+  bulk access is effectively dead.
+- After approval: create a “script” app at https://www.reddit.com/prefs/apps,
+  set `REDDIT_CLIENT_ID` / `REDDIT_CLIENT_SECRET` / `REDDIT_USER_AGENT` in
+  `.env`, then `python3 reddit_scan.py --backend praw`.
 
 ## Running it
 
@@ -178,7 +168,8 @@ python3 x_scan.py                       # API if X_BEARER_TOKEN set, else manual
 python3 score_demand.py
 ```
 
-Pipeline env knobs: `SKIP_SEARCH_VOLUME=1`, `SKIP_COMMUNITY=1`, `SKIP_REDDIT=1`, `SKIP_X=1`.
+Pipeline env knobs: `SKIP_SEARCH_VOLUME=1`, `SKIP_COMMUNITY=1`, `SKIP_X=1`,
+`INCLUDE_REDDIT=1` (Reddit is **off** unless set).
 
 ## Local 3D printing *service* keywords (city-level)
 
