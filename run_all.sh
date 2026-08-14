@@ -27,6 +27,11 @@
 #   Estimate: python3 etsy_scan.py --estimate
 #   Skip: SKIP_ETSY=1 ./run_all.sh
 #
+# Amazon commercial intent (optional; free autocomplete + optional Rainforest):
+#   Estimate: python3 amazon_scan.py --estimate
+#   Optional listings/prices: RAINFOREST_API_KEY in .env
+#   Skip: SKIP_AMAZON=1 ./run_all.sh
+#
 # Search volume (DataForSEO Google Ads — primary demand signal):
 #   Set DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD in .env.
 #   Cached weekly by default. Skip: SKIP_SEARCH_VOLUME=1 ./run_all.sh
@@ -150,6 +155,14 @@ if [[ "${SKIP_ETSY:-0}" != "1" ]]; then
 else
   step "Etsy scan"
   echo "  skipped (SKIP_ETSY=1)"
+fi
+
+if [[ "${SKIP_AMAZON:-0}" != "1" ]]; then
+  step "Amazon commercial intent (autocomplete + optional Rainforest)"
+  python3 amazon_scan.py || echo "  [warn] Amazon scan failed — continuing"
+else
+  step "Amazon scan"
+  echo "  skipped (SKIP_AMAZON=1)"
 fi
 
 step "Scoring & ranking"

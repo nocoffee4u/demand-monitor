@@ -41,7 +41,7 @@ import yaml
 # ---------------------------------------------------------------------------
 
 # Quality-first demand (sums ~1.0 before empty-source redistribution).
-# Optional marketplace/social signals stay small (Etsy, eBay, YouTube, X, Reddit).
+# Optional marketplace/social signals stay small (Etsy, eBay, YouTube, Amazon, X, Reddit).
 DEMAND_WEIGHTS = {
     "volume_quality": 0.22,  # log volume × specificity (not raw volume)
     "intent": 0.16,
@@ -51,12 +51,13 @@ DEMAND_WEIGHTS = {
     "community_downloads": 0.10,
     "community_makes": 0.06,
     "community_likes": 0.02,
-    "trends_interest": 0.01,
+    "trends_interest": 0.005,  # carved slightly for Amazon problem signal
     "ebay_sold_volume": 0.04,  # log-scaled sold_count_30d + specificity dampen
-    "ebay_price_signal": 0.01,  # light boost for sensible FDM sold-price bands
+    "ebay_price_signal": 0.005,  # light boost for sensible FDM sold-price bands
     # Etsy Open API has no public sold counts — this is favorites (or sold_proxy if ever set)
-    "etsy_engagement_volume": 0.02,
-    "youtube_volume": 0.025,
+    "etsy_engagement_volume": 0.015,
+    "amazon_problem_signal": 0.025,  # problem/replacement language + autocomplete
+    "youtube_volume": 0.015,
     "youtube_engagement": 0.01,
     "x_volume": 0.005,
     "x_engagement": 0.005,
@@ -64,11 +65,12 @@ DEMAND_WEIGHTS = {
     "reddit_engagement": 0.002,
 }
 
-# Higher = more crowded supply (penalized via opportunity). Etsy listing density
-# sits here with marketplace listings, not as a demand bonus.
+# Higher = more crowded supply (penalized via opportunity). Etsy/Amazon listing
+# density sit here with marketplace listings, not as a demand bonus.
 COMPETITION_WEIGHTS = {
-    "marketplace_listings": 0.60,
+    "marketplace_listings": 0.59,
     "etsy_listing_saturation": 0.05,  # log active Etsy listing density for keyword
+    "amazon_listing_saturation": 0.01,  # optional Rainforest total results
     "ads_competition": 0.15,
     "incumbent_strength": 0.20,
 }
@@ -450,6 +452,7 @@ def main(
     youtube_path: str | None = None,
     ebay_path: str | None = None,
     etsy_path: str | None = None,
+    amazon_path: str | None = None,
     search_volume_path: str | None = None,
     community_path: str | None = None,
     products_config: str = DEFAULT_PRODUCTS_CONFIG,
@@ -483,6 +486,7 @@ def main(
         _safe_read(youtube_path),
         _safe_read(ebay_path),
         _safe_read(etsy_path),
+        _safe_read(amazon_path),
     ]
     # Collect orphan product names across signals (data-integrity surface)
     orphans: set[str] = set()
@@ -545,12 +549,24 @@ def main(
             "etsy_sold_proxy",
             "etsy_avg_price",
             "etsy_favorites_proxy",
+            "amazon_listing_count",
+            "amazon_autocomplete_hits",
+            "amazon_problem_mention_score",
+            "amazon_avg_price",
             "ads_competition_avg",
             "cpc_avg",
         ],
     )
 
-    marketplace_cols = [c for c in df.columns if c.endswith("_listing_count")]
+    # Marketplace competition totals: maker platforms only (not Etsy/Amazon
+    # which have their own competition weights).
+    marketplace_cols = [
+        c
+        for c in df.columns
+        if c.endswith("_listing_count")
+        and not c.startswith("etsy_")
+        and not c.startswith("amazon_")
+    ]
     for c in marketplace_cols:
         df[c] = pd.to_numeric(df[c], errors="coerce").fillna(0)
     df["total_listings"] = (
@@ -707,6 +723,35 @@ def main(
     df["n_etsy_engagement_volume_adj"] = (
         df["n_etsy_engagement_volume"] * spec_dampen
     )
+    # Amazon: problem language + autocomplete (absolute score 0–100); listing
+    # density is competition-only when Rainforest provides totals.
+    if "amazon_problem_mention_score" not in df.columns:
+        df["amazon_problem_mention_score"] = 0.0
+    if "amazon_autocomplete_hits" not in df.columns:
+        df["amazon_autocomplete_hits"] = 0.0
+    if "amazon_listing_count" not in df.columns:
+        df["amazon_listing_count"] = 0.0
+    # Blend absolute problem score with log autocomplete strength (both 0–100)
+    ac_log = (
+        pd.to_numeric(df["amazon_autocomplete_hits"], errors="coerce")
+        .fillna(0.0)
+        .map(lambda x: math.log1p(float(x)))
+    )
+    df["n_amazon_autocomplete"] = normalize(ac_log)
+    df["n_amazon_problem_raw"] = pd.to_numeric(
+        df["amazon_problem_mention_score"], errors="coerce"
+    ).fillna(0.0)
+    # Prefer problem score when present; mix a little autocomplete for density
+    df["n_amazon_problem_signal"] = (
+        df["n_amazon_problem_raw"] * 0.75 + df["n_amazon_autocomplete"] * 0.25
+    )
+    df["n_amazon_problem_signal_adj"] = df["n_amazon_problem_signal"] * spec_dampen
+    df["amazon_listings_log"] = (
+        pd.to_numeric(df["amazon_listing_count"], errors="coerce")
+        .fillna(0.0)
+        .map(lambda x: math.log1p(float(x)))
+    )
+    df["n_amazon_listing_saturation"] = normalize(df["amazon_listings_log"])
 
     # --- Demand ------------------------------------------------------------
     demand_w = dict(DEMAND_WEIGHTS)
@@ -753,6 +798,11 @@ def main(
         demand_unused.extend(["ebay_sold_volume", "ebay_price_signal"])
     if _signal_empty(df, ["etsy_sold_proxy", "etsy_favorites_proxy"]):
         demand_unused.append("etsy_engagement_volume")
+    if _signal_empty(
+        df,
+        ["amazon_problem_mention_score", "amazon_autocomplete_hits"],
+    ):
+        demand_unused.append("amazon_problem_signal")
     demand_w = _redistribute(demand_w, demand_unused)
 
     demand_cols = {
@@ -768,6 +818,7 @@ def main(
         "ebay_sold_volume": "n_ebay_sold_volume_adj",
         "ebay_price_signal": "n_ebay_price_signal_adj",
         "etsy_engagement_volume": "n_etsy_engagement_volume_adj",
+        "amazon_problem_signal": "n_amazon_problem_signal_adj",
         "youtube_volume": "n_youtube_volume_adj",
         "youtube_engagement": "n_youtube_engagement_adj",
         "x_volume": "n_x_volume",
@@ -791,6 +842,8 @@ def main(
         comp_unused.append("marketplace_listings")
     if _signal_empty(df, ["etsy_listing_count"]):
         comp_unused.append("etsy_listing_saturation")
+    if _signal_empty(df, ["amazon_listing_count"]):
+        comp_unused.append("amazon_listing_saturation")
     if _signal_empty(df, ["ads_competition_avg"]):
         comp_unused.append("ads_competition")
     if _signal_empty(df, ["community_downloads"]):
@@ -800,6 +853,7 @@ def main(
     comp_cols = {
         "marketplace_listings": "n_marketplace_listings",
         "etsy_listing_saturation": "n_etsy_listing_saturation",
+        "amazon_listing_saturation": "n_amazon_listing_saturation",
         "ads_competition": "n_ads_competition",
         "incumbent_strength": "n_incumbent_strength",
     }
@@ -928,6 +982,10 @@ def main(
                 "etsy_engagement_volume" not in demand_unused
                 or "etsy_listing_saturation" not in comp_unused
             ),
+            "amazon": (
+                "amazon_problem_signal" not in demand_unused
+                or "amazon_listing_saturation" not in comp_unused
+            ),
             "reddit": "reddit_volume" not in demand_unused,
             "marketplace": "marketplace_listings" not in comp_unused,
         },
@@ -1001,6 +1059,7 @@ if __name__ == "__main__":
     parser.add_argument("--youtube", default="out/youtube_signal.csv")
     parser.add_argument("--ebay", default="out/ebay_sold_signal.csv")
     parser.add_argument("--etsy", default="out/etsy_signal.csv")
+    parser.add_argument("--amazon", default="out/amazon_signal.csv")
     parser.add_argument(
         "--products-config",
         default=DEFAULT_PRODUCTS_CONFIG,
@@ -1017,6 +1076,7 @@ if __name__ == "__main__":
         youtube_path=args.youtube,
         ebay_path=args.ebay,
         etsy_path=args.etsy,
+        amazon_path=args.amazon,
         search_volume_path=args.search_volume,
         community_path=args.community,
         products_config=args.products_config,

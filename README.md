@@ -29,6 +29,7 @@ you've decided rather than guessing upfront.
 | YouTube matching videos + views/likes/comments | Yes (API key) | `youtube_scan.py` — needs `YOUTUBE_API_KEY`. Skip with `SKIP_YOUTUBE=1` |
 | eBay sold / completed listings + sold prices | Yes (API key) | `ebay_sold_scan.py` — SoldComps `EBAY_SOLD_API_KEY`. Skip with `SKIP_EBAY=1` |
 | Etsy active listings + favorites (sold proxy limited) | Yes (API key) | `etsy_scan.py` — Open API v3 `ETSY_API_KEY`. Skip with `SKIP_ETSY=1` |
+| Amazon autocomplete + problem language (optional listings) | Yes (free AC; optional Rainforest key) | `amazon_scan.py` — soft-fail. Skip with `SKIP_AMAZON=1` |
 | X / Twitter keyword + brand-account chatter | Yes (API) or manual | `x_scan.py` — needs `X_BEARER_TOKEN` or `x_manual_log.csv` |
 | Reddit posts/upvotes/comments | **Optional / off by default** | `reddit_scan.py` (PullPush or PRAW). Weekly path skips unless `INCLUDE_REDDIT=1` |
 | Facebook / Pinkbike / MTBR | **No — manual** | `facebook_manual_log.csv` |
@@ -55,6 +56,17 @@ for 3D-print marketplace interest. **No public sold totals** from Etsy’s API �
 not a demand bonus. Setup: register app at etsy.com/developers →
 `ETSY_API_KEY=keystring:shared_secret` in `.env`. Estimate:
 `python3 etsy_scan.py --estimate`. Cache: `cache/etsy_cache.json` (28d TTL).
+
+**Amazon (optional):** Commercial intent + problem/replacement language, not
+transaction proof. **v1 free path** uses Amazon public autocomplete
+(`completion.amazon.com`) → `amazon_autocomplete_hits` +
+`amazon_problem_mention_score` from suggestion text. **Optional**
+`RAINFOREST_API_KEY` adds search result density (`amazon_listing_count`) and
+avg price. No Product Advertising API / Associates in v1; no invented BSR or
+sold ranks; no Playwright. Estimate: `python3 amazon_scan.py --estimate`.
+Cache: `cache/amazon_cache.json` (28d). Skip: `SKIP_AMAZON=1`. Weights:
+`amazon_problem_signal` 0.025 (demand) + `amazon_listing_saturation` 0.01
+(competition when listings present).
 
 Facebook actively blocks automated scraping and its ToS prohibits it.
 Pinkbike Forum and MTBR Forum were tested directly (July 2026) and both run
@@ -169,7 +181,7 @@ python3 score_demand.py
 ```
 
 Pipeline env knobs: `SKIP_SEARCH_VOLUME=1`, `SKIP_COMMUNITY=1`, `SKIP_X=1`,
-`INCLUDE_REDDIT=1` (Reddit is **off** unless set).
+`SKIP_AMAZON=1`, `INCLUDE_REDDIT=1` (Reddit is **off** unless set).
 
 ## Local 3D printing *service* keywords (city-level)
 
@@ -381,7 +393,7 @@ products, Bambu FDM, low support), not raw Google volume alone.
 
 | Score | Meaning |
 |---|---|
-| **demand_score** | Quality-weighted pull: intent, specificity, problem intensity, log-volume×specificity, community, trends, optional Etsy / eBay / YouTube / X / Reddit |
+| **demand_score** | Quality-weighted pull: intent, specificity, problem intensity, log-volume×specificity, community, trends, optional Etsy / eBay / Amazon / YouTube / X / Reddit |
 | **fit_score** | Manufacturing + customer clarity: FDM-friendly, materials, clear buyer, low support burden |
 | **competition_score** | Listing counts + ads competition + incumbent downloads |
 | **opportunity_score** | Demand vs competition (market whitespace) |

@@ -10,6 +10,9 @@
 #   youtube_keywords       - optional YouTube search phrases (else keywords)
 #   ebay_keywords          - optional eBay sold-search phrases (else keywords)
 #   etsy_keywords          - optional Etsy search phrases (else keywords)
+#   amazon_keywords        - optional Amazon autocomplete/search phrases
+#                            (else keywords → search_volume_keywords; prefer
+#                            problem/replacement language when useful)
 #   makerworld_keywords    - optional MakerWorld search phrases
 #   thangs_keywords        - optional Thangs search phrases
 #   category               - "rad_power_bikes", "mtb_general", etc.

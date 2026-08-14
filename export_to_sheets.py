@@ -303,6 +303,16 @@ SOURCE_COL_MAP = {
         "etsy_notes",
         "fetched_at",
     ],
+    "amazon": [
+        "amazon_listing_count",
+        "amazon_autocomplete_hits",
+        "amazon_problem_mention_score",
+        "amazon_avg_price",
+        "amazon_top_title",
+        "amazon_keywords_used",
+        "amazon_notes",
+        "fetched_at",
+    ],
     "trends": [
         "trends_avg_interest_0_100",
         "trends_recent_vs_prior_pct_change",
@@ -412,6 +422,13 @@ def source_is_active(meta: dict, key: str) -> bool:
         return not (
             "etsy_engagement_volume" in unused_d
             and "etsy_listing_saturation" in unused_c
+        )
+    if key == "amazon":
+        unused_d = set(meta.get("demand_unused") or [])
+        unused_c = set(meta.get("competition_unused") or [])
+        return not (
+            "amazon_problem_signal" in unused_d
+            and "amazon_listing_saturation" in unused_c
         )
     if key == "trends":
         return not ("trends_interest" in unused or "momentum" in unused)
@@ -1336,6 +1353,7 @@ def build_dashboard(
         ("YouTube", "youtube"),
         ("eBay", "ebay"),
         ("Etsy", "etsy"),
+        ("Amazon", "amazon"),
         ("X", "x"),
         ("Reddit", "reddit"),
     ]:

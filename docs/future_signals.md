@@ -1,8 +1,8 @@
 # Future Demand Signals — Integration Plan & Roadmap
 
-**Status:** Active roadmap (eBay + Etsy + MakerWorld/Thangs community: **implemented**)  
+**Status:** Active roadmap (eBay + Etsy + MakerWorld/Thangs + Amazon v1: **implemented**)  
 **Created:** 2026-08-10  
-**Updated:** 2026-08-12 — MakerWorld + Thangs extended community scanner  
+**Updated:** 2026-08-13 — Amazon autocomplete + optional Rainforest  
 **Owner:** Project (Grok + Claude)  
 **Location:** This file lives in `docs/` so it is easy to find and reference later.
 
@@ -21,10 +21,11 @@ All new scanners should follow the same contract as the recent YouTube integrati
 
 ## Priority order (recommended implementation sequence)
 
-1. **eBay Sold / Completed Listings** — highest near-term ROI  
-2. **Etsy demand / sold proxies** — closest marketplace to pure 3D-print buyers  
-3. **Expanded maker platforms** (MakerWorld + Thangs velocity) — deepens the existing community signal  
-4. Later backlog (Pinterest Trends, Amazon review mining, TikTok/Reels, etc.)
+1. **eBay Sold / Completed Listings** — highest near-term ROI — **done**  
+2. **Etsy demand / sold proxies** — closest marketplace to pure 3D-print buyers — **done**  
+3. **Expanded maker platforms** (MakerWorld + Thangs velocity) — **done**  
+4. **Amazon commercial intent (v1)** — autocomplete + problem language; optional Rainforest listings — **done** (see § Amazon below)  
+5. Later backlog (Pinterest Trends, deeper Amazon review mining, TikTok/Reels, PA-API, etc.)
 
 ---
 
@@ -201,9 +202,38 @@ Empty any optional source → redistribute exactly as today.
 
 ---
 
+## 4. Amazon commercial intent (v1 — implemented)
+
+**Status: implemented** (2026-08-13) — `amazon_scan.py`
+
+### Why (from backlog)
+Amazon is where commercial replacement/problem language shows up ("cover",
+"replacement", brand + part). Autocomplete surfaces what shoppers type;
+listing density is competition context when available.
+
+### Provider (v1 deviations from full "review mining")
+| Path | What we get | Key |
+|------|-------------|-----|
+| Public autocomplete | suggestion hits + problem-language score from suggestion text | none |
+| Rainforest `type=search` (optional) | total results, avg price, titles | `RAINFOREST_API_KEY` |
+| PA-API / Associates | **not in v1** (approval + signing complexity) | — |
+| Full 1★ review mining | **not in v1** (ToS / brittle scrape risk) | — |
+
+**Output:** `out/amazon_signal.csv`  
+**Cache:** `cache/amazon_cache.json` (28d)  
+**Weights:** `amazon_problem_signal` 0.025 (demand, specificity-dampened);
+`amazon_listing_saturation` 0.01 (competition when listing_count > 0).  
+**Wiring:** `SKIP_AMAZON=1`, `run_meta.sources.amazon`, Sheets chip.
+
+### Follow-ups (not this pass)
+- Product Advertising API when Associates credentials exist
+- Deeper review snippet mining only via a supported API (not Playwright)
+
+---
+
 ## Sheets / Dashboard impact
 
-- New source chips on Dashboard status strip: `eBay`, `Etsy` (and expanded Community if needed)
+- New source chips on Dashboard status strip: `eBay`, `Etsy`, `Amazon` (and expanded Community if needed)
 - Product Rankings / Scoring Detail: add the new numeric columns (blank when skipped)
 - History: optionally append `ebay_sold_count_30d` and `etsy_sold_proxy` later if we want trend lines on transaction signals (not required for v1 of each scanner)
 - Action This Week rules stay the same; stronger near-term data should simply improve the priority scores that feed those rules
@@ -215,7 +245,7 @@ Empty any optional source → redistribute exactly as today.
 | Signal                    | Horizon     | Notes |
 |---------------------------|-------------|-------|
 | Pinterest Trends          | Leading     | Free, strong early purchase-intent, visual niches |
-| Amazon review mining + autocomplete | Near + problem discovery | 1-star "this broke / they changed the design" is pure replacement-part gold |
+| Amazon review mining (deeper) / PA-API | Near + problem discovery | v1 = autocomplete + optional Rainforest; full 1★ review mining / Associates still open |
 | TikTok / Reels hashtag & view velocity | Near momentum | Pair with existing YouTube |
 | Obsolescence language scan (forums + Reddit + search) | Long-term replacement niche | "discontinued", "no longer available", "OEM NLA" |
 | Kickstarter / Indiegogo category history | Validation of willingness-to-pay | Secondary filter |
