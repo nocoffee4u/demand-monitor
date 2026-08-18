@@ -382,7 +382,7 @@ GOOGLE_SHEETS_SPREADSHEET_ID=your_spreadsheet_id
 ```
 
 Skip: `SKIP_SHEETS=1 ./run_all.sh`.  
-Tabs: Dashboard, Product Rankings, Scoring Detail, Search Volume, Marketplace,
+Tabs: Dashboard, Product Rankings, Scoring Detail, Market Voice, Search Volume, Marketplace,
 Local Service (Phoenix), History (append-only), Config.  
 Spec: `docs/sheets_dashboard_spec.md`. Setup: `docs/sheets_setup.md`.
 

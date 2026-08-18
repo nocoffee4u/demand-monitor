@@ -4,8 +4,8 @@ export_to_sheets.py
 -------------------
 Push demand-monitor pipeline outputs into a Google Sheet (Service Account).
 
-Tabs (per docs/sheets_dashboard_spec.md):
-  Dashboard, Product Rankings, Scoring Detail, Search Volume,
+Tabs (per docs/sheets_dashboard_spec.md + voice_radar_spec.md):
+  Dashboard, Product Rankings, Scoring Detail, Market Voice, Search Volume,
   Marketplace, Local Service (Phoenix), History, Config
 
 USAGE:
@@ -32,6 +32,8 @@ from typing import Any
 import pandas as pd
 import yaml
 
+from market_voice import VOICE_COLS, build_market_voice, write_market_voice
+
 try:
     from dotenv import load_dotenv
 
@@ -46,6 +48,7 @@ TAB_ORDER = [
     "Dashboard",
     "Product Rankings",
     "Scoring Detail",
+    "Market Voice",
     "Search Volume",
     "Marketplace",
     "Local Service (Phoenix)",
@@ -2563,6 +2566,8 @@ def export(
 
     rankings = build_rankings(report, meta)
     detail = build_scoring_detail(report, meta)
+    voice_df = build_market_voice(report=report, meta=meta)
+    write_market_voice(voice_df, "out/market_voice.csv")
     sv_matrix = build_search_volume_tab(meta)
     market_df = build_marketplace_tab(report, meta)
     local_matrix = build_local_service_tab()
@@ -2587,10 +2592,11 @@ def export(
     category_avg = build_category_avg(rankings)
 
     LOG.info(
-        "Prepared tabs: rankings=%d detail=%d history_new=%d actions=%d "
+        "Prepared tabs: rankings=%d detail=%d voice=%d history_new=%d actions=%d "
         "trend_pivot=%s category_rows=%d charts_start_row=%d",
         len(rankings),
         len(detail),
+        len(voice_df),
         len(history_new),
         len(actions),
         trend_pivot.shape,
@@ -2603,6 +2609,7 @@ def export(
         out_dir.mkdir(parents=True, exist_ok=True)
         rankings.to_csv(out_dir / "product_rankings.csv", index=False)
         detail.to_csv(out_dir / "scoring_detail.csv", index=False)
+        voice_df.to_csv(out_dir / "market_voice.csv", index=False)
         history_new.to_csv(out_dir / "history_append.csv", index=False)
         market_df.to_csv(out_dir / "marketplace.csv", index=False)
         trend_pivot.to_csv(out_dir / "trend_pivot.csv", index=False)
@@ -2664,6 +2671,11 @@ def export(
         assert "CHART DATA — Category avg" not in dash_text
         assert "HOW TO READ THIS DASHBOARD" in dash_text
         assert "★ ACTION THIS WEEK" in dash_text
+        assert list(voice_df.columns) == list(VOICE_COLS), voice_df.columns.tolist()
+        assert len(voice_df) == len(rankings), "Market Voice must cover all products"
+        assert voice_df["top_intent_phrases"].astype(str).str.len().gt(0).any(), (
+            "expected some intent phrases from search_volume_keywords"
+        )
         assert "CHARTS — visual overview" in dash_text
         assert "DEMAND VS FIT KEY" in dash_text
         assert "KPIs THIS RUN" in dash_text
@@ -2736,6 +2748,15 @@ def export(
         print(f"\nTrend pivot preview ({trend_pivot.shape[0]} dates × "
               f"{max(0, trend_pivot.shape[1]-1)} products):")
         print(trend_pivot.head().to_string(index=False))
+        print(f"\n=== MARKET VOICE (dry-run, top 3) ===")
+        preview_cols = [
+            "product",
+            "top_intent_phrases",
+            "design_must_haves",
+            "social_hook",
+            "confidence",
+        ]
+        print(voice_df[preview_cols].head(3).to_string(index=False))
         print(f"\nDry-run complete → {out_dir}")
         return
 
@@ -2798,6 +2819,11 @@ def export(
         service, spreadsheet_id, "Scoring Detail", df_to_values(detail)
     )
     freeze_header(service, spreadsheet_id, sheet_ids["Scoring Detail"])
+
+    clear_and_write(
+        service, spreadsheet_id, "Market Voice", df_to_values(voice_df, VOICE_COLS)
+    )
+    freeze_header(service, spreadsheet_id, sheet_ids["Market Voice"])
 
     clear_and_write(service, spreadsheet_id, "Search Volume", sv_matrix)
     # Marketplace status banner + table

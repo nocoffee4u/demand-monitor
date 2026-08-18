@@ -2,8 +2,9 @@
 
 Owner: Claude (architecture/data model/Dashboard design, per `PROJECT_BRIEF.md`).
 Implementer: Grok.
-Status: design — prerequisites §5 steps 1 + History coverage (gotcha 1/2) implemented;
-Market Voice / Radar tabs not built yet.
+Status: Market Voice **v1 implemented** (Sheets tab + `market_voice.py`, Tier 1+3).
+Prerequisites §5 steps 1 + History coverage done. Opportunity Radar / design briefs /
+Amazon suggestion-list field still open.
 
 Grounded in the actual current data shape as of 2026-08-17 (`out/demand_report.csv`
 = 177 columns, `HISTORY_COLS` in `export_to_sheets.py`, `amazon_scan.py`,
@@ -98,10 +99,12 @@ different sources:
 | 3 | `ebay_top_title`, `etsy_top_listing_title`, `printables_top_name` / `cults_top_name` / `makerworld_top_name` / `thangs_top_name` | Competitive listing language (best-selling/highest-favorited/highest-download title per source). | None — already exists. Label clearly as "how sellers title this," not customer voice. |
 | — | YouTube | Nothing today. `youtube_signal.csv` has no title field at all — only counts and links. | Out of scope for v1; note as an honest gap, not silently implied as covered. Fast-follow: add `youtube_top_title` to `youtube_scan.py` using the same one-field pattern as Tier 2. |
 
-**v1 ships with Tier 1 + Tier 3 (zero scanner changes, available today).**
-Tier 2 lands as a fast-follow once the one-field patch to `amazon_scan.py`
-is in — don't block the whole feature on it, but don't ship Voice claiming
-full "pain language" coverage before it lands either.
+**v1 shipped with Tier 1 + Tier 3** (`market_voice.py` → Sheets **Market Voice**).
+`top_problem_phrases` uses problem-filtered Tier 1 search phrases as a temporary
+fallback (documented in `voice_notes` / module docstring) until Tier 2
+`amazon_suggestions_sample` lands — do not claim full Amazon pain-language
+coverage yet. Extra scannable columns beyond §2.3: `rank`, `channel_bias`,
+`voice_notes`.
 
 ### 2.2 "Clustering" — rule-based tagging, not NLP
 
@@ -224,9 +227,8 @@ time, each with its own Claude review pass):
 3. **Add coverage snapshot to `HISTORY_COLS`** (§4, gotcha 1–2). **Done** —
    `sources_active_count`, `sources_active`, `community_platforms_ok`,
    `community_platforms_total`. `append_history` upgrades old headers.
-4. **Ship Market Voice tab** (§2.3). The largest of the four PRs — new
-   territory (text tagging, not pure numeric scoring) — warrants its own
-   full review pass, not a bundle with anything else.
+4. **Ship Market Voice tab** (§2.3). **Done (v1)** — `market_voice.py` +
+   Sheets tab; Tier 1+3 only; Tier 2 amazon suggestions still fast-follow.
 5. **Ship Opportunity Radar tab** (§1, absorbing D). Depends on step 3 to
    be meaningful. Should be a smaller PR than Voice — the trend-chart and
    category-average machinery (`build_trend_pivot`, `build_category_avg`,
