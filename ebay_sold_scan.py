@@ -77,7 +77,7 @@ FIELDNAMES = [
     "ebay_top_title",
     "ebay_keywords_used",
     "ebay_notes",
-    "fetched_at",
+    "ebay_fetched_at",
 ]
 
 
@@ -156,7 +156,7 @@ def empty_row(
         "ebay_top_title": "",
         "ebay_keywords_used": "",
         "ebay_notes": notes,
-        "fetched_at": fetched_at
+        "ebay_fetched_at": fetched_at
         or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
 

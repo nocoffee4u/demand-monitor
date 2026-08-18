@@ -178,6 +178,27 @@ def _safe_read(path: str | None) -> pd.DataFrame | None:
         return None
 
 
+def _disambiguate_fetched_at(
+    fr: pd.DataFrame | None, source: str
+) -> pd.DataFrame | None:
+    """
+    Avoid pandas merge collisions on generic `fetched_at`.
+    Scanners should emit `{source}_fetched_at`; this renames legacy CSVs too.
+    """
+    if fr is None or fr.empty:
+        return fr
+    out = fr
+    col = f"{source}_fetched_at"
+    if "fetched_at" in out.columns:
+        out = out.copy()
+        if col in out.columns:
+            # Prefer explicit column; drop ambiguous legacy name
+            out = out.drop(columns=["fetched_at"])
+        else:
+            out = out.rename(columns={"fetched_at": col})
+    return out
+
+
 def _merge_on_product(base: pd.DataFrame, other: pd.DataFrame | None) -> pd.DataFrame:
     if other is None or other.empty:
         return base
@@ -484,9 +505,9 @@ def main(
         _safe_read(reddit_path),
         _safe_read(x_path),
         _safe_read(youtube_path),
-        _safe_read(ebay_path),
-        _safe_read(etsy_path),
-        _safe_read(amazon_path),
+        _disambiguate_fetched_at(_safe_read(ebay_path), "ebay"),
+        _disambiguate_fetched_at(_safe_read(etsy_path), "etsy"),
+        _disambiguate_fetched_at(_safe_read(amazon_path), "amazon"),
     ]
     # Collect orphan product names across signals (data-integrity surface)
     orphans: set[str] = set()

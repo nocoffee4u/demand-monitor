@@ -83,7 +83,7 @@ FIELDNAMES = [
     "etsy_top_listing_title",
     "etsy_keywords_used",
     "etsy_notes",
-    "fetched_at",
+    "etsy_fetched_at",
 ]
 
 
@@ -155,7 +155,7 @@ def empty_row(
         "etsy_top_listing_title": "",
         "etsy_keywords_used": "",
         "etsy_notes": notes,
-        "fetched_at": fetched_at
+        "etsy_fetched_at": fetched_at
         or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
 

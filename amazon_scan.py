@@ -96,7 +96,7 @@ FIELDNAMES = [
     "amazon_top_title",
     "amazon_keywords_used",
     "amazon_notes",
-    "fetched_at",
+    "amazon_fetched_at",
 ]
 
 
@@ -169,7 +169,7 @@ def empty_row(
         "amazon_top_title": "",
         "amazon_keywords_used": "",
         "amazon_notes": notes,
-        "fetched_at": fetched_at
+        "amazon_fetched_at": fetched_at
         or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
 
@@ -505,7 +505,7 @@ def scan(
             "amazon_top_title": top_title,
             "amazon_keywords_used": " | ".join(kws),
             "amazon_notes": "; ".join(notes)[:500],
-            "fetched_at": fetched_at,
+            "amazon_fetched_at": fetched_at,
         }
         rows.append(row)
         print(

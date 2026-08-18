@@ -238,6 +238,9 @@ _H2S_PROCESS_MISMATCH = (
     "multicolor",
 )
 
+# Weekly History snapshot. Coverage fields (appended after community_downloads)
+# exist so Radar can tell priority deltas from weight-redistribution / partial
+# community weeks. New columns are additive; append_history upgrades old headers.
 HISTORY_COLS = [
     "run_date",
     "run_id",
@@ -252,6 +255,11 @@ HISTORY_COLS = [
     "search_volume",
     "total_listings",
     "community_downloads",
+    # --- coverage snapshot (voice/radar prerequisite) ---
+    "sources_active_count",  # how many run_meta.sources keys were True
+    "sources_active",  # semicolon-sorted active source names
+    "community_platforms_ok",  # e.g. 3 when Cults+MW+Thangs ok
+    "community_platforms_total",  # e.g. 4 (Printables/Cults/MW/Thangs)
 ]
 
 # Columns blanked when their source is unused (per run_meta)
@@ -291,7 +299,7 @@ SOURCE_COL_MAP = {
         "ebay_top_title",
         "ebay_keywords_used",
         "ebay_notes",
-        "fetched_at",
+        "ebay_fetched_at",
     ],
     "etsy": [
         "etsy_listing_count",
@@ -301,7 +309,7 @@ SOURCE_COL_MAP = {
         "etsy_top_listing_title",
         "etsy_keywords_used",
         "etsy_notes",
-        "fetched_at",
+        "etsy_fetched_at",
     ],
     "amazon": [
         "amazon_listing_count",
@@ -311,7 +319,7 @@ SOURCE_COL_MAP = {
         "amazon_top_title",
         "amazon_keywords_used",
         "amazon_notes",
-        "fetched_at",
+        "amazon_fetched_at",
     ],
     "trends": [
         "trends_avg_interest_0_100",
@@ -508,6 +516,9 @@ def coerce_history_df(df: pd.DataFrame) -> pd.DataFrame:
         "search_volume",
         "total_listings",
         "community_downloads",
+        "sources_active_count",
+        "community_platforms_ok",
+        "community_platforms_total",
     ):
         if col in out.columns:
             out[col] = pd.to_numeric(out[col], errors="coerce")
@@ -1281,10 +1292,43 @@ def build_config_tab(products: list[dict], local_svc: dict) -> list[list[Any]]:
     return rows
 
 
+def history_coverage_fields(meta: dict) -> dict:
+    """
+    Compact coverage snapshot for History (same values on every product row
+    for a run). Lets Radar interpret priority deltas vs redistribution.
+    """
+    sources = meta.get("sources") or {}
+    active = sorted(k for k, v in sources.items() if v)
+    ok = meta.get("community_platforms_ok")
+    total = meta.get("community_platforms_total")
+    if ok is None or total is None:
+        platforms = meta.get("community_platforms") or {}
+        if isinstance(platforms, dict) and platforms:
+            statuses = []
+            for p in platforms.values():
+                if isinstance(p, dict):
+                    statuses.append(str(p.get("status") or "").lower())
+                else:
+                    statuses.append(str(p).lower())
+            ok = sum(1 for s in statuses if s in ("ok", "active", "success"))
+            total = len(platforms)
+        else:
+            ok, total = "", ""
+    return {
+        "sources_active_count": len(active),
+        "sources_active": ";".join(active),
+        "community_platforms_ok": ok if ok != "" else "",
+        "community_platforms_total": total if total != "" else "",
+    }
+
+
 def build_history_rows(report: pd.DataFrame, meta: dict) -> pd.DataFrame:
     df = report.copy()
     df["run_date"] = meta.get("run_date", "")
     df["run_id"] = meta.get("run_id", "")
+    cov = history_coverage_fields(meta)
+    for k, v in cov.items():
+        df[k] = v
     for c in HISTORY_COLS:
         if c not in df.columns:
             df[c] = ""
@@ -1940,6 +1984,22 @@ def append_history(
             header,
         )
         col_order = header
+    elif header and header == expected[: len(header)]:
+        # True prefix only (not any ordered subsequence). Missing a middle
+        # column must NOT upgrade — that would mislabel historical cells.
+        # Backward-safe: old History ending before coverage cols still upgrades;
+        # prior rows keep blank cells for new trailing columns.
+        LOG.info(
+            "Upgrading History header with new coverage columns: %s",
+            [c for c in expected if c not in header],
+        )
+        service.spreadsheets().values().update(
+            spreadsheetId=spreadsheet_id,
+            range="'History'!A1",
+            valueInputOption="USER_ENTERED",
+            body={"values": [expected]},
+        ).execute()
+        col_order = expected
     else:
         raise RuntimeError(
             "History sheet header does not match expected HISTORY_COLS.\n"
