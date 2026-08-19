@@ -479,12 +479,12 @@ def community_source_chip(meta: dict, active: bool) -> str:
     if tot_i and tot_i > 0 and ok_i is not None:
         if ok_i <= 0:
             if not active:
-                return f"Community: skipped (0/{tot_i})"
-            return f"Community: error (0/{tot_i})"
+                return f"Community: ○ SKIPPED (0/{tot_i})"
+            return f"Community: ○ ERROR (0/{tot_i})"
         if ok_i >= tot_i:
-            return f"Community: active ({ok_i}/{tot_i})"
-        return f"Community: partial ({ok_i}/{tot_i})"
-    return f"Community: {'active' if active else 'skipped'}"
+            return f"Community: ● ACTIVE ({ok_i}/{tot_i})"
+        return f"Community: ◐ PARTIAL ({ok_i}/{tot_i})"
+    return f"Community: {'● ACTIVE' if active else '○ SKIPPED'}"
 
 
 def blank_unused_sources(df: pd.DataFrame, meta: dict) -> pd.DataFrame:
@@ -1409,7 +1409,9 @@ def build_dashboard(
         if key == "community":
             chips.append(community_source_chip(meta, active))
         else:
-            chips.append(f"{name}: {'active' if active else 'skipped'}")
+            chips.append(
+                f"{name}: ● ACTIVE" if active else f"{name}: ○ SKIPPED"
+            )
     rows.append(["Sources this run:", " | ".join(chips)])
 
     n_prod = int(meta.get("products_tracked") or len(rankings))
@@ -1847,7 +1849,29 @@ def clear_and_write(
     ).execute()
 
 
-def freeze_header(service, spreadsheet_id: str, sheet_id: int) -> None:
+# Soft presentation colors (Sheets API 0–1 floats)
+_COLOR_GREEN = {"red": 0.78, "green": 0.93, "blue": 0.80}
+_COLOR_AMBER = {"red": 1.0, "green": 0.94, "blue": 0.72}
+_COLOR_GRAY = {"red": 0.93, "green": 0.93, "blue": 0.93}
+_COLOR_SOFT_RED = {"red": 0.98, "green": 0.86, "blue": 0.86}
+_COLOR_RED = {"red": 0.96, "green": 0.75, "blue": 0.75}
+_COLOR_BAND_A = {"red": 1.0, "green": 1.0, "blue": 1.0}
+_COLOR_BAND_B = {"red": 0.96, "green": 0.97, "blue": 0.99}
+
+
+def freeze_header(
+    service,
+    spreadsheet_id: str,
+    sheet_id: int,
+    *,
+    frozen_cols: int = 0,
+) -> None:
+    """Freeze header row; optionally freeze leading columns (e.g. rank+product)."""
+    props: dict[str, Any] = {"frozenRowCount": 1}
+    fields = "gridProperties.frozenRowCount"
+    if frozen_cols > 0:
+        props["frozenColumnCount"] = frozen_cols
+        fields += ",gridProperties.frozenColumnCount"
     service.spreadsheets().batchUpdate(
         spreadsheetId=spreadsheet_id,
         body={
@@ -1856,14 +1880,250 @@ def freeze_header(service, spreadsheet_id: str, sheet_id: int) -> None:
                     "updateSheetProperties": {
                         "properties": {
                             "sheetId": sheet_id,
-                            "gridProperties": {"frozenRowCount": 1},
+                            "gridProperties": props,
                         },
-                        "fields": "gridProperties.frozenRowCount",
+                        "fields": fields,
                     }
                 }
             ]
         },
     ).execute()
+
+
+def _dim_width_requests(
+    sheet_id: int, specs: list[tuple[int, int, int]]
+) -> list[dict[str, Any]]:
+    """(start_col, end_col_exclusive, pixel_width) → DimensionRange requests.
+    DimensionRange uses endIndex (NOT endRowIndex).
+    """
+    out: list[dict[str, Any]] = []
+    for start, end, px in specs:
+        out.append(
+            {
+                "updateDimensionProperties": {
+                    "range": {
+                        "sheetId": sheet_id,
+                        "dimension": "COLUMNS",
+                        "startIndex": start,
+                        "endIndex": end,
+                    },
+                    "properties": {"pixelSize": px},
+                    "fields": "pixelSize",
+                }
+            }
+        )
+    return out
+
+
+def _row_height_request(
+    sheet_id: int, end_row: int, *, pixel_size: int = 24
+) -> dict[str, Any]:
+    """ROWS DimensionRange — must use endIndex."""
+    return {
+        "updateDimensionProperties": {
+            "range": {
+                "sheetId": sheet_id,
+                "dimension": "ROWS",
+                "startIndex": 0,
+                "endIndex": end_row,
+            },
+            "properties": {"pixelSize": pixel_size},
+            "fields": "pixelSize",
+        }
+    }
+
+
+def _banding_request(
+    sheet_id: int, n_data_rows: int, n_cols: int
+) -> dict[str, Any]:
+    """Alternating row colors for data rows (header excluded)."""
+    return {
+        "addBanding": {
+            "bandedRange": {
+                "range": {
+                    "sheetId": sheet_id,
+                    "startRowIndex": 0,
+                    "endRowIndex": max(n_data_rows + 1, 2),
+                    "startColumnIndex": 0,
+                    "endColumnIndex": max(n_cols, 1),
+                },
+                "rowProperties": {
+                    "headerColor": {"red": 0.90, "green": 0.92, "blue": 0.95},
+                    "firstBandColor": _COLOR_BAND_A,
+                    "secondBandColor": _COLOR_BAND_B,
+                },
+            }
+        }
+    }
+
+
+def _delete_bandings_requests(
+    service, spreadsheet_id: str, sheet_id: int
+) -> list[dict[str, Any]]:
+    try:
+        meta = (
+            service.spreadsheets()
+            .get(
+                spreadsheetId=spreadsheet_id,
+                fields="sheets(properties.sheetId,bandedRanges)",
+            )
+            .execute()
+        )
+    except Exception as e:
+        LOG.debug("Could not read bandedRanges: %s", e)
+        return []
+    reqs: list[dict[str, Any]] = []
+    for sh in meta.get("sheets") or []:
+        if sh.get("properties", {}).get("sheetId") != sheet_id:
+            continue
+        for br in sh.get("bandedRanges") or []:
+            bid = br.get("bandedRangeId")
+            if bid is not None:
+                reqs.append({"deleteBanding": {"bandedRangeId": bid}})
+    return reqs
+
+
+def _clear_conditional_format_requests(
+    service, spreadsheet_id: str, sheet_id: int
+) -> list[dict[str, Any]]:
+    """Delete existing CF rules (index 0 repeatedly) so weekly export doesn't stack."""
+    try:
+        meta = (
+            service.spreadsheets()
+            .get(
+                spreadsheetId=spreadsheet_id,
+                fields="sheets(properties.sheetId,conditionalFormats)",
+            )
+            .execute()
+        )
+    except Exception as e:
+        LOG.debug("Could not read conditionalFormats: %s", e)
+        return []
+    n = 0
+    for sh in meta.get("sheets") or []:
+        if sh.get("properties", {}).get("sheetId") == sheet_id:
+            n = len(sh.get("conditionalFormats") or [])
+            break
+    return [
+        {"deleteConditionalFormatRule": {"sheetId": sheet_id, "index": 0}}
+        for _ in range(n)
+    ]
+
+
+def _cf_number_rule(
+    sheet_id: int,
+    col: int,
+    n_rows: int,
+    *,
+    ctype: str,
+    value: str,
+    color: dict[str, float],
+    index: int,
+) -> dict[str, Any]:
+    return {
+        "addConditionalFormatRule": {
+            "rule": {
+                "ranges": [
+                    {
+                        "sheetId": sheet_id,
+                        "startRowIndex": 1,
+                        "endRowIndex": n_rows + 1,
+                        "startColumnIndex": col,
+                        "endColumnIndex": col + 1,
+                    }
+                ],
+                "booleanRule": {
+                    "condition": {
+                        "type": ctype,
+                        "values": [{"userEnteredValue": value}],
+                    },
+                    "format": {"backgroundColor": color},
+                },
+            },
+            "index": index,
+        }
+    }
+
+
+def _cf_not_blank_rule(
+    sheet_id: int,
+    col: int,
+    n_rows: int,
+    *,
+    color: dict[str, float],
+    index: int,
+) -> dict[str, Any]:
+    return {
+        "addConditionalFormatRule": {
+            "rule": {
+                "ranges": [
+                    {
+                        "sheetId": sheet_id,
+                        "startRowIndex": 1,
+                        "endRowIndex": n_rows + 1,
+                        "startColumnIndex": col,
+                        "endColumnIndex": col + 1,
+                    }
+                ],
+                "booleanRule": {
+                    "condition": {"type": "NOT_BLANK"},
+                    "format": {"backgroundColor": color},
+                },
+            },
+            "index": index,
+        }
+    }
+
+
+def _bold_columns_request(
+    sheet_id: int, cols: list[int], n_rows: int
+) -> list[dict[str, Any]]:
+    reqs: list[dict[str, Any]] = []
+    for col in cols:
+        reqs.append(
+            {
+                "repeatCell": {
+                    "range": {
+                        "sheetId": sheet_id,
+                        "startRowIndex": 1,
+                        "endRowIndex": n_rows + 1,
+                        "startColumnIndex": col,
+                        "endColumnIndex": col + 1,
+                    },
+                    "cell": {
+                        "userEnteredFormat": {
+                            "textFormat": {"bold": True},
+                        }
+                    },
+                    "fields": "userEnteredFormat.textFormat.bold",
+                }
+            }
+        )
+    return reqs
+
+
+def _header_bold_request(sheet_id: int, n_cols: int) -> dict[str, Any]:
+    return {
+        "repeatCell": {
+            "range": {
+                "sheetId": sheet_id,
+                "startRowIndex": 0,
+                "endRowIndex": 1,
+                "startColumnIndex": 0,
+                "endColumnIndex": max(n_cols, 1),
+            },
+            "cell": {
+                "userEnteredFormat": {
+                    "textFormat": {"bold": True},
+                    "backgroundColor": {"red": 0.90, "green": 0.92, "blue": 0.95},
+                }
+            },
+            "fields": (
+                "userEnteredFormat.textFormat.bold,"
+                "userEnteredFormat.backgroundColor"
+            ),
+        }
+    }
 
 
 def format_dashboard_layout(
@@ -1885,21 +2145,7 @@ def format_dashboard_layout(
         (6, 8, 160),
     ]
     requests: list[dict[str, Any]] = []
-    for start, end, px in col_widths:
-        requests.append(
-            {
-                "updateDimensionProperties": {
-                    "range": {
-                        "sheetId": sheet_id,
-                        "dimension": "COLUMNS",
-                        "startIndex": start,
-                        "endIndex": end,
-                    },
-                    "properties": {"pixelSize": px},
-                    "fields": "pixelSize",
-                }
-            }
-        )
+    requests.extend(_dim_width_requests(sheet_id, col_widths))
     requests.append(
         {
             "repeatCell": {
@@ -1924,20 +2170,8 @@ def format_dashboard_layout(
         }
     )
     # Taller default rows so wrapped Action lines show fully
-    requests.append(
-        {
-            "updateDimensionProperties": {
-                "range": {
-                    "sheetId": sheet_id,
-                    "dimension": "ROWS",
-                    "startIndex": 0,
-                    "endRowIndex": end_row,
-                },
-                "properties": {"pixelSize": 24},
-                "fields": "pixelSize",
-            }
-        }
-    )
+    # DimensionRange for ROWS uses endIndex (GridRange uses endRowIndex).
+    requests.append(_row_height_request(sheet_id, end_row, pixel_size=24))
     try:
         service.spreadsheets().batchUpdate(
             spreadsheetId=spreadsheet_id, body={"requests": requests}
@@ -1945,6 +2179,317 @@ def format_dashboard_layout(
         LOG.info("Dashboard layout formatted (column widths + wrap)")
     except Exception as e:
         LOG.warning("Dashboard layout format failed (data still written): %s", e)
+
+
+def format_product_rankings(
+    service, spreadsheet_id: str, sheet_id: int, n_rows: int
+) -> None:
+    """Scannable Rankings: freeze, CF on scores, bold product, banding, widths."""
+    n_cols = len(RANKINGS_COLS)
+    # rank=0 product=1 priority=3 fit=5 competition=7
+    requests: list[dict[str, Any]] = []
+    requests.extend(_delete_bandings_requests(service, spreadsheet_id, sheet_id))
+    requests.extend(
+        _clear_conditional_format_requests(service, spreadsheet_id, sheet_id)
+    )
+    requests.extend(
+        _dim_width_requests(
+            sheet_id,
+            [
+                (0, 1, 48),  # rank
+                (1, 2, 260),  # product
+                (2, 3, 110),  # category
+                (3, 4, 88),  # priority
+                (4, 5, 72),  # demand
+                (5, 6, 72),  # fit
+                (6, 7, 120),  # h2s
+                (7, 8, 88),  # competition
+                (8, 9, 80),  # opportunity
+                (9, 11, 100),
+                (11, n_cols, 90),
+            ],
+        )
+    )
+    requests.append(_header_bold_request(sheet_id, n_cols))
+    requests.extend(_bold_columns_request(sheet_id, [1], n_rows))
+    requests.append(_banding_request(sheet_id, n_rows, n_cols))
+    # Conditional formats (index 0 = highest priority)
+    cf_i = 0
+    # priority ≥80 green, 50–79 amber, <50 gray
+    requests.append(
+        _cf_number_rule(
+            sheet_id, 3, n_rows, ctype="NUMBER_GREATER_THAN_EQ", value="80",
+            color=_COLOR_GREEN, index=cf_i,
+        )
+    )
+    cf_i += 1
+    requests.append(
+        {
+            "addConditionalFormatRule": {
+                "rule": {
+                    "ranges": [
+                        {
+                            "sheetId": sheet_id,
+                            "startRowIndex": 1,
+                            "endRowIndex": n_rows + 1,
+                            "startColumnIndex": 3,
+                            "endColumnIndex": 4,
+                        }
+                    ],
+                    "booleanRule": {
+                        "condition": {
+                            "type": "NUMBER_BETWEEN",
+                            "values": [
+                                {"userEnteredValue": "50"},
+                                {"userEnteredValue": "79.999"},
+                            ],
+                        },
+                        "format": {"backgroundColor": _COLOR_AMBER},
+                    },
+                },
+                "index": cf_i,
+            }
+        }
+    )
+    cf_i += 1
+    requests.append(
+        _cf_number_rule(
+            sheet_id, 3, n_rows, ctype="NUMBER_LESS", value="50",
+            color=_COLOR_GRAY, index=cf_i,
+        )
+    )
+    cf_i += 1
+    # competition ≤10 green, ≥30 red
+    requests.append(
+        _cf_number_rule(
+            sheet_id, 7, n_rows, ctype="NUMBER_LESS_THAN_EQ", value="10",
+            color=_COLOR_GREEN, index=cf_i,
+        )
+    )
+    cf_i += 1
+    requests.append(
+        _cf_number_rule(
+            sheet_id, 7, n_rows, ctype="NUMBER_GREATER_THAN_EQ", value="30",
+            color=_COLOR_RED, index=cf_i,
+        )
+    )
+    cf_i += 1
+    # fit ≥85 green, 70–84 amber, <70 soft red
+    requests.append(
+        _cf_number_rule(
+            sheet_id, 5, n_rows, ctype="NUMBER_GREATER_THAN_EQ", value="85",
+            color=_COLOR_GREEN, index=cf_i,
+        )
+    )
+    cf_i += 1
+    requests.append(
+        {
+            "addConditionalFormatRule": {
+                "rule": {
+                    "ranges": [
+                        {
+                            "sheetId": sheet_id,
+                            "startRowIndex": 1,
+                            "endRowIndex": n_rows + 1,
+                            "startColumnIndex": 5,
+                            "endColumnIndex": 6,
+                        }
+                    ],
+                    "booleanRule": {
+                        "condition": {
+                            "type": "NUMBER_BETWEEN",
+                            "values": [
+                                {"userEnteredValue": "70"},
+                                {"userEnteredValue": "84.999"},
+                            ],
+                        },
+                        "format": {"backgroundColor": _COLOR_AMBER},
+                    },
+                },
+                "index": cf_i,
+            }
+        }
+    )
+    cf_i += 1
+    requests.append(
+        _cf_number_rule(
+            sheet_id, 5, n_rows, ctype="NUMBER_LESS", value="70",
+            color=_COLOR_SOFT_RED, index=cf_i,
+        )
+    )
+    try:
+        service.spreadsheets().batchUpdate(
+            spreadsheetId=spreadsheet_id, body={"requests": requests}
+        ).execute()
+        LOG.info("Product Rankings formatted (CF + freeze prep + banding)")
+    except Exception as e:
+        LOG.warning("Product Rankings format failed (data still written): %s", e)
+
+
+def format_market_voice(
+    service, spreadsheet_id: str, sheet_id: int, n_rows: int
+) -> None:
+    """Scannable Market Voice: highlight problem phrases, bold hooks, banding."""
+    n_cols = len(VOICE_COLS)
+    # rank=0 product=1 problem=5 proof=6 must=8 hook=9
+    requests: list[dict[str, Any]] = []
+    requests.extend(_delete_bandings_requests(service, spreadsheet_id, sheet_id))
+    requests.extend(
+        _clear_conditional_format_requests(service, spreadsheet_id, sheet_id)
+    )
+    requests.extend(
+        _dim_width_requests(
+            sheet_id,
+            [
+                (0, 1, 48),  # rank
+                (1, 2, 240),  # product
+                (2, 3, 100),  # category
+                (3, 4, 72),  # priority
+                (4, 5, 200),  # intent
+                (5, 6, 200),  # problem
+                (6, 7, 160),  # proof (smaller emphasis via width)
+                (7, 8, 180),  # competitive
+                (8, 9, 160),  # must-haves
+                (9, 10, 280),  # social hook
+                (10, n_cols, 120),
+            ],
+        )
+    )
+    requests.append(_header_bold_request(sheet_id, n_cols))
+    requests.extend(_bold_columns_request(sheet_id, [1, 8, 9], n_rows))  # product, must, hook
+    # Soften proof snippets column
+    requests.append(
+        {
+            "repeatCell": {
+                "range": {
+                    "sheetId": sheet_id,
+                    "startRowIndex": 1,
+                    "endRowIndex": n_rows + 1,
+                    "startColumnIndex": 6,
+                    "endColumnIndex": 7,
+                },
+                "cell": {
+                    "userEnteredFormat": {
+                        "textFormat": {
+                            "fontSize": 9,
+                            "italic": True,
+                            "foregroundColor": {
+                                "red": 0.35,
+                                "green": 0.35,
+                                "blue": 0.40,
+                            },
+                        },
+                        "wrapStrategy": "WRAP",
+                    }
+                },
+                "fields": (
+                    "userEnteredFormat.textFormat,"
+                    "userEnteredFormat.wrapStrategy"
+                ),
+            }
+        }
+    )
+    requests.append(_banding_request(sheet_id, n_rows, n_cols))
+    # Non-empty top_problem_phrases → amber (high-value pain language)
+    requests.append(
+        _cf_not_blank_rule(
+            sheet_id, 5, n_rows, color=_COLOR_AMBER, index=0
+        )
+    )
+    try:
+        service.spreadsheets().batchUpdate(
+            spreadsheetId=spreadsheet_id, body={"requests": requests}
+        ).execute()
+        LOG.info("Market Voice formatted (problem highlight + banding)")
+    except Exception as e:
+        LOG.warning("Market Voice format failed (data still written): %s", e)
+
+
+def format_scoring_detail(
+    service, spreadsheet_id: str, sheet_id: int, n_rows: int, n_cols: int
+) -> None:
+    """Freeze product col; light red on literal remaining ERR cells if any."""
+    requests: list[dict[str, Any]] = []
+    requests.extend(_delete_bandings_requests(service, spreadsheet_id, sheet_id))
+    requests.extend(
+        _clear_conditional_format_requests(service, spreadsheet_id, sheet_id)
+    )
+    requests.extend(_dim_width_requests(sheet_id, [(0, 1, 240)]))  # product
+    requests.append(_header_bold_request(sheet_id, n_cols))
+    requests.append(_banding_request(sheet_id, n_rows, n_cols))
+    # True error leftovers (should be rare after ERR→— rewrite)
+    requests.append(
+        {
+            "addConditionalFormatRule": {
+                "rule": {
+                    "ranges": [
+                        {
+                            "sheetId": sheet_id,
+                            "startRowIndex": 1,
+                            "endRowIndex": n_rows + 1,
+                            "startColumnIndex": 0,
+                            "endColumnIndex": max(n_cols, 1),
+                        }
+                    ],
+                    "booleanRule": {
+                        "condition": {
+                            "type": "TEXT_EQ",
+                            "values": [{"userEnteredValue": "ERR"}],
+                        },
+                        "format": {"backgroundColor": _COLOR_SOFT_RED},
+                    },
+                },
+                "index": 0,
+            }
+        }
+    )
+    try:
+        service.spreadsheets().batchUpdate(
+            spreadsheetId=spreadsheet_id, body={"requests": requests}
+        ).execute()
+        LOG.info("Scoring Detail formatted")
+    except Exception as e:
+        LOG.warning("Scoring Detail format failed (data still written): %s", e)
+
+
+def scoring_detail_display_values(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Presentation-only: show ERR as — so the tab isn't a wall of identical
+    error tokens. Notes/error columns keep original text when present.
+    """
+    out = df.copy()
+    keep_raw = {
+        c
+        for c in out.columns
+        if any(
+            x in str(c).lower()
+            for x in ("note", "error", "detail", "explanation", "flag")
+        )
+    }
+    keep_raw.add("product")
+    for c in out.columns:
+        if c in keep_raw:
+            continue
+        out[c] = out[c].map(
+            lambda x: "—"
+            if str(x).strip().upper() == "ERR"
+            else x
+        )
+    return out
+
+
+def validate_dimension_requests_use_end_index(
+    requests: list[dict[str, Any]],
+) -> None:
+    """Guard: DimensionRange must not use endRowIndex (Sheets API rejects it)."""
+    for req in requests:
+        udp = req.get("updateDimensionProperties") or {}
+        rng = udp.get("range") or {}
+        if "endRowIndex" in rng:
+            raise AssertionError(
+                "updateDimensionProperties range must use endIndex, "
+                f"not endRowIndex: {rng}"
+            )
 
 
 def read_sheet_values(service, spreadsheet_id: str, title: str) -> list[list[Any]]:
@@ -2677,6 +3222,21 @@ def export(
         assert voice_df["top_intent_phrases"].astype(str).str.len().gt(0).any(), (
             "expected some intent phrases from search_volume_keywords"
         )
+        # P0 layout guard: DimensionRange must use endIndex (not endRowIndex)
+        _layout_probe = [
+            _row_height_request(0, 40),
+            *_dim_width_requests(0, [(0, 1, 100)]),
+        ]
+        validate_dimension_requests_use_end_index(_layout_probe)
+        (out_dir / "layout_endindex_ok.txt").write_text(
+            "updateDimensionProperties uses endIndex (not endRowIndex)\n"
+        )
+        # ERR display rewrite is presentation-only
+        _err_probe = scoring_detail_display_values(
+            pd.DataFrame({"product": ["x"], "printables_downloads": ["ERR"], "notes": ["ERR detail"]})
+        )
+        assert _err_probe.loc[0, "printables_downloads"] == "—"
+        assert _err_probe.loc[0, "notes"] == "ERR detail"
         assert "CHARTS — visual overview" in dash_text
         assert "DEMAND VS FIT KEY" in dash_text
         assert "KPIs THIS RUN" in dash_text
@@ -2814,17 +3374,52 @@ def export(
     clear_and_write(
         service, spreadsheet_id, "Product Rankings", df_to_values(rankings, RANKINGS_COLS)
     )
-    freeze_header(service, spreadsheet_id, sheet_ids["Product Rankings"])
-
-    clear_and_write(
-        service, spreadsheet_id, "Scoring Detail", df_to_values(detail)
+    freeze_header(
+        service,
+        spreadsheet_id,
+        sheet_ids["Product Rankings"],
+        frozen_cols=2,  # rank + product
     )
-    freeze_header(service, spreadsheet_id, sheet_ids["Scoring Detail"])
+    format_product_rankings(
+        service,
+        spreadsheet_id,
+        sheet_ids["Product Rankings"],
+        n_rows=len(rankings),
+    )
+
+    detail_display = scoring_detail_display_values(detail)
+    clear_and_write(
+        service, spreadsheet_id, "Scoring Detail", df_to_values(detail_display)
+    )
+    freeze_header(
+        service,
+        spreadsheet_id,
+        sheet_ids["Scoring Detail"],
+        frozen_cols=1,  # product
+    )
+    format_scoring_detail(
+        service,
+        spreadsheet_id,
+        sheet_ids["Scoring Detail"],
+        n_rows=len(detail_display),
+        n_cols=len(detail_display.columns),
+    )
 
     clear_and_write(
         service, spreadsheet_id, "Market Voice", df_to_values(voice_df, VOICE_COLS)
     )
-    freeze_header(service, spreadsheet_id, sheet_ids["Market Voice"])
+    freeze_header(
+        service,
+        spreadsheet_id,
+        sheet_ids["Market Voice"],
+        frozen_cols=2,  # rank + product
+    )
+    format_market_voice(
+        service,
+        spreadsheet_id,
+        sheet_ids["Market Voice"],
+        n_rows=len(voice_df),
+    )
 
     clear_and_write(service, spreadsheet_id, "Search Volume", sv_matrix)
     # Marketplace status banner + table

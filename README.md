@@ -383,8 +383,10 @@ GOOGLE_SHEETS_SPREADSHEET_ID=your_spreadsheet_id
 ```
 
 Skip: `SKIP_SHEETS=1 ./run_all.sh`.  
-Tabs: Dashboard, Product Rankings, Scoring Detail, Market Voice, Search Volume, Marketplace,
-Local Service (Phoenix), History (append-only), Config.  
+Tabs: Dashboard, Product Rankings, Scoring Detail, Market Voice, Search Volume,
+Marketplace, Local Service (Phoenix), History (append-only), Config.  
+Presentation: Rankings/Voice freeze + score colors; Scoring Detail shows `ERR`
+as `—`; Dashboard chips use ● ACTIVE / ◐ PARTIAL / ○ SKIPPED.  
 Spec: `docs/sheets_dashboard_spec.md`. Setup: `docs/sheets_setup.md`.
 
 ## Scoring: Demand quality × Fit × Opportunity
