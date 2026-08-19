@@ -51,16 +51,22 @@ VOICE_COLS = [
 # Must match amazon_scan.SUGGESTIONS_SEP
 AMAZON_SUGGESTIONS_SEP = " | "
 
+# Shared complaint/replacement matcher for top_problem_phrases AND the
+# "replacement" design tag — keep these aligned so tags never claim
+# "replacement" while problem phrases stay empty.
+# Structural nouns (cover|cap|guard|dust|fuse|spare) intentionally excluded.
+PROBLEM_PHRASE = re.compile(
+    r"\b(replace|replacement|break|broken|crack|fail|failed|loose|rattle|"
+    r"wobble|wear|worn|damage|damaged|missing|lost|discontinued|nla|oem|"
+    r"no\s*longer\s*available)\b",
+    re.I,
+)
+# Subset used only for the design_must_haves "replacement" tag
+REPLACEMENT_TAG = re.compile(r"\b(replace|replacement)\b", re.I)
+
 # Explainable tag vocabulary → regex (Tier 1/2 buyer phrases + titles)
 TAG_RULES: list[tuple[str, re.Pattern[str]]] = [
-    (
-        "replacement",
-        re.compile(
-            r"\b(replace|replacement|spare|oem\s*nla|no\s*longer\s*available|"
-            r"discontinued)\b",
-            re.I,
-        ),
-    ),
+    ("replacement", REPLACEMENT_TAG),
     (
         "durability/fit",
         re.compile(
@@ -103,15 +109,6 @@ TAG_RULES: list[tuple[str, re.Pattern[str]]] = [
 
 # Competitive-only differentiation cue (seller language, not buyer)
 UNIVERSAL_GENERIC = re.compile(r"\b(universal|generic|fits\s+most)\b", re.I)
-
-# Complaint/failure + replacement intent — not structural nouns (cover/cap/guard/
-# dust/fuse/spare) that appear in every product name and fake "problem" hits.
-PROBLEM_PHRASE = re.compile(
-    r"\b(replace|replacement|break|broken|crack|fail|failed|loose|rattle|"
-    r"wobble|wear|worn|damage|damaged|missing|lost|discontinued|nla|oem|"
-    r"no\s*longer\s*available)\b",
-    re.I,
-)
 
 # Same spirit as score_demand.BROAD_GENERIC — avoid headlining viral generics.
 try:
@@ -457,20 +454,21 @@ def build_market_voice(
         titles = competitive_titles_for_row(row)[:max_titles]
 
         intent_strs = [f"{p} ({int(v)}/mo)" if v else p for p, v in phrases]
+        # Tier 2: same PROBLEM_PHRASE matcher over amazon_suggestions
         amz_sugg = parse_amazon_suggestions(row)
         amz_complaint = [s for s in amz_sugg if PROBLEM_PHRASE.search(s)]
         if amz_sugg:
-            # Prefer Amazon AC text; empty when none match complaint language
+            # Prefer Amazon AC text; empty when none match PROBLEM_PHRASE
             problem_phrases = amz_complaint[:max_problem]
-            amazon_problem_empty = len(amz_complaint) == 0
         else:
-            # No AC text — Tier-1 search phrases only if useful
+            # No AC text — Tier-1 search phrases with the same matcher
             problem_phrases = [
                 p for p, _ in phrases if PROBLEM_PHRASE.search(p)
             ][:max_problem]
-            amazon_problem_empty = False
+        # Note tracks the cell: suggestions present but PROBLEM_PHRASE hit none
+        amazon_problem_empty = bool(amz_sugg) and len(problem_phrases) == 0
 
-        # 1–2 [amazon] proof snippets (complaint matches first, else any sample)
+        # 1–2 [amazon] proof snippets (PROBLEM_PHRASE hits first, else any sample)
         proof_src = amz_complaint[:2] if amz_complaint else amz_sugg[:2]
         proof_snippets = " | ".join(f"[amazon] {s}" for s in proof_src)
 
