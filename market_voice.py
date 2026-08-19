@@ -104,11 +104,11 @@ TAG_RULES: list[tuple[str, re.Pattern[str]]] = [
 # Competitive-only differentiation cue (seller language, not buyer)
 UNIVERSAL_GENERIC = re.compile(r"\b(universal|generic|fits\s+most)\b", re.I)
 
-# Genuine complaint/failure language only — not structural nouns (cover/cap/guard)
-# that appear in every product name and fake "problem" hits.
+# Complaint/failure + replacement intent — not structural nouns (cover/cap/guard/
+# dust/fuse/spare) that appear in every product name and fake "problem" hits.
 PROBLEM_PHRASE = re.compile(
-    r"\b(break|broken|crack|fail|failed|loose|rattle|wobble|wear|worn|"
-    r"damage|damaged|missing|lost|discontinued|nla|oem|"
+    r"\b(replace|replacement|break|broken|crack|fail|failed|loose|rattle|"
+    r"wobble|wear|worn|damage|damaged|missing|lost|discontinued|nla|oem|"
     r"no\s*longer\s*available)\b",
     re.I,
 )
@@ -280,13 +280,13 @@ def data_as_of_for_row(row: pd.Series) -> str:
 
 
 def parse_amazon_suggestions(row: pd.Series) -> list[str]:
-    """Split amazon_suggestions (joined by ' | '). Empty → []."""
+    """Split amazon_suggestions on AMAZON_SUGGESTIONS_SEP (' | '). Empty → []."""
     raw = _clean(row.get("amazon_suggestions"))
     if not raw:
         return []
     out: list[str] = []
     seen: set[str] = set()
-    for part in raw.split("|"):
+    for part in raw.split(AMAZON_SUGGESTIONS_SEP):
         s = part.strip()
         if not s:
             continue
