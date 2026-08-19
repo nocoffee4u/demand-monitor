@@ -317,6 +317,7 @@ SOURCE_COL_MAP = {
     "amazon": [
         "amazon_listing_count",
         "amazon_autocomplete_hits",
+        "amazon_suggestions",
         "amazon_problem_mention_score",
         "amazon_avg_price",
         "amazon_top_title",
@@ -2751,8 +2752,8 @@ def export(
         print(f"\n=== MARKET VOICE (dry-run, top 3) ===")
         preview_cols = [
             "product",
-            "top_intent_phrases",
-            "design_must_haves",
+            "top_problem_phrases",
+            "proof_snippets",
             "social_hook",
             "confidence",
         ]

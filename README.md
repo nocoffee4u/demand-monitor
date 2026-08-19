@@ -58,15 +58,16 @@ not a demand bonus. Setup: register app at etsy.com/developers →
 `python3 etsy_scan.py --estimate`. Cache: `cache/etsy_cache.json` (28d TTL).
 
 **Amazon (optional):** Commercial intent + problem/replacement language, not
-transaction proof. **v1 free path** uses Amazon public autocomplete
-(`completion.amazon.com`) → `amazon_autocomplete_hits` +
-`amazon_problem_mention_score` from suggestion text. **Optional**
-`RAINFOREST_API_KEY` adds search result density (`amazon_listing_count`) and
-avg price. No Product Advertising API / Associates in v1; no invented BSR or
-sold ranks; no Playwright. Estimate: `python3 amazon_scan.py --estimate`.
-Cache: `cache/amazon_cache.json` (28d). Skip: `SKIP_AMAZON=1`. Weights:
-`amazon_problem_signal` 0.025 (demand) + `amazon_listing_saturation` 0.01
-(competition when listings present).
+transaction proof. **Free path** uses Amazon public autocomplete
+(`completion.amazon.com`) → `amazon_autocomplete_hits`, persisted
+`amazon_suggestions` (unique strings joined by ` | `, max 11; restored from
+cache on hit), and `amazon_problem_mention_score` (sample-size shrunk).
+**Market Voice** uses those suggestion strings for problem/proof evidence when
+complaint terms match. **Optional** `RAINFOREST_API_KEY` adds listing density
++ avg price. No PA-API / invented BSR / Playwright. Estimate:
+`python3 amazon_scan.py --estimate`. Cache: `cache/amazon_cache.json` (28d).
+Skip: `SKIP_AMAZON=1`. Weights: `amazon_problem_signal` 0.025 +
+`amazon_listing_saturation` 0.01 (when listings present).
 
 Facebook actively blocks automated scraping and its ToS prohibits it.
 Pinkbike Forum and MTBR Forum were tested directly (July 2026) and both run

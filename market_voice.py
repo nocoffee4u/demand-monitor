@@ -5,16 +5,18 @@ market_voice.py
 Market Voice v1 — rule-based marketing/design language from existing signals.
 
 Inputs (no new scanners):
-  - out/demand_report.csv (titles, amazon problem score + AC hits, freshness)
+  - out/demand_report.csv (titles, amazon_suggestions, AC hits, freshness)
   - out/search_volume_keywords.csv (multi-phrase buyer language + volumes)
   - out/run_meta.json (coverage notes)
 
 Outputs:
   - DataFrame / out/market_voice.csv for Sheets "Market Voice" tab
 
-v1 = Tier 1 (search volume phrases) + Tier 3 (competitive titles).
-Tier 2 Amazon suggestion lists are a fast-follow — top_problem_phrases falls
-back to problem-filtered Tier 1 phrases until that field lands.
+Tier 1 = search volume phrases; Tier 2 = amazon_suggestions (persisted AC
+strings, separator " | "); Tier 3 = competitive titles.
+top_problem_phrases prefers complaint-filtered Amazon suggestions; if
+suggestions exist but none match complaint language, leave empty (honest).
+Tier-1 problem filter is fallback only when no Amazon suggestion text.
 
 No NLP; explainable regex tags only. Soft-fail → blank / explicit notes.
 """
@@ -36,6 +38,7 @@ VOICE_COLS = [
     "priority_score",
     "top_intent_phrases",
     "top_problem_phrases",
+    "proof_snippets",
     "competitive_titles",
     "design_must_haves",
     "social_hook",
@@ -44,6 +47,9 @@ VOICE_COLS = [
     "voice_notes",
     "data_as_of",
 ]
+
+# Must match amazon_scan.SUGGESTIONS_SEP
+AMAZON_SUGGESTIONS_SEP = " | "
 
 # Explainable tag vocabulary → regex (Tier 1/2 buyer phrases + titles)
 TAG_RULES: list[tuple[str, re.Pattern[str]]] = [
@@ -273,12 +279,33 @@ def data_as_of_for_row(row: pd.Series) -> str:
     return "; ".join(parts)
 
 
+def parse_amazon_suggestions(row: pd.Series) -> list[str]:
+    """Split amazon_suggestions (joined by ' | '). Empty → []."""
+    raw = _clean(row.get("amazon_suggestions"))
+    if not raw:
+        return []
+    out: list[str] = []
+    seen: set[str] = set()
+    for part in raw.split("|"):
+        s = part.strip()
+        if not s:
+            continue
+        key = s.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(s)
+    return out
+
+
 def voice_notes_for_row(
     row: pd.Series,
     meta: dict,
     n_phrases: int,
     *,
     hook_skipped_broad: str = "",
+    n_amazon_suggestions: int = 0,
+    amazon_problem_empty: bool = False,
 ) -> str:
     notes: list[str] = []
     sources = meta.get("sources") or {}
@@ -293,7 +320,15 @@ def voice_notes_for_row(
         except (TypeError, ValueError):
             pass
     amz_notes = _clean(row.get("amazon_notes"))
-    if "no_rainforest" in amz_notes.lower() or "ac-only" in amz_notes.lower():
+    no_rf = "no_rainforest" in amz_notes.lower() or "ac-only" in amz_notes.lower()
+    if n_amazon_suggestions > 0:
+        notes.append(f"amazon_suggestions={n_amazon_suggestions}")
+        if no_rf:
+            # Have real AC text — do not imply "AC with no text"
+            notes.append("amazon listing density unavailable (no Rainforest)")
+        if amazon_problem_empty:
+            notes.append("amazon suggestions present; no complaint-term matches")
+    elif no_rf:
         notes.append("amazon AC-only (no listing density)")
     elif not sources.get("amazon", False):
         notes.append("amazon inactive")
@@ -312,7 +347,11 @@ def voice_notes_for_row(
         notes.append(hook_skipped_broad)
     if not sources.get("youtube", True):
         notes.append("youtube inactive — no titles in v1 anyway")
-    if n_phrases == 0 and not competitive_titles_for_row(row):
+    if (
+        n_phrases == 0
+        and not competitive_titles_for_row(row)
+        and n_amazon_suggestions == 0
+    ):
         notes.append("no voice evidence this run")
     return "; ".join(notes)[:400]
 
@@ -418,12 +457,24 @@ def build_market_voice(
         titles = competitive_titles_for_row(row)[:max_titles]
 
         intent_strs = [f"{p} ({int(v)}/mo)" if v else p for p, v in phrases]
-        problem_phrases = [
-            p for p, _ in phrases if PROBLEM_PHRASE.search(p)
-        ][:max_problem]
-        # Tier 2 amazon suggestions not yet persisted — Tier 1 pain-filter only
+        amz_sugg = parse_amazon_suggestions(row)
+        amz_complaint = [s for s in amz_sugg if PROBLEM_PHRASE.search(s)]
+        if amz_sugg:
+            # Prefer Amazon AC text; empty when none match complaint language
+            problem_phrases = amz_complaint[:max_problem]
+            amazon_problem_empty = len(amz_complaint) == 0
+        else:
+            # No AC text — Tier-1 search phrases only if useful
+            problem_phrases = [
+                p for p, _ in phrases if PROBLEM_PHRASE.search(p)
+            ][:max_problem]
+            amazon_problem_empty = False
 
-        buyer_texts = [p for p, _ in phrases]
+        # 1–2 [amazon] proof snippets (complaint matches first, else any sample)
+        proof_src = amz_complaint[:2] if amz_complaint else amz_sugg[:2]
+        proof_snippets = " | ".join(f"[amazon] {s}" for s in proof_src)
+
+        buyer_texts = [p for p, _ in phrases] + amz_sugg
         title_texts = [t for _, t in titles]
         must = tag_texts(buyer_texts)
         # Differentiation: universal/generic in competitive titles but not buyer phrases
@@ -443,13 +494,19 @@ def build_market_voice(
                 "priority_score": row.get("priority_score", ""),
                 "top_intent_phrases": "; ".join(intent_strs),
                 "top_problem_phrases": "; ".join(problem_phrases),
+                "proof_snippets": proof_snippets,
                 "competitive_titles": comp,
                 "design_must_haves": "; ".join(must),
                 "social_hook": hook,
                 "confidence": confidence_label(len(phrases), len(titles)),
                 "channel_bias": channel_bias_for_row(row, phrases, titles),
                 "voice_notes": voice_notes_for_row(
-                    row, meta, len(phrases), hook_skipped_broad=hook_skipped
+                    row,
+                    meta,
+                    len(phrases),
+                    hook_skipped_broad=hook_skipped,
+                    n_amazon_suggestions=len(amz_sugg),
+                    amazon_problem_empty=amazon_problem_empty,
                 ),
                 "data_as_of": data_as_of_for_row(row),
             }

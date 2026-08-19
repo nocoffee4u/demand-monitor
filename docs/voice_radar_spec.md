@@ -2,9 +2,9 @@
 
 Owner: Claude (architecture/data model/Dashboard design, per `PROJECT_BRIEF.md`).
 Implementer: Grok.
-Status: Market Voice **v1 implemented** (Sheets tab + `market_voice.py`, Tier 1+3).
-Prerequisites §5 steps 1 + History coverage done. Opportunity Radar / design briefs /
-Amazon suggestion-list field still open.
+Status: Market Voice **v1 + Amazon suggestions** implemented (Sheets tab +
+`market_voice.py`; `amazon_suggestions` persisted). Prerequisites + History
+coverage done. Opportunity Radar / design briefs / YouTube titles still open.
 
 Grounded in the actual current data shape as of 2026-08-17 (`out/demand_report.csv`
 = 177 columns, `HISTORY_COLS` in `export_to_sheets.py`, `amazon_scan.py`,
@@ -99,12 +99,13 @@ different sources:
 | 3 | `ebay_top_title`, `etsy_top_listing_title`, `printables_top_name` / `cults_top_name` / `makerworld_top_name` / `thangs_top_name` | Competitive listing language (best-selling/highest-favorited/highest-download title per source). | None — already exists. Label clearly as "how sellers title this," not customer voice. |
 | — | YouTube | Nothing today. `youtube_signal.csv` has no title field at all — only counts and links. | Out of scope for v1; note as an honest gap, not silently implied as covered. Fast-follow: add `youtube_top_title` to `youtube_scan.py` using the same one-field pattern as Tier 2. |
 
-**v1 shipped with Tier 1 + Tier 3** (`market_voice.py` → Sheets **Market Voice**).
-`top_problem_phrases` uses problem-filtered Tier 1 search phrases as a temporary
-fallback (documented in `voice_notes` / module docstring) until Tier 2
-`amazon_suggestions_sample` lands — do not claim full Amazon pain-language
-coverage yet. Extra scannable columns beyond §2.3: `rank`, `channel_bias`,
-`voice_notes`.
+**v1 + Tier 2 fast-follow shipped** (`market_voice.py` → Sheets **Market Voice**).
+`amazon_scan.py` persists `amazon_suggestions` (unique AC strings, separator
+`" | "`, max 11). Voice prefers complaint-filtered suggestions for
+`top_problem_phrases` / `proof_snippets`; if suggestions exist but none match
+narrow complaint language, problem phrases stay empty (honest). Tier-1
+search-phrase filter is fallback only when no Amazon suggestion text.
+Extra columns beyond §2.3: `rank`, `proof_snippets`, `channel_bias`, `voice_notes`.
 
 ### 2.2 "Clustering" — rule-based tagging, not NLP
 
@@ -220,10 +221,9 @@ time, each with its own Claude review pass):
 1. **Fix the `fetched_at` merge collision** (§0). **Done** —
    scanners emit `ebay_fetched_at` / `etsy_fetched_at` / `amazon_fetched_at`;
    `score_demand._disambiguate_fetched_at` renames legacy CSVs on merge.
-2. **Add `amazon_suggestions_sample` to `amazon_scan.py`** (§2.1, Tier 2).
-   One field. Optionally `youtube_top_title` to `youtube_scan.py` in the
-   same pass, same pattern — closes the YouTube gap honestly instead of
-   leaving it silently uncovered.
+2. **Add `amazon_suggestions` to `amazon_scan.py`** (§2.1, Tier 2). **Done** —
+   persisted AC strings (` | ` sep, max 11); Voice consumes them. Optional
+   follow-up: `youtube_top_title` still open.
 3. **Add coverage snapshot to `HISTORY_COLS`** (§4, gotcha 1–2). **Done** —
    `sources_active_count`, `sources_active`, `community_platforms_ok`,
    `community_platforms_total`. `append_history` upgrades old headers.

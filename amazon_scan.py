@@ -7,8 +7,10 @@ Optional Amazon commercial-intent + problem/replacement language signal.
 v1 provider strategy (documented — soft-fail first):
   1. FREE (no key): Amazon public autocomplete
      GET https://completion.amazon.com/api/2017/suggestions
-     → amazon_autocomplete_hits, problem language score from suggestion text,
-       top suggestion as title proxy.
+     → amazon_autocomplete_hits, amazon_suggestions (persisted strings,
+       separator " | ", max 11 unique), problem score from suggestion text,
+       top suggestion as title proxy. Cache stores suggestion lists so
+       weekly hits restore the same text.
   2. OPTIONAL (paid third-party): Rainforest API search when
      RAINFOREST_API_KEY (or AMAZON_RAINFOREST_API_KEY) is set
      → amazon_listing_count (total results), amazon_avg_price, better top title.
@@ -74,6 +76,9 @@ RAINFOREST_URL = "https://api.rainforestapi.com/request"
 DEFAULT_KEYWORDS_PER_PRODUCT = 3
 DEFAULT_DELAY_S = 0.6
 DEFAULT_CACHE_TTL_DAYS = 28
+# Persist at most this many unique autocomplete strings (API limit is ~11/prefix)
+MAX_SUGGESTIONS_PERSIST = 11
+SUGGESTIONS_SEP = " | "
 CACHE_PATH = Path("cache/amazon_cache.json")
 
 # Problem / replacement language for commercial + pain intent
@@ -91,6 +96,7 @@ FIELDNAMES = [
     "category",
     "amazon_listing_count",
     "amazon_autocomplete_hits",
+    "amazon_suggestions",  # unique AC strings, joined by SUGGESTIONS_SEP
     "amazon_problem_mention_score",
     "amazon_avg_price",
     "amazon_top_title",
@@ -164,6 +170,7 @@ def empty_row(
         "category": category,
         "amazon_listing_count": 0,
         "amazon_autocomplete_hits": 0,
+        "amazon_suggestions": "",
         "amazon_problem_mention_score": 0,
         "amazon_avg_price": "",
         "amazon_top_title": "",
@@ -481,8 +488,9 @@ def scan(
                         notes.append(f"rainforest_err:{kw[:30]}:{e}")
                         time.sleep(min(delay_s, 1.0))
 
-        # Unique suggestion count
+        # Unique suggestions (preserve order); cap persisted text at API-ish limit
         uniq_sugg = list(dict.fromkeys(all_suggestions))
+        persist_sugg = uniq_sugg[:MAX_SUGGESTIONS_PERSIST]
         problem_texts = uniq_sugg + all_titles
         problem_score = score_problem_language(problem_texts)
 
@@ -500,6 +508,7 @@ def scan(
             "category": cat,
             "amazon_listing_count": listing_max if rf_key else 0,
             "amazon_autocomplete_hits": len(uniq_sugg),
+            "amazon_suggestions": SUGGESTIONS_SEP.join(persist_sugg),
             "amazon_problem_mention_score": problem_score,
             "amazon_avg_price": avg_price,
             "amazon_top_title": top_title,
@@ -509,8 +518,8 @@ def scan(
         }
         rows.append(row)
         print(
-            f"  {name[:48]}: ac={len(uniq_sugg)} problem={problem_score} "
-            f"listings={row['amazon_listing_count']} "
+            f"  {name[:48]}: ac={len(uniq_sugg)} sugg={len(persist_sugg)} "
+            f"problem={problem_score} listings={row['amazon_listing_count']} "
             f"{'(rf)' if rf_key else '(ac-only)'}"
         )
 
