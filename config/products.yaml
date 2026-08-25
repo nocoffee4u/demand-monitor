@@ -49,6 +49,14 @@ products:
     keywords: ["radwagon 4 fishing rod holder", "radwagon caboose rod holder", "rad power caboose fishing mount"]
     category: rad_power_bikes
 
+  - name: "Rad headlight-to-basket light relocator"
+    keywords: ["rad headlight basket mount", "ebike basket light mount", "front basket headlight bracket", "radrunner headlight relocator"]
+    category: rad_power_bikes
+
+  - name: "Rad-geometry AirTag stealth mount"
+    keywords: ["rad power airtag mount", "radrunner stealth airtag", "radrover airtag hide", "ebike airtag mount rad"]
+    category: rad_power_bikes
+
   - name: "MTB chain guide / bash guard"
     keywords: ["3d printed chain guide mountain bike", "printed bash guard mtb"]
     category: mtb_general
