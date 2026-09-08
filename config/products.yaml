@@ -28,6 +28,40 @@ products:
     keywords: ["rad power phone mount", "radrunner handlebar mount", "ebike display mount 3d print"]
     category: rad_power_bikes
 
+  # --- First demand-hunt additions (bot/signal-hunt, 2026-08-22) ----------
+  - name: "Rad kickstand anti-rattle hook"
+    keywords: ["radwagon 4 kickstand hook", "radwagon kickstand anti rattle", "radrunner kickstand stabilizer", "rad power kickstand clip"]
+    category: rad_power_bikes
+
+  - name: "Rad display weather / sun cover"
+    keywords: ["radrover display cover", "rad power screen cover", "radrover 6 sun hood", "ebike display rain cap", "rad ui clasp cover"]
+    category: rad_power_bikes
+
+  - name: "Rad rack pannier adapter"
+    keywords: ["radrunner pannier adapter", "radwagon pannier hook", "rad power ortlieb adapter", "fat rack pannier adapter"]
+    category: rad_power_bikes
+
+  - name: "RadRunner 3 / Max / Radster storage mount"
+    keywords: ["radrunner 3 console alternative", "radrunner max storage mount", "radster step through box", "radrunner 3 field box mount"]
+    category: rad_power_bikes
+
+  - name: "RadWagon 4 caboose fishing rod holder"
+    keywords: ["radwagon 4 fishing rod holder", "radwagon caboose rod holder", "rad power caboose fishing mount"]
+    category: rad_power_bikes
+
+  - name: "Rad headlight-to-basket light relocator"
+    keywords: ["rad headlight basket mount", "ebike basket light mount", "front basket headlight bracket", "radrunner headlight relocator"]
+    category: rad_power_bikes
+
+  - name: "Rad-geometry AirTag stealth mount"
+    keywords: ["rad power airtag mount", "radrunner stealth airtag", "radrover airtag hide", "ebike airtag mount rad"]
+    category: rad_power_bikes
+
+
+  - name: "RadRunner fender bolt-retention clip"
+    keywords: ["radrunner fender bolt", "rad fender stay", "radrunner fender retention", "rad power fender clip"]
+    category: rad_power_bikes
+
   - name: "MTB chain guide / bash guard"
     keywords: ["3d printed chain guide mountain bike", "printed bash guard mtb"]
     category: mtb_general
