@@ -57,6 +57,11 @@ products:
     keywords: ["rad power airtag mount", "radrunner stealth airtag", "radrover airtag hide", "ebike airtag mount rad"]
     category: rad_power_bikes
 
+
+  - name: "RadRunner fender bolt-retention clip"
+    keywords: ["radrunner fender bolt", "rad fender stay", "radrunner fender retention", "rad power fender clip"]
+    category: rad_power_bikes
+
   - name: "MTB chain guide / bash guard"
     keywords: ["3d printed chain guide mountain bike", "printed bash guard mtb"]
     category: mtb_general
