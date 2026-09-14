@@ -57,6 +57,10 @@ products:
     keywords: ["rad power airtag mount", "radrunner stealth airtag", "radrover airtag hide", "ebike airtag mount rad"]
     category: rad_power_bikes
 
+  - name: "RadRunner off-back rear-rack basket"
+    keywords: ["radrunner rear basket", "radrunner off back basket", "radrunner passenger cargo tray", "radrunner rack extension basket", "radrunner rear cargo behind seat"]
+    category: rad_power_bikes
+
 
   - name: "RadRunner fender bolt-retention clip"
     keywords: ["radrunner fender bolt", "rad fender stay", "radrunner fender retention", "rad power fender clip"]
