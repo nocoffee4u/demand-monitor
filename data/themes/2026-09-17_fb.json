@@ -1,0 +1,32 @@
+{
+  "id": "theme-fb-2026-09-17",
+  "ts": "2026-09-17T21:00:00Z",
+  "window": "weekly-fb-2026-09-17",
+  "sources_readable": [
+    "facebook_rpboc",
+    "facebook_upgrades",
+    "facebook_aventon"
+  ],
+  "sources_failed": [],
+  "nothing_new": false,
+  "themes": [
+    {
+      "label": "Cargo/basket + passenger package OOS",
+      "tag": "Rad",
+      "gist": "Basket/liner interest; passenger package OOS; cushion/peg asks. Off-back WATCH, not hero.",
+      "url": "https://www.facebook.com/groups/rpboc",
+      "relevance": "off_back",
+      "signal_ids": [
+        "sig-fb-rpboc-cargo-oos-2026-09-17"
+      ]
+    },
+    {
+      "label": "Aventon seat/handlebar comfort",
+      "tag": "Aventon",
+      "gist": "Seat and handlebar comfort chatter in Aventon group — later candidate only, not Rad launch queue.",
+      "url": "https://www.facebook.com/groups/860508022428626",
+      "relevance": "other",
+      "signal_ids": []
+    }
+  ]
+}

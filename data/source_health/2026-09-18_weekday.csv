@@ -1,0 +1,10 @@
+ts,run_id,alert_user,name,status,detail
+2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,context_rad_oem,OK,Monitor mon_af59846a active; baseline queued
+2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,context_ebr,OK,Monitor mon_d85e4369 active
+2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,context_amazon,OK,Monitor mon_7cfac79a broadened to Rad/e-bike accessories
+2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,context_ebr_report,OK,Monitor mon_d44aec3d active
+2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,etsy,OK,Open API OK on last weekday hunt 2026-09-17
+2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,rad_oem,OK,products.json OK; core OOS unchanged
+2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,facebook_manual,OK,Catch-up OK 2026-09-17; weekly routine first schedule Mon 2026-09-21
+2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,ebr_forum,STALE,Catch-up browser OK; weekly routine never run on schedule; RSS stale since ~2026-07-30
+2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,reddit,SKIPPED,Retired — do not scrape

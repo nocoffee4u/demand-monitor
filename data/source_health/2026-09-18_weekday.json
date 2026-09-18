@@ -1,0 +1,52 @@
+{
+  "ts": "2026-09-18T06:45:00Z",
+  "run_id": "seed-align-2026-09-18",
+  "alert_user": false,
+  "sources": [
+    {
+      "name": "context_rad_oem",
+      "status": "OK",
+      "detail": "Monitor mon_af59846a active; baseline queued"
+    },
+    {
+      "name": "context_ebr",
+      "status": "OK",
+      "detail": "Monitor mon_d85e4369 active"
+    },
+    {
+      "name": "context_amazon",
+      "status": "OK",
+      "detail": "Monitor mon_7cfac79a broadened to Rad/e-bike accessories"
+    },
+    {
+      "name": "context_ebr_report",
+      "status": "OK",
+      "detail": "Monitor mon_d44aec3d active"
+    },
+    {
+      "name": "etsy",
+      "status": "OK",
+      "detail": "Open API OK on last weekday hunt 2026-09-17"
+    },
+    {
+      "name": "rad_oem",
+      "status": "OK",
+      "detail": "products.json OK; core OOS unchanged"
+    },
+    {
+      "name": "facebook_manual",
+      "status": "OK",
+      "detail": "Catch-up OK 2026-09-17; weekly routine first schedule Mon 2026-09-21"
+    },
+    {
+      "name": "ebr_forum",
+      "status": "STALE",
+      "detail": "Catch-up browser OK; weekly routine never run on schedule; RSS stale since ~2026-07-30"
+    },
+    {
+      "name": "reddit",
+      "status": "SKIPPED",
+      "detail": "Retired — do not scrape"
+    }
+  ]
+}
