@@ -1,47 +1,72 @@
 {
-  "ts": "2026-09-18T06:45:00Z",
-  "run_id": "seed-align-2026-09-18",
-  "alert_user": false,
+  "ts": "2026-09-18T16:19:31Z",
+  "run_id": "weekday-2026-09-18",
+  "alert_user": true,
   "sources": [
+    {
+      "name": "rad_oem",
+      "status": "OK",
+      "detail": "products.json+accessories JSON HTTP 200; 66 accessories; OOS: Large Front Basket, RadRunner Passenger Package, RadRover Rear Rack, RadWagon Deckpad; no display/sun cover SKU; charge-port cover+GUB mount+fenders IN"
+    },
+    {
+      "name": "ebr_forum",
+      "status": "OK",
+      "detail": "RSS HTTP 200 fresh through 2026-09-18T15:19Z (recovered vs prior ~2026-07-30 stale); 0 Rad accessory keyword hits in latest 50 items; homepage readable"
+    },
+    {
+      "name": "electric_bike_report",
+      "status": "OK",
+      "detail": "Homepage HTTP 200 + Context scrape OK; TWR Ep99 Rad ownership/crowdfunding headline; no new accessory demand language"
+    },
+    {
+      "name": "amazon",
+      "status": "OK",
+      "detail": "Search reachable HTTP 200; ~409 results for rad power bike accessories; phone mounts/baskets visible; not blocked"
+    },
+    {
+      "name": "etsy",
+      "status": "BLOCKED",
+      "detail": "Public search HTTP 403 DataDome/JS challenge on all 6 competition queries; listing counts not invented"
+    },
+    {
+      "name": "makerworld",
+      "status": "OK",
+      "detail": "HTTP 200 search OK; fuzzy totals discarded; page-1 qualitative only (Lectric display cover; non-Rad charge caps; 1 Rad basket light mount)"
+    },
+    {
+      "name": "x",
+      "status": "BLOCKED",
+      "detail": "Public search returned login/Something went wrong shell; no usable public tweets parsed"
+    },
+    {
+      "name": "youtube",
+      "status": "SKIPPED",
+      "detail": "Light attempt HTTP 200 but no usable title parse; not used for signals"
+    },
     {
       "name": "context_rad_oem",
       "status": "OK",
-      "detail": "Monitor mon_af59846a active; baseline queued"
+      "detail": "mon_af59846a active; scheduled run completed no change; last_change_at null; DUPLICATE mon_35d2435d also active — do not double-count"
     },
     {
       "name": "context_ebr",
       "status": "OK",
-      "detail": "Monitor mon_d85e4369 active"
+      "detail": "mon_d85e4369 active; scheduled run completed no change"
     },
     {
       "name": "context_amazon",
       "status": "OK",
-      "detail": "Monitor mon_7cfac79a broadened to Rad/e-bike accessories"
+      "detail": "mon_7cfac79a active; baseline only so far; last_change_at null"
     },
     {
       "name": "context_ebr_report",
       "status": "OK",
-      "detail": "Monitor mon_d44aec3d active"
-    },
-    {
-      "name": "etsy",
-      "status": "OK",
-      "detail": "Open API OK on last weekday hunt 2026-09-17"
-    },
-    {
-      "name": "rad_oem",
-      "status": "OK",
-      "detail": "products.json OK; core OOS unchanged"
+      "detail": "mon_d44aec3d active; baseline only; last_change_at null"
     },
     {
       "name": "facebook_manual",
-      "status": "OK",
-      "detail": "Catch-up OK 2026-09-17; weekly routine first schedule Mon 2026-09-21"
-    },
-    {
-      "name": "ebr_forum",
-      "status": "STALE",
-      "detail": "Catch-up browser OK; weekly routine never run on schedule; RSS stale since ~2026-07-30"
+      "status": "SKIPPED",
+      "detail": "Weekly routine only — not scraped this weekday hunt"
     },
     {
       "name": "reddit",

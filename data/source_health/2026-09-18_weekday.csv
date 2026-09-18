@@ -1,10 +1,15 @@
 ts,run_id,alert_user,name,status,detail
-2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,context_rad_oem,OK,Monitor mon_af59846a active; baseline queued
-2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,context_ebr,OK,Monitor mon_d85e4369 active
-2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,context_amazon,OK,Monitor mon_7cfac79a broadened to Rad/e-bike accessories
-2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,context_ebr_report,OK,Monitor mon_d44aec3d active
-2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,etsy,OK,Open API OK on last weekday hunt 2026-09-17
-2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,rad_oem,OK,products.json OK; core OOS unchanged
-2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,facebook_manual,OK,Catch-up OK 2026-09-17; weekly routine first schedule Mon 2026-09-21
-2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,ebr_forum,STALE,Catch-up browser OK; weekly routine never run on schedule; RSS stale since ~2026-07-30
-2026-09-18T06:45:00Z,seed-align-2026-09-18,FALSE,reddit,SKIPPED,Retired — do not scrape
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,rad_oem,OK,"products.json+accessories JSON HTTP 200; 66 accessories; OOS: Large Front Basket, RadRunner Passenger Package, RadRover Rear Rack, RadWagon Deckpad; no display/sun cover SKU; charge-port cover+GUB mount+fenders IN"
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,ebr_forum,OK,RSS HTTP 200 fresh through 2026-09-18T15:19Z (recovered vs prior ~2026-07-30 stale); 0 Rad accessory keyword hits in latest 50 items; homepage readable
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,electric_bike_report,OK,Homepage HTTP 200 + Context scrape OK; TWR Ep99 Rad ownership/crowdfunding headline; no new accessory demand language
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,amazon,OK,Search reachable HTTP 200; ~409 results for rad power bike accessories; phone mounts/baskets visible; not blocked
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,etsy,BLOCKED,Public search HTTP 403 DataDome/JS challenge on all 6 competition queries; listing counts not invented
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,makerworld,OK,HTTP 200 search OK; fuzzy totals discarded; page-1 qualitative only (Lectric display cover; non-Rad charge caps; 1 Rad basket light mount)
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,x,BLOCKED,Public search returned login/Something went wrong shell; no usable public tweets parsed
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,youtube,SKIPPED,Light attempt HTTP 200 but no usable title parse; not used for signals
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,context_rad_oem,OK,mon_af59846a active; scheduled run completed no change; last_change_at null; DUPLICATE mon_35d2435d also active — do not double-count
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,context_ebr,OK,mon_d85e4369 active; scheduled run completed no change
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,context_amazon,OK,mon_7cfac79a active; baseline only so far; last_change_at null
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,context_ebr_report,OK,mon_d44aec3d active; baseline only; last_change_at null
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,facebook_manual,SKIPPED,Weekly routine only — not scraped this weekday hunt
+2026-09-18T16:19:31Z,weekday-2026-09-18,TRUE,reddit,SKIPPED,Retired — do not scrape
