@@ -7,6 +7,7 @@ Context.dev monitors (daily)
 
 Weekday Rad hunt
   → OEM / EBR RSS / Report / Amazon / X / Etsy+MW competition
+  → YouTube via youtube_scan.py when YOUTUBE_API_KEY set; else youtube SKIPPED/AUTH
   → append signals + write data/source_health/YYYY-MM-DD_weekday.json
   → alert user if important source BLOCKED/AUTH
 

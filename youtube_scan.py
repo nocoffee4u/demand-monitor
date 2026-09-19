@@ -3,7 +3,8 @@
 
 The YouTube Data API search.list endpoint costs quota units per search, so this
 scanner deliberately makes one small search per keyword and does not request
-view counts. Use --out to save the resulting signal-shaped dictionaries.
+view counts. Use --out for a JSON array, or --emit-signals to append
+schema-shaped JSONL lines for weekday hunt ingest.
 """
 import argparse
 import json
@@ -25,14 +26,29 @@ except ImportError:
 
 
 API_URL = "https://www.googleapis.com/youtube/v3/search"
+# Tight Rad accessory / pain queries (quota: one search.list per keyword).
 KEYWORDS = (
-    "RadRunner display sun",
+    "Rad Power display cover",
+    "Rad e-bike display cover",
+    "RadRunner phone mount",
     "Rad Power phone mount",
-    "ebike charge port cover",
-    "RadRunner basket",
-    "Rad display glare",
-    "RadRunner fender",
+    "Rad Power charging port plug",
+    "RadRunner fender install",
+    "RadRunner front basket",
 )
+# Keep a signal only if title+description hits at least one of these
+# (case-insensitive). Drops eyewear/optical glare and unrelated shorts.
+RELEVANCE_TERMS = (
+    "radrunner",
+    "radwagon",
+    "radcity",
+    "radrover",
+    "rad power",
+    "ebike",
+    "e-bike",
+)
+# Bare "rad" as a whole word (avoids matching "radar" / "radical" alone).
+RELEVANCE_RAD_WORD = re.compile(r"\brad\b", re.IGNORECASE)
 COMPLAINT_TERMS = (
     "annoy",
     "bad",
@@ -67,6 +83,14 @@ def get_api_key():
     return os.environ.get("YOUTUBE_API_KEY")
 
 
+def is_relevant(title, description):
+    """True when title+description looks Rad / e-bike related."""
+    text = f"{title} {description}".lower()
+    if any(term in text for term in RELEVANCE_TERMS):
+        return True
+    return bool(RELEVANCE_RAD_WORD.search(text))
+
+
 def classify_kind(title, url):
     text = f"{title} {url}".lower()
     if any(term in text for term in COMPLAINT_TERMS):
@@ -96,6 +120,9 @@ def make_signal(item, keyword, observed_at):
     channel_title = snippet.get("channelTitle") or ""
     published_at = snippet.get("publishedAt")
     description = snippet.get("description") or ""
+    if not is_relevant(title, description):
+        return None
+
     url = f"https://www.youtube.com/watch?v={video_id}"
     signal = {
         "id": f"youtube:{video_id}",
@@ -127,6 +154,7 @@ def scan(api_key, max_results=5):
     signals_by_video = {}
     errors = []
     searches_succeeded = 0
+    dropped_irrelevant = 0
 
     for keyword in KEYWORDS:
         params = {
@@ -146,6 +174,14 @@ def scan(api_key, max_results=5):
 
         searches_succeeded += 1
         for item in payload.get("items", []):
+            snippet = item.get("snippet") or {}
+            title = snippet.get("title") or ""
+            description = snippet.get("description") or ""
+            # Count relevance drops before make_signal returns None for other reasons
+            video_id = (item.get("id") or {}).get("videoId")
+            if video_id and title and not is_relevant(title, description):
+                dropped_irrelevant += 1
+                continue
             signal = make_signal(item, keyword, observed_at)
             if signal is None:
                 continue
@@ -163,10 +199,20 @@ def scan(api_key, max_results=5):
         "searches_attempted": len(KEYWORDS),
         "searches_succeeded": searches_succeeded,
         "max_results_per_search": max_results,
+        "dropped_irrelevant": dropped_irrelevant,
         "signal_count": len(signals),
         "errors": errors,
         "signals": signals,
     }
+
+
+def append_signals_jsonl(path, signals):
+    """Append schema-shaped signal dicts as JSONL (weekday hunt ingest)."""
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("a", encoding="utf-8") as fh:
+        for signal in signals:
+            fh.write(json.dumps(signal, ensure_ascii=False) + "\n")
 
 
 def main():
@@ -174,6 +220,11 @@ def main():
     parser.add_argument(
         "--out",
         help="write signal-shaped dictionaries as a JSON array to this path",
+    )
+    parser.add_argument(
+        "--emit-signals",
+        metavar="PATH.jsonl",
+        help="append schema-shaped signal lines to this JSONL path",
     )
     parser.add_argument(
         "--max-results",
@@ -202,6 +253,9 @@ def main():
                 encoding="utf-8",
             )
             summary["out"] = str(output_path)
+        if args.emit_signals:
+            append_signals_jsonl(args.emit_signals, summary["signals"])
+            summary["emit_signals"] = str(Path(args.emit_signals))
     except (OSError, RuntimeError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
