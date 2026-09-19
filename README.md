@@ -118,3 +118,14 @@ items, raise `marketplace_gap` and lower `reddit_engagement`.
   endpoint), swap in Google's official Trends API (alpha, limited quota) or
   a paid provider like SerpApi's Trends endpoint — same output shape, just
   replace the internals of `trends_scan.py`.
+
+
+## YouTube (weekday Rad hunt)
+
+Weekday SoMo Rad hunts run `youtube_scan.py` when `YOUTUBE_API_KEY` is set in
+`.env` (gitignored). The scanner uses a small Rad-accessory keyword set plus a
+light title/description relevance filter, then can append schema-shaped lines
+with `--emit-signals PATH.jsonl` (or `--out` for a JSON array).
+
+If the key is missing, mark source **youtube** as **SKIPPED** / **AUTH** in
+`data/source_health/YYYY-MM-DD_weekday.json` — do not invent signals.

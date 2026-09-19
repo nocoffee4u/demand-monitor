@@ -1,0 +1,77 @@
+{
+  "ts": "2026-09-19T05:24:00Z",
+  "run_id": "evening-2026-09-18",
+  "alert_user": true,
+  "sources": [
+    {
+      "name": "rad_oem",
+      "status": "OK",
+      "detail": "Evening products.json HTTP 200; accessories 66 + spare-parts 65 = 131 unique (was 134 Sep 15); OOS unchanged: Large Front-Mounted Basket, RadRunner Passenger Package, RadRover Rear Rack, RadWagon Deckpad; no NEW OOS / no core back-in-stock"
+    },
+    {
+      "name": "ebr_forum",
+      "status": "OK",
+      "detail": "Carried from morning weekday-2026-09-18 (not re-scraped evening); Context mon_d85e4369 last run 2026-09-18T09:07Z no change"
+    },
+    {
+      "name": "electric_bike_report",
+      "status": "OK",
+      "detail": "Context mon_d44aec3d scheduled run 2026-09-18T17:44Z completed no change; last_change_at null"
+    },
+    {
+      "name": "amazon",
+      "status": "OK",
+      "detail": "Context mon_7cfac79a CHANGE at 2026-09-19T01:48Z (Jerbor rotors/headlight/kickstand + 2-pin headlight; SERP churn); direct scrape not repeated evening"
+    },
+    {
+      "name": "etsy",
+      "status": "BLOCKED",
+      "detail": "Carried from morning \u2014 DataDome/403; not retested evening"
+    },
+    {
+      "name": "makerworld",
+      "status": "OK",
+      "detail": "Carried from morning weekday-2026-09-18; not retested evening"
+    },
+    {
+      "name": "x",
+      "status": "BLOCKED",
+      "detail": "Carried from morning \u2014 login/error shell; not retested evening"
+    },
+    {
+      "name": "youtube",
+      "status": "SKIPPED",
+      "detail": "Carried from morning \u2014 not used evening"
+    },
+    {
+      "name": "context_rad_oem",
+      "status": "OK",
+      "detail": "Primary mon_af59846a active; last_change_at null; last scheduled run 2026-09-18T07:30Z no change. DUPLICATE mon_35d2435d still active + NEW change 2026-09-19T02:24Z Back Order\u2192Add to Cart (SKU unnamed; products.json core-4 still OOS) \u2014 do not delete duplicate / do not double-count"
+    },
+    {
+      "name": "context_ebr",
+      "status": "OK",
+      "detail": "mon_d85e4369 active; last run 2026-09-18T09:07Z no change; last_change_at null"
+    },
+    {
+      "name": "context_amazon",
+      "status": "OK",
+      "detail": "mon_7cfac79a active; NEW change chg_f46a5efb at 2026-09-19T01:48Z (high/0.98); next_run ~2026-09-20T01:47Z"
+    },
+    {
+      "name": "context_ebr_report",
+      "status": "OK",
+      "detail": "mon_d44aec3d active; scheduled run 2026-09-18T17:44Z no change; last_change_at null"
+    },
+    {
+      "name": "facebook_manual",
+      "status": "SKIPPED",
+      "detail": "No Facebook tonight (evening catch-up rule)"
+    },
+    {
+      "name": "reddit",
+      "status": "SKIPPED",
+      "detail": "Retired \u2014 do not scrape"
+    }
+  ]
+}

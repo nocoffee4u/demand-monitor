@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SourceHealthSnapshot",
+  "type": "object",
+  "required": ["ts", "run_id", "sources"],
+  "properties": {
+    "ts": { "type": "string", "format": "date-time" },
+    "run_id": { "type": "string" },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "status"],
+        "properties": {
+          "name": { "type": "string" },
+          "status": { "type": "string", "enum": ["OK", "STALE", "BLOCKED", "AUTH", "EMPTY_UNEXPECTED", "SKIPPED"] },
+          "detail": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "alert_user": { "type": "boolean" }
+  }
+}
