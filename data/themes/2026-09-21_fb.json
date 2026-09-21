@@ -1,0 +1,26 @@
+{
+  "id": "theme-fb-2026-09-21",
+  "ts": "2026-09-21T17:35:00Z",
+  "window": "weekly-fb-2026-09-21",
+  "sources_readable": [
+    "facebook_rpboc",
+    "facebook_upgrades",
+    "facebook_aventon"
+  ],
+  "sources_failed": [],
+  "nothing_new": false,
+  "compared_to": "2026-09-17_fb",
+  "notes": "Personal Meta as Grant OK. All three Joined groups readable. No SUN-01/clasp/charge_cap/fender themes. One Aventon front-basket preference (WATCH, off-back). No PROTOTYPE. Liability threads (battery/brake/passenger) excluded.",
+  "themes": [
+    {
+      "label": "Front-basket preference",
+      "tag": "Aventon/Aventure-2",
+      "gist": "Recent Aventon photo post: comments liked a front basket and called it solid; another noted similar setup with different mirrors. Off-back WATCH only; later candidate, not Rad launch three.",
+      "url": "https://www.facebook.com/groups/860508022428626",
+      "relevance": "off_back",
+      "signal_ids": [
+        "sig-fb-aventon-front-basket-2026-09-21"
+      ]
+    }
+  ]
+}
