@@ -1,0 +1,18 @@
+ts,run_id,alert_user,name,status,detail
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,rad_oem,OK,products.json HTTP 200; accessories 66 + spare-parts 65 = 131 unique; core-4 OOS unchanged + RadExpand Replacement Tire OOS; no sun-cover SKU; OEM External Battery Charge Port Cover in stock; GUB PRO-3 Phone Mount in stock
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,ebr_forum,STALE,electricbikereview.com Rad forum RSS and /forums/rad-power-bikes.60/ both HTTP 404; Context mon_d85e4369 completed 2026-09-21T09:07Z no change — forum URL may have moved; Monday full crawl owns deepen
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,electric_bike_report,OK,https://electricbikereport.com/feed/ HTTP 200; newest 2026-09-20 TWR Ep 101; Rad crowdfunding mention still in Ep 99 (Sep 6)
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,amazon,OK,"Via Context mon_7cfac79a: changes 2026-09-19/20/21 (chg_f46a5efb prior; new chg_c28a0138, chg_6a19a5f8). Direct scrape not repeated. Launch-queue extract monitors also Amazon-backed."
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,etsy,OK,"openapi.etsy.com v3 OK with x-api-key keystring:shared_secret; display cover count=8, phone mount count=0, charge port cover count=1"
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,makerworld,OK,HTTP search pages 200; Rad-specific display-cover hits ~0 (printer/German Rad noise); generic e-bike charge-port caps present (Bosch/Yamaha/etc.); no reliable numeric API
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,x,BLOCKED,Public x.com search returned error shell (Something went wrong / no tweet payload); no unofficial scrape
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,youtube,OK,youtube_scan.py 7/7 searches OK; 31 signals emitted (1 dropped irrelevant); YOUTUBE_API_KEY from .env
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,context_rad_oem,OK,mon_af59846a runs OK; change chg_36cc5f07 2026-09-19 Back Order→Add to Cart; runs 2026-09-20/21 no further change. Not using deleted mon_35d2435d
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,context_ebr,OK,"mon_d85e4369 scheduled runs through 2026-09-21T09:07Z completed, change_detected=false"
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,context_amazon,OK,mon_7cfac79a changes on 2026-09-19/20/21; latest chg_6a19a5f8 at 2026-09-21T01:48Z
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,context_ebr_report,OK,mon_d44aec3d last completed 2026-09-20T17:44Z no change; no Sep21 run yet at hunt time
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,context_sun_01,OK,mon_c149fcde change chg_d537a5fb 2026-09-20 (display/sun cover shelf); scheduled 2026-09-21 run FAILED judge_failed (credits 0) — monitor flaky but prior change emitted
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,context_clasp,OK,"mon_885be9df changes 2026-09-19/20/21 (chg_9ba4008c, chg_bbd36ff5, chg_b6d67958) phone-mount competition churn"
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,context_charge_cap,OK,mon_4dada2b6 change chg_d64cd574 2026-09-19; scheduled 2026-09-20/21 runs FAILED judge_failed — emitted Sep19 change; flaky judge
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,facebook_manual,SKIPPED,Weekly owns Facebook; not in weekday routine
+2026-09-21T16:28:43Z,weekday-2026-09-21,true,reddit,SKIPPED,Retired — do not scrape
