@@ -1,0 +1,2 @@
+opportunity_id,ts,run_id,product_key,brand,pain,evidence_count,sources_json,confidence,suggested_next,alert_user,summary
+opp-e8b4c2a1,2026-09-21T12:00:00-07:00,schema-seed,SOMO-RAD-SUN-01,rad,visor/left UI pad,0,[],low,WATCH,false,schema seed — not a scored claim

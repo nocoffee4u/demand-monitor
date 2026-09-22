@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Opportunity",
+  "description": "Cross-source pain opportunity row for Pulse. opportunity_id MUST be stable across days: hash of product_key|normalized_pain (never daily-random). Optional additive fields: lane, url. CSV path: data/opportunities/YYYY-MM-DD.csv (+ jsonl OK). Headers (exact): opportunity_id,ts,run_id,product_key,brand,pain,evidence_count,sources_json,confidence,suggested_next,alert_user,summary — plus optional lane,url.",
+  "type": "object",
+  "required": [
+    "opportunity_id",
+    "ts",
+    "product_key",
+    "brand",
+    "pain",
+    "evidence_count",
+    "confidence",
+    "suggested_next"
+  ],
+  "properties": {
+    "opportunity_id": {
+      "type": "string",
+      "description": "Stable key across days: hash of product_key|normalized_pain (e.g. opp-{sha256-8}). Not daily-random."
+    },
+    "ts": { "type": "string", "format": "date-time" },
+    "run_id": { "type": "string" },
+    "product_key": { "type": "string" },
+    "brand": { "type": "string", "enum": ["rad", "aventon", "generic"] },
+    "pain": { "type": "string", "description": "Short pain label" },
+    "evidence_count": { "type": "integer", "minimum": 0 },
+    "sources_json": {
+      "type": "string",
+      "description": "JSON array of source names as a string, or blank"
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "medium-high"]
+    },
+    "suggested_next": {
+      "type": "string",
+      "enum": ["WATCH", "PRINT_SAMPLE", "DESIGN", "SHOPIFY", "KEEP_HUNTING"]
+    },
+    "alert_user": { "type": "boolean" },
+    "summary": { "type": "string" },
+    "lane": {
+      "type": "string",
+      "enum": ["demand", "competition", "mixed", "review"],
+      "description": "Optional additive column"
+    },
+    "url": {
+      "type": "string",
+      "description": "Optional additive column — representative evidence URL"
+    }
+  },
+  "additionalProperties": true
+}
