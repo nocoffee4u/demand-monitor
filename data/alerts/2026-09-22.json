@@ -1,1 +1,48 @@
-PLACEHOLDER
+{
+  "run_id": "weekday-2026-09-22",
+  "ts": "2026-09-22T16:30:00Z",
+  "alerts": [
+    {
+      "alert_user": true,
+      "severity": "critical",
+      "kind": "source_blocked",
+      "names": [
+        "context_rad_oem",
+        "context_amazon",
+        "context_ebr",
+        "context_ebr_report",
+        "amazon_reviews_rad",
+        "amazon_reviews_aventon",
+        "google_reviews_rad",
+        "google_reviews_aventon",
+        "oem_help_rad",
+        "oem_help_aventon",
+        "amazon"
+      ],
+      "detail": "Context.dev API credits depleted (Gmail 2026-09-22T05:18Z UTC). All Context monitors AUTH including six review/help lanes; Amazon shelf via Context unavailable. Zapier Context.dev needsAuth. Do not recreate deleted launch extracts.",
+      "opportunity_ids": [
+        "opp-a7bf736b"
+      ]
+    },
+    {
+      "alert_user": false,
+      "severity": "info",
+      "kind": "other",
+      "names": [
+        "x"
+      ],
+      "detail": "Public X search BLOCKED (login/error shell). Non-blocking per soft gate.",
+      "opportunity_ids": []
+    },
+    {
+      "alert_user": false,
+      "severity": "info",
+      "kind": "other",
+      "names": [
+        "ebr_forum"
+      ],
+      "detail": "EBR Rad board RSS host migrated to forums.electricbikereview.com/forum/rad-power-bikes/index.rss; old paths 404. Light weekday check OK / NOTHING_NEW Path A.",
+      "opportunity_ids": []
+    }
+  ]
+}
