@@ -13,8 +13,26 @@
         "required": ["name", "status"],
         "properties": {
           "name": { "type": "string" },
-          "status": { "type": "string", "enum": ["OK", "STALE", "BLOCKED", "AUTH", "EMPTY_UNEXPECTED", "SKIPPED"] },
-          "detail": { "type": ["string", "null"] }
+          "status": {
+            "type": "string",
+            "enum": ["OK", "STALE", "BLOCKED", "AUTH", "EMPTY_UNEXPECTED", "SKIPPED"]
+          },
+          "detail": { "type": ["string", "null"] },
+          "last_ok": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "Optional SLA: last successful OK timestamp"
+          },
+          "consecutive_failures": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Optional SLA: consecutive non-OK outcomes"
+          },
+          "owner": {
+            "type": "string",
+            "enum": ["forecasting", "ui", "manual", "context", ""],
+            "description": "Optional SLA owner: forecasting | ui | manual | context | blank"
+          }
         }
       }
     },
