@@ -17,6 +17,8 @@ Sheet columns match `signal.schema.json` / `theme.schema.json` / `source_health.
 
 ## Drive companion (interim until HTTPS webhook)
 
+See [`drive_autopush.md`](drive_autopush.md) for the weekday Drive companion naming details.
+
 Parent folder id: `0AP1Zt35TN43AUk9PVA`  
 Dated names: `opportunities_YYYY-MM-DD.csv`, `alerts_YYYY-MM-DD.json`, `heat_YYYY-MM-DD.csv`  
 HTTPS ingest: **stubbed** (Drive auto-push interim).
