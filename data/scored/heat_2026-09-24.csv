@@ -1,0 +1,8 @@
+product_key,heat,unmet_demand,competition_density,evidence_7d,wtb_count,diy_workaround_count,howto_install_count,oem_gap,oem_in_stock_substitute,source_diversity,recency_boost,competition_proxy,run_id,ts,heat_formula_version
+SOMO-RAD-SUN-01,86,100,0.4,5,1,2,0,1,false,0.8,0.8,0.4,weekday-2026-09-24,2026-09-24T09:05:00-07:00,v2
+rad_large_front_mounted_basket,85,85,0.0,2,1,0,4,1,false,0.55,0.55,0.0,weekday-2026-09-24,2026-09-24T09:05:00-07:00,v2
+aventon_front_basket,58,58,0.0,1,1,0,0,0,false,0.2,0.35,0.0,weekday-2026-09-24,2026-09-24T09:05:00-07:00,v2
+rad_radrover_rear_rack,45,45,0.0,1,0,0,0,1,false,0.35,0.4,0.0,weekday-2026-09-24,2026-09-24T09:05:00-07:00,v2
+rad_radrunner_passenger_package,45,45,0.0,1,0,0,0,1,false,0.35,0.4,0.0,weekday-2026-09-24,2026-09-24T09:05:00-07:00,v2
+rad_display_phone_mount,15,18,0.4,0,0,0,7,0,true,0.6,0.7,0.4,weekday-2026-09-24,2026-09-24T09:05:00-07:00,v2
+rad_power_charging_port_dust_cap,13,16,0.45,0,0,0,0,0,true,0.4,0.5,0.45,weekday-2026-09-24,2026-09-24T09:05:00-07:00,v2

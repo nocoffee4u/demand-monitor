@@ -1,0 +1,69 @@
+{
+  "run_id": "weekday-2026-09-24",
+  "ts": "2026-09-24T09:05:00-07:00",
+  "alerts": [
+    {
+      "alert_user": false,
+      "severity": "info",
+      "kind": "other",
+      "names": [
+        "oem_help_aventon"
+      ],
+      "detail": "Aventon Zendesk HC recovered (was Cloudflare BLOCKED 09-23). Thin JS landing only \u2014 no accessory articles. Not alert_user (recovered). consecutive_failures=0.",
+      "opportunity_ids": [
+        "opp-40996e5a"
+      ]
+    },
+    {
+      "alert_user": false,
+      "severity": "info",
+      "kind": "other",
+      "names": [
+        "rad_oem"
+      ],
+      "detail": "Live Rad OEM paginated 2026-09-24 PT: accessories 66 + spare-parts 65 = 131. Charge Port Cover IN STOCK; GUB PRO-3 IN STOCK; no sun-cover/visor SKU. Core OOS unchanged. Flips vs weekday-2026-09-23: 0.",
+      "opportunity_ids": [
+        "opp-a7bf736b",
+        "opp-c06fe8eb",
+        "opp-c79d9c4e",
+        "opp-5a782a21"
+      ]
+    },
+    {
+      "alert_user": false,
+      "severity": "info",
+      "kind": "other",
+      "names": [
+        "amazon"
+      ],
+      "detail": "Amazon free WebFetch OK (streak=0). Main accessories SERP OK; display-cover 1\u20133\u2605 filter bm-verify interstitial \u2014 no review text. Not elevated as failure.",
+      "opportunity_ids": [
+        "opp-a7bf736b"
+      ]
+    },
+    {
+      "alert_user": false,
+      "severity": "info",
+      "kind": "other",
+      "names": [
+        "youtube",
+        "rad_large_front_mounted_basket"
+      ],
+      "detail": "YT scan 32 signals. Material: BikesAreFun large-basket 'always sold out' WTB/OOS language elevates invent unmet for rad_large_front_mounted_basket vs 09-23. Soft hero SUN-01 unchanged KEEP_HUNTING.",
+      "opportunity_ids": [
+        "opp-5a782a21",
+        "opp-a7bf736b"
+      ]
+    },
+    {
+      "alert_user": false,
+      "severity": "info",
+      "kind": "other",
+      "names": [
+        "context_dev"
+      ],
+      "detail": "All context_* and Context-backed review aliases SKIPPED reason=context_paid_abandoned. No Context API polls.",
+      "opportunity_ids": []
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "ts": "2026-09-24T09:05:00-07:00",
+  "run_id": "weekday-2026-09-24",
+  "alert_user": false,
+  "note": "Weekday free-stack 2026-09-24. Context paid abandoned \u2192 all context_* + Context-backed review aliases SKIPPED reason=context_paid_abandoned. Amazon free WebFetch OK (streak=0); 1\u20133\u2605 filter bm-verify only. oem_help_aventon RECOVERED from Cloudflare BLOCKED (consecutive_failures 1\u21920). Soft hero SOMO-RAD-SUN-01 KEEP_HUNTING. Cargo invent: large front basket unmet elevated on YT sold-out WTB language.",
+  "sources": [
+    {
+      "name": "rad_oem",
+      "status": "OK",
+      "detail": "products.json HTTP 200; accessories 66 + spare-parts 65 = 131 unique; core OOS unchanged; no sun-cover SKU; Charge Port Cover IN STOCK; GUB PRO-3 IN STOCK; flips vs weekday-2026-09-23=0",
+      "last_ok": "2026-09-24T09:05:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "ebr_forum",
+      "status": "OK",
+      "detail": "Rad board RSS OK forums.electricbikereview.com; light weekday no new Path A accessory pain; battery/recall liability-only",
+      "last_ok": "2026-09-24T09:05:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "electric_bike_report",
+      "status": "OK",
+      "detail": "feed OK; newest still 2026-09-22 Euphree City Robin Review; no new Rad Path A accessory",
+      "last_ok": "2026-09-24T09:05:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "amazon",
+      "status": "OK",
+      "detail": "WebFetch OK on Rad accessories SERP (no bm-verify). Display-cover 1\u20133\u2605 filter hit bm-verify interstitial \u2014 no review text. Overall OK; BLOCKED streak=0 (prior weekday OK).",
+      "last_ok": "2026-09-24T09:05:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "etsy",
+      "status": "OK",
+      "detail": "openapi.etsy.com v3 OK; display cover count=8, phone mount count=0, charge port cover count=1",
+      "last_ok": "2026-09-24T09:05:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "makerworld",
+      "status": "OK",
+      "detail": "HTTP search 200; Rad-specific display-cover ~0; phone-mount generic; approximate competition only",
+      "last_ok": "2026-09-24T09:05:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "x",
+      "status": "BLOCKED",
+      "detail": "Public X expected BLOCKED; no unofficial scrape. Non-blocking.",
+      "last_ok": null,
+      "consecutive_failures": 4,
+      "owner": "forecasting"
+    },
+    {
+      "name": "youtube",
+      "status": "OK",
+      "detail": "youtube_scan.py 7/7 searches OK; 32 signals emitted; YOUTUBE_API_KEY from .env",
+      "last_ok": "2026-09-24T09:05:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "facebook_manual",
+      "status": "OK",
+      "detail": "Weekday not due \u2014 OK-from-prior weekly 2026-09-21: 3 Joined groups; Aventon front-basket WATCH carry only. No FB scrape today.",
+      "last_ok": "2026-09-21T17:35:00Z",
+      "consecutive_failures": 0,
+      "owner": "manual"
+    },
+    {
+      "name": "reddit",
+      "status": "SKIPPED",
+      "detail": "Retired \u2014 no Reddit API; do not scrape",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "context_rad_oem",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 Grant/Boss lock; free OEM products.json used instead. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_amazon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free Amazon WebFetch used under amazon instead. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_ebr",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_ebr_report",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free Electric Bike Report feed used instead. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "amazon_reviews_rad",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned (Context-backed alias). Free Amazon attempt recorded under amazon. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "amazon_reviews_aventon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "google_reviews_rad",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "google_reviews_aventon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "oem_help_rad",
+      "status": "OK",
+      "detail": "WebFetch OK https://www.radpowerbikes.com/pages/support \u2014 contact hours only; no glare/visor/charge-port/phone-mount language on landing page",
+      "last_ok": "2026-09-24T09:05:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "oem_help_aventon",
+      "status": "OK",
+      "detail": "RECOVERED: WebFetch/curl HTTP 200 on https://rideaventon.zendesk.com/hc/en-us \u2014 no Cloudflare challenge (was BLOCKED consecutive_failures=1 on 09-23). Landing is thin JS shell; no accessory article bodies. consecutive_failures reset to 0.",
+      "last_ok": "2026-09-24T09:05:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    }
+  ]
+}
