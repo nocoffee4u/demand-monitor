@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CompetitiveTeardown",
+  "description": "Required for any opportunity card above WATCH. No teardown = cannot claim opportunity.",
+  "type": "object",
+  "required": [
+    "opportunity_id",
+    "product_key",
+    "teardown_status",
+    "sellers_json",
+    "price_band",
+    "materials_fit_claims",
+    "review_complaints",
+    "somo_differentiator",
+    "run_id",
+    "ts"
+  ],
+  "properties": {
+    "opportunity_id": {
+      "type": "string"
+    },
+    "product_key": {
+      "type": "string"
+    },
+    "teardown_status": {
+      "type": "string",
+      "enum": [
+        "COMPLETE",
+        "PARTIAL",
+        "NEEDS DATA"
+      ]
+    },
+    "sellers_json": {
+      "type": "string",
+      "description": "JSON array string of seller objects"
+    },
+    "price_band": {
+      "type": "string"
+    },
+    "materials_fit_claims": {
+      "type": "string"
+    },
+    "review_complaints": {
+      "type": "string"
+    },
+    "somo_differentiator": {
+      "type": "string"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "ts": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": true
+}

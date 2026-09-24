@@ -13,3 +13,9 @@ Existing dated companions continue to use their practiced names:
 - `source_health_YYYY-MM-DD_weekday.csv`
 
 The HTTPS webhook remains stubbed. Until the UI pastes an HTTPS URL, Context stays on the poll → CSV + Drive + Pipeline flow.
+
+Track A companions (same parent):
+
+- `teardowns_YYYY-MM-DD.csv`
+- `invent_candidates_YYYY-MM-DD.csv`
+- heat/opportunities continue; heat schema is v2 (additive columns).

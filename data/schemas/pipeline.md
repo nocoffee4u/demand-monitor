@@ -13,7 +13,9 @@ Weekday Rad hunt
   → append signals + write data/source_health/YYYY-MM-DD_weekday.json
   → alert user if important source BLOCKED/AUTH (→ data/alerts/YYYY-MM-DD.json)
   → Opportunity emit after hunts → data/opportunities/YYYY-MM-DD.csv (+ jsonl)
-  → optional interim heat → data/scored/heat_YYYY-MM-DD.csv
+  → optional interim heat v2 → data/scored/heat_YYYY-MM-DD.csv (unmet_demand vs competition_density)
+  → teardowns for cards above WATCH → data/teardowns/YYYY-MM-DD.csv
+  → invent candidates (OEM cargo OOS + buyer talk) → data/invent/invent_candidates_YYYY-MM-DD.csv
 
 Weekly EBR browser + Weekly FB listen
   → data/themes/YYYY-MM-DD_{ebr|fb}.json
@@ -36,6 +38,9 @@ Notes:
 
 - Launch extract monitors deleted (cap); review/help + OEM live.
 - Do not invent sales/engagement; heat is not full ProductScore.
+- Etsy/MW counts feed competition_density only — never inflate unmet_demand.
+- Weight WTB / DIY workaround above how-to YT installs in unmet_demand.
+- No competitive teardown → cannot claim opportunity above WATCH.
 
 Sheet tabs (proposed; UI Bot owns final columns):
 

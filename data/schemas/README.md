@@ -11,7 +11,9 @@ Rider-first demand infrastructure. This folder is the **system of record for raw
 | Source health | `data/source_health/*.json` | Every hunt | User alerts, UI Health tab |
 | Opportunities | `data/opportunities/*.csv` (+ jsonl) | Weekday hunt stitch | Pulse / UI |
 | Alerts | `data/alerts/*.json` | Hunt / health routing | Notify channel, UI |
-| Heat (interim) | `data/scored/heat_*.csv` | Optional lightweight heat | Pulse (not ProductScore) |
+| Heat (interim) | `data/scored/heat_*.csv` | Optional lightweight heat (v2: unmet_demand vs competition_density) | Pulse (not ProductScore) |
+| Teardowns | `data/teardowns/*` | Hunt stitch when card > WATCH | Pulse / UI |
+| Invent candidates | `data/invent/*` | OEM OOS + buyer talk | Pulse / Boss |
 | Scored products | `data/scored/*.csv` | `score_dashboard` / live runs | Demand Monitor UI Bot → Sheet |
 
 ## Rules
@@ -30,3 +32,5 @@ Rider-first demand infrastructure. This folder is the **system of record for raw
 - `opportunity.schema.json`, `alert.schema.json`, `handoff.schema.json`
 - `alert_routing.md`, `heat_formula.md`, `ui_bot_contract.md`, `pipeline.md`
 - `scored_product.columns.md`
+- `competitive_teardown.md` / `competitive_teardown.schema.json` (required above WATCH)
+- `invent_candidates.md` (OEM cargo OOS invent lane)

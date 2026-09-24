@@ -38,8 +38,14 @@ HTTPS ingest: **stubbed** (Drive auto-push interim).
 Optional additive: `lane` (demand|competition|mixed|review), `url`  
 `opportunity_id` stable across days = hash of `product_key|normalized_pain` (never daily-random).
 
-**Heat (interim):** `product_key,heat,evidence_7d,source_diversity,recency_boost,competition_proxy,run_id,ts`  
-Not a full ProductScore — see `heat_formula.md`.
+**Heat (interim v2):** `product_key,heat,unmet_demand,competition_density,evidence_7d,wtb_count,diy_workaround_count,howto_install_count,oem_gap,oem_in_stock_substitute,source_diversity,recency_boost,competition_proxy,run_id,ts,heat_formula_version`  
+Sort Pulse by `unmet_demand` (not raw marketplace counts). `competition_density` annotates/punishes only. See `heat_formula.md` v2.
+
+**Teardowns (required above WATCH):** `data/teardowns/YYYY-MM-DD.csv` — see `competitive_teardown.md`.
+
+**Invent candidates:** `data/invent/invent_candidates_YYYY-MM-DD.csv` — see `invent_candidates.md`.
+
+**Opportunities additive (Track A):** `unmet_demand,competition_density,teardown_status,teardown_ref`; `suggested_next` may be `DROP?`.
 
 **Products:** see `scored_product.columns.md` — config-only / unscored never emit.
 
