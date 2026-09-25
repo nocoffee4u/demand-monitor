@@ -1,0 +1,14 @@
+{
+  "display_cover": {
+    "query": "rad power display cover",
+    "count": 8
+  },
+  "phone_mount": {
+    "query": "rad power phone mount",
+    "count": 0
+  },
+  "charging_port_cover": {
+    "query": "rad charging port cover",
+    "count": 1
+  }
+}

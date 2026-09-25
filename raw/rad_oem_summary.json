@@ -1,0 +1,15 @@
+{
+  "accessories_count": 66,
+  "spare_parts_count": 65,
+  "unique_handles": 131,
+  "core_status": {
+    "large-front-mounted-basket": "OOS",
+    "radrunner-passenger-package": "OOS",
+    "radrover-rear-rack": "OOS",
+    "radwagon-deckpad": "OOS",
+    "radexpand-replacement-tire": "OOS"
+  },
+  "charge_port_cover_in_stock": true,
+  "gub_pro3_phone_mount_in_stock": true,
+  "sun_cover_sku_handles": []
+}
