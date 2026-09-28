@@ -1,0 +1,271 @@
+{
+  "ts": "2026-09-28T09:20:00-07:00",
+  "run_id": "weekday-2026-09-28",
+  "sources": [
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "rad_oem",
+      "status": "OK",
+      "detail": "products.json HTTP 200; accessories 66 + spare-parts 65 = 131 unique; core OOS unchanged (large-front-mounted-basket, radrover-rear-rack, radrunner-passenger-package, radwagon-deckpad, radexpand-replacement-tire); no sun-cover SKU; Charge Port Cover IN STOCK; GUB PRO-3 IN STOCK; flips vs weekday-2026-09-25=0",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "ebr_forum",
+      "status": "OK",
+      "detail": "Rad board RSS OK https://forums.electricbikereview.com/forum/rad-power-bikes/index.rss (50 items). Newest: UL battery packs Oct 2026, funding, CPSC recall, Infinite Battery mount, seatpost, hub motor \u2014 no new Path A accessory pain (basket/visor/cup/mount).",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "electric_bike_report",
+      "status": "OK",
+      "detail": "feed OK; newest titles include NY e-moto bill / Euphree City Robin / Puckipuppy / Ford Mustang eBike / Trek Domane+ \u2014 no new Rad Path A accessory article.",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "amazon",
+      "status": "OK",
+      "detail": "curl SERP/product 503/captcha; WebFetch SERP OK (Rad accessories + cup holder + cargo net + Ibera/Topeak rack searches). Line and Ride B0FNL2Q87Q currently unavailable (3.8\u2605/7). Overall OK; BLOCKED streak=0 (prior weekday OK).",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "etsy",
+      "status": "OK",
+      "detail": "openapi.etsy.com v3 OK; display cover=8, phone mount=0, charge port=1, rad basket cup=0, rad basket organizer=1 (irrelevant Packout), ebike cup=14, visor=1",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "makerworld",
+      "status": "OK",
+      "detail": "HTTP search 200; Rad-specific display-cover ~0 (German Radkappe noise); basket cup/organizer/cargo-hook return universal models; Hook for Cargo Basket Net free STL present; approximate competition only",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "x",
+      "status": "BLOCKED",
+      "detail": "Public X expected BLOCKED (HTTP 307 empty body); no unofficial scrape. Non-blocking.",
+      "last_ok": "",
+      "consecutive_failures": 6,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "youtube",
+      "status": "OK",
+      "detail": "youtube_scan.py 7/7 searches OK; 31 signals emitted; YOUTUBE_API_KEY from .env",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "facebook_manual",
+      "status": "OK",
+      "detail": "Weekday not due \u2014 OK-from-prior weekly 2026-09-21: 3 Joined groups; Aventon front-basket WATCH carry only. No FB scrape today.",
+      "last_ok": "2026-09-21T17:35:00Z",
+      "consecutive_failures": 0,
+      "owner": "manual"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "reddit",
+      "status": "SKIPPED",
+      "detail": "Retired \u2014 no Reddit API; do not scrape",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "context_rad_oem",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 monitors paused; free OEM products.json used instead. NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "context_amazon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free Amazon WebFetch used under amazon instead. NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "context_ebr",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "context_ebr_report",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free Electric Bike Report feed used instead. NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "amazon_reviews_rad",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned (Context-backed alias). Free Amazon attempt recorded under amazon. NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "amazon_reviews_aventon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "google_reviews_rad",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "google_reviews_aventon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "oem_help_rad",
+      "status": "OK",
+      "detail": "curl/WebFetch OK https://www.radpowerbikes.com/pages/support \u2014 support landing; no new glare/visor/charge-port/phone-mount language mined today",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "oem_help_aventon",
+      "status": "OK",
+      "detail": "HTTP 200 https://rideaventon.zendesk.com/hc/en-us \u2014 no Cloudflare challenge. Landing thin; no accessory article bodies. consecutive_failures=0.",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "rad_yotpo",
+      "status": "OK",
+      "detail": "Yotpo widget + store-wide filter.json OK; accessory 1\u20133\u2605: LFMB=53, SFMB=43, cargo-net=57, straps=32, bottle=153, rear-rack=163. New 2025-10-22 helmet-visor wish (id 773119058) is HELMET not left-pad \u2014 does not open SUN-01 DESIGN gate.",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "aventon_oem",
+      "status": "OK",
+      "detail": "products.json HTTP 200 (~249\u2013250); no dedicated front basket SKU; Rear Rack Basket Abound $150.99/$168.99 IN STOCK; BC280 Display Cover $23.99 IN STOCK; BiKASE Basket Liner $34.99 IN STOCK; Aventure 2 rear rack set OOS ($49.99).",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "printables",
+      "status": "BLOCKED",
+      "detail": "HTTP 403 on search; use WebSearch snippets only for competition notes. Non-blocking.",
+      "last_ok": "",
+      "consecutive_failures": 1,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-28T09:20:00-07:00",
+      "run_id": "weekday-2026-09-28",
+      "alert_user": "false",
+      "name": "ebay",
+      "status": "BLOCKED",
+      "detail": "HTTP 403 on search; rear-rack aftermarket prices NEEDS DATA via eBay. Non-blocking.",
+      "last_ok": "",
+      "consecutive_failures": 1,
+      "owner": "forecasting"
+    }
+  ],
+  "amazon_blocked_streak": 0
+}
