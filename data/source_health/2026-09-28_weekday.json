@@ -1,9 +1,12 @@
 {
-  "ts": "2026-09-28T09:20:00-07:00",
+  "ts": "2026-09-28T09:40:00-07:00",
   "run_id": "weekday-2026-09-28",
+  "amazon_blocked_streak": 0,
+  "weekly_ebr_patch": true,
+  "weekly_ebr_window": "weekly-ebr-2026-09-28",
   "sources": [
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "rad_oem",
@@ -14,29 +17,29 @@
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "ebr_forum",
       "status": "OK",
-      "detail": "Rad board RSS OK https://forums.electricbikereview.com/forum/rad-power-bikes/index.rss (50 items). Newest: UL battery packs Oct 2026, funding, CPSC recall, Infinite Battery mount, seatpost, hub motor \u2014 no new Path A accessory pain (basket/visor/cup/mount).",
-      "last_ok": "2026-09-28T09:20:00-07:00",
+      "detail": "Weekly EBR dig 2026-09-28: Rad RSS OK (Rad Power Bikes Forum, 50 items) + accessories RSS OK. Baseline Path A threads rechecked (condensation 56621 last Feb 2025; no new clasp/charge_cap/fender/off_back posts since 2026-09-21). Board activity = battery/recall/funding liability only. NOTHING_NEW vs 2026-09-21_ebr.",
+      "last_ok": "2026-09-28T09:40:00-07:00",
       "consecutive_failures": 0,
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "electric_bike_report",
       "status": "OK",
-      "detail": "feed OK; newest titles include NY e-moto bill / Euphree City Robin / Puckipuppy / Ford Mustang eBike / Trek Domane+ \u2014 no new Rad Path A accessory article.",
-      "last_ok": "2026-09-28T09:20:00-07:00",
+      "detail": "Weekly dig: homepage + feed OK; newest TWR Ep 102 (2026-09-27). Rad mention in Ep 99 = Rad Life Mobility crowdfunding (funding liability, not Path A accessory). No new Rad Path A accessory article since 2026-09-21.",
+      "last_ok": "2026-09-28T09:40:00-07:00",
       "consecutive_failures": 0,
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "amazon",
@@ -47,7 +50,7 @@
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "etsy",
@@ -58,7 +61,7 @@
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "makerworld",
@@ -69,7 +72,7 @@
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "x",
@@ -80,7 +83,7 @@
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "youtube",
@@ -91,7 +94,7 @@
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "facebook_manual",
@@ -102,7 +105,7 @@
       "owner": "manual"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "reddit",
@@ -113,7 +116,7 @@
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "context_rad_oem",
@@ -124,7 +127,7 @@
       "owner": "context"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "context_amazon",
@@ -135,29 +138,29 @@
       "owner": "context"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "context_ebr",
       "status": "SKIPPED",
-      "detail": "context_paid_abandoned \u2014 free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
+      "detail": "Weekly check: monitor paused (context_paid_abandoned). list-monitor-changes mon_d85e4369 \u2192 NOT_FOUND; full id mon_d85e4369a4604aea8e44ec654f9c4f56 status=paused. Free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
       "last_ok": "",
       "consecutive_failures": 0,
       "owner": "context"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "context_ebr_report",
       "status": "SKIPPED",
-      "detail": "context_paid_abandoned \u2014 free Electric Bike Report feed used instead. NEVER NOTHING_NEW.",
+      "detail": "Weekly check: monitor paused (context_paid_abandoned). list-monitor-changes mon_d44aec3d \u2192 NOT_FOUND; full id mon_d44aec3d8cf7487990619d666df879ae status=paused. Free Report feed used under electric_bike_report. NEVER NOTHING_NEW.",
       "last_ok": "",
       "consecutive_failures": 0,
       "owner": "context"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "amazon_reviews_rad",
@@ -168,7 +171,7 @@
       "owner": "context"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "amazon_reviews_aventon",
@@ -179,7 +182,7 @@
       "owner": "context"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "google_reviews_rad",
@@ -190,7 +193,7 @@
       "owner": "context"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "google_reviews_aventon",
@@ -201,7 +204,7 @@
       "owner": "context"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "oem_help_rad",
@@ -212,7 +215,7 @@
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "oem_help_aventon",
@@ -223,7 +226,7 @@
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "rad_yotpo",
@@ -234,7 +237,7 @@
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "aventon_oem",
@@ -245,7 +248,7 @@
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "printables",
@@ -256,7 +259,7 @@
       "owner": "forecasting"
     },
     {
-      "ts": "2026-09-28T09:20:00-07:00",
+      "ts": "2026-09-28T09:40:00-07:00",
       "run_id": "weekday-2026-09-28",
       "alert_user": "false",
       "name": "ebay",
@@ -266,6 +269,5 @@
       "consecutive_failures": 1,
       "owner": "forecasting"
     }
-  ],
-  "amazon_blocked_streak": 0
+  ]
 }
