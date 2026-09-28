@@ -7,7 +7,7 @@ ts,run_id,alert_user,name,status,detail,last_ok,consecutive_failures,owner
 2026-09-28T09:40:00-07:00,weekday-2026-09-28,false,makerworld,OK,HTTP search 200; Rad-specific display-cover ~0 (German Radkappe noise); basket cup/organizer/cargo-hook return universal models; Hook for Cargo Basket Net free STL present; approximate competition only,2026-09-28T09:20:00-07:00,0,forecasting
 2026-09-28T09:40:00-07:00,weekday-2026-09-28,false,x,BLOCKED,Public X expected BLOCKED (HTTP 307 empty body); no unofficial scrape. Non-blocking.,,6,forecasting
 2026-09-28T09:40:00-07:00,weekday-2026-09-28,false,youtube,OK,youtube_scan.py 7/7 searches OK; 31 signals emitted; YOUTUBE_API_KEY from .env,2026-09-28T09:20:00-07:00,0,forecasting
-2026-09-28T09:40:00-07:00,weekday-2026-09-28,false,facebook_manual,OK,Weekday not due — OK-from-prior weekly 2026-09-21: 3 Joined groups; Aventon front-basket WATCH carry only. No FB scrape today.,2026-09-21T17:35:00Z,0,manual
+2026-09-28T09:40:00-07:00,weekday-2026-09-28,false,facebook_manual,OK,Weekly 2026-09-28: Grant OK; 3 Joined readable; Aventon Level 4 fender/rack FLAG (later); Caboose saddle WATCH; battery off-back. alert_user=true.,2026-09-28T17:11:00Z,0,manual
 2026-09-28T09:40:00-07:00,weekday-2026-09-28,false,reddit,SKIPPED,Retired — no Reddit API; do not scrape,,0,forecasting
 2026-09-28T09:40:00-07:00,weekday-2026-09-28,false,context_rad_oem,SKIPPED,context_paid_abandoned — monitors paused; free OEM products.json used instead. NEVER NOTHING_NEW.,,0,context
 2026-09-28T09:40:00-07:00,weekday-2026-09-28,false,context_amazon,SKIPPED,context_paid_abandoned — free Amazon WebFetch used under amazon instead. NEVER NOTHING_NEW.,,0,context

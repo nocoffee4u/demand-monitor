@@ -99,8 +99,8 @@
       "alert_user": "false",
       "name": "facebook_manual",
       "status": "OK",
-      "detail": "Weekday not due \u2014 OK-from-prior weekly 2026-09-21: 3 Joined groups; Aventon front-basket WATCH carry only. No FB scrape today.",
-      "last_ok": "2026-09-21T17:35:00Z",
+      "detail": "Weekly 2026-09-28: Grant OK; 3 Joined readable; Aventon Level 4 fender/rack FLAG (later); Caboose saddle WATCH; battery off-back. alert_user=true.",
+      "last_ok": "2026-09-28T17:11:00Z",
       "consecutive_failures": 0,
       "owner": "manual"
     },
