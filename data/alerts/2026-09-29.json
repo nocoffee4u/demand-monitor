@@ -1,0 +1,9 @@
+{
+  "ts": "2026-09-29T09:15:00-07:00",
+  "run_id": "weekday-2026-09-29",
+  "alert_user": false,
+  "reason": "none_due",
+  "summary": "No new important-source first-dark/recovery alerts. Amazon WebFetch OK (streak=0). rad_yotpo marked STALE (newest still 2026-04-15) per Boss 2026-09-28 \u2014 not an alert. Context monitors remain SKIPPED (known). Board: no card newly crossed above WATCH; no new DESIGN gate; SUN-01 still KEEP_HUNTING (helmet visor \u2260 left-pad). Etsy display-cover 8\u219211 competition-only.",
+  "sources": [],
+  "amazon_blocked_streak": 0
+}
