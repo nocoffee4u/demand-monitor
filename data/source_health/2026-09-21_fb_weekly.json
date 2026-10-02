@@ -1,0 +1,11 @@
+{
+  "ts": "2026-09-21T17:35:00Z",
+  "run_id": "weekly-fb-2026-09-21",
+  "alert_user": false,
+  "sources": [
+    {"name": "facebook_rpboc", "status": "OK", "detail": "Joined; readable; personal Meta as Grant; ~14 posts (~2h–6d)"},
+    {"name": "facebook_upgrades", "status": "OK", "detail": "Joined; readable; ~8 posts (~10h–6d)"},
+    {"name": "facebook_aventon", "status": "OK", "detail": "Joined; readable; ~13 posts (~2h–5d); front-basket WATCH theme"},
+    {"name": "facebook_groups", "status": "OK", "detail": "All 3 Joined+readable; no AUTH/checkpoint; alert_user=false"}
+  ]
+}

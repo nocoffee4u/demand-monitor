@@ -1,0 +1,2 @@
+ts,run_id,alert_user,name,status,detail
+2026-09-21T16:35:00Z,weekday-2026-09-21,false,ebr_forum,OK,"SUPERSEDED sparse emit — patched into data/source_health/2026-09-21_weekday.csv under same run_id weekday-2026-09-21 (full snapshot includes youtube OK). Do not treat this file as latest."

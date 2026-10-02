@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DemandThemeDigest",
+  "type": "object",
+  "required": ["id", "ts", "window", "sources_readable", "themes"],
+  "properties": {
+    "id": { "type": "string" },
+    "ts": { "type": "string", "format": "date-time" },
+    "window": { "type": "string", "description": "e.g. weekly-fb-2026-09-17" },
+    "sources_readable": { "type": "array", "items": { "type": "string" } },
+    "sources_failed": { "type": "array", "items": { "type": "string" } },
+    "themes": {
+      "type": "array",
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["label", "tag", "gist", "relevance"],
+        "properties": {
+          "label": { "type": "string" },
+          "tag": { "type": "string", "enum": ["Rad", "Aventon", "transferable-generic", "other"] },
+          "gist": { "type": "string" },
+          "url": { "type": ["string", "null"] },
+          "relevance": { "type": "string", "description": "SUN-01 | clasp | charge_cap | off_back | fender | NEW | other" },
+          "signal_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "nothing_new": { "type": "boolean" }
+  }
+}

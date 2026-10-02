@@ -1,0 +1,52 @@
+{
+  "id": "theme-ebr-2026-09-17",
+  "ts": "2026-09-17T20:00:00Z",
+  "window": "weekly-ebr-2026-09-17",
+  "sources_readable": [
+    "ebr_forum"
+  ],
+  "sources_failed": [],
+  "nothing_new": false,
+  "themes": [
+    {
+      "label": "Phone / display mount retention",
+      "tag": "Rad",
+      "gist": "EBR Best Phone Holder: one-hand remove, rotate, charge access, under $40.",
+      "url": "https://forums.electricbikereview.com/threads/best-phone-holder.43493/",
+      "relevance": "clasp",
+      "signal_ids": [
+        "sig-ebr-phone-holder-43493"
+      ]
+    },
+    {
+      "label": "Lost charge-port plug / OEM no replacement",
+      "tag": "Rad",
+      "gist": "Lost Rad rubber plug; OEM unavailable; tape workaround; repeated loss reports.",
+      "url": "https://forums.electricbikereview.com/threads/rubber-plug-replacement-on-battery-that-covers-charging-hole.51769/",
+      "relevance": "charge_cap",
+      "signal_ids": [
+        "sig-ebr-charge-plug-51769"
+      ]
+    },
+    {
+      "label": "Display weather / condensation",
+      "tag": "Rad",
+      "gist": "Condensation + rain assist loss; zip-bag workaround. Supports SUN-01 weather shield.",
+      "url": "https://forums.electricbikereview.com/threads/condensation-in-display-sudden-loss-of-motor-power.56621/",
+      "relevance": "SUN-01",
+      "signal_ids": [
+        "sig-ebr-display-condense-56621"
+      ]
+    },
+    {
+      "label": "Rear cargo / modular rack",
+      "tag": "Rad",
+      "gist": "Modular rear rack/pannier/basket fit for Rover — off-back WATCH only.",
+      "url": "https://forums.electricbikereview.com/threads/all-singing-all-dancing-rear-rack-for-rad-rhinoe-rover.39327/",
+      "relevance": "off_back",
+      "signal_ids": [
+        "sig-ebr-rear-rack-39327"
+      ]
+    }
+  ]
+}

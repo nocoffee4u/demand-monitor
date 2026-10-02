@@ -1,0 +1,11 @@
+product_key,heat,unmet_demand,competition_density,evidence_7d,wtb_count,diy_workaround_count,howto_install_count,oem_gap,oem_in_stock_substitute,source_diversity,recency_boost,competition_proxy,run_id,ts,heat_formula_version
+SOMO-RAD-SUN-01,86,100,0.4,2,0,3,1,1,false,0.95,0.55,0.4,weekday-2026-09-25,2026-09-25T09:10:00-07:00,v2
+aventon_front_basket,67,67,0.0,1,1,0,0,1,false,0.25,0.15,0.0,weekday-2026-09-25,2026-09-25T09:10:00-07:00,v2
+rad_basket_divider_organizer,49,60,0.51,3,2,3,0,0,true,0.55,0.45,0.51,weekday-2026-09-25,2026-09-25T09:10:00-07:00,v2
+rad_large_front_mounted_basket,46,55,0.48,1,1,1,2,1,true,0.5,0.25,0.48,weekday-2026-09-25,2026-09-25T09:10:00-07:00,v2
+rad_basket_cargo_tiedown,40,50,0.55,2,1,2,0,0,true,0.4,0.35,0.55,weekday-2026-09-25,2026-09-25T09:10:00-07:00,v2
+rad_radrover_rear_rack,41,41,0.0,1,0,0,0,1,false,0.3,0.2,0.0,weekday-2026-09-25,2026-09-25T09:10:00-07:00,v2
+rad_basket_cup_holder,23,35,1.0,2,1,1,2,0,true,0.45,0.3,1.0,weekday-2026-09-25,2026-09-25T09:10:00-07:00,v2
+rad_radrunner_passenger_package,15,18,0.4,1,0,0,0,1,true,0.3,0.2,0.4,weekday-2026-09-25,2026-09-25T09:10:00-07:00,v2
+rad_display_phone_mount,15,18,0.46,0,0,0,4,0,true,0.35,0.15,0.46,weekday-2026-09-25,2026-09-25T09:10:00-07:00,v2
+rad_power_charging_port_dust_cap,5,6,0.45,0,0,0,0,0,true,0.2,0.1,0.45,weekday-2026-09-25,2026-09-25T09:10:00-07:00,v2

@@ -1,0 +1,42 @@
+{
+  "run_id": "free-stitch-2026-09-22-night",
+  "ts": "2026-09-22T22:15:00-07:00",
+  "alerts": [
+    {
+      "alert_user": true,
+      "severity": "info",
+      "kind": "source_blocked",
+      "names": [
+        "amazon"
+      ],
+      "detail": "Amazon Rad accessories SERP WebFetch BLOCKED (bot interstitial / bm-verify challenge). No Amazon review counts invented. Free-stack stitch proceeded without Amazon.",
+      "opportunity_ids": [
+        "opp-a7bf736b"
+      ]
+    },
+    {
+      "alert_user": false,
+      "severity": "info",
+      "kind": "other",
+      "names": [
+        "rad_oem"
+      ],
+      "detail": "Live Rad OEM paginated 2026-09-22 night PT: accessories pages 1-3 (30+30+6=66) + spare-parts 1-3 (30+30+5=65)=131. External Battery Charge Port Cover IN STOCK; GUB PRO-3 Phone Mount IN STOCK; no sun-cover/visor SKU. Core OOS: Large Front-Mounted Basket, RadRover Rear Rack, RadRunner Passenger Package, RadWagon Deckpad, RadExpand Replacement Tire.",
+      "opportunity_ids": [
+        "opp-a7bf736b",
+        "opp-c06fe8eb",
+        "opp-c79d9c4e"
+      ]
+    },
+    {
+      "alert_user": false,
+      "severity": "info",
+      "kind": "other",
+      "names": [
+        "context_dev"
+      ],
+      "detail": "No Context API polls this run (monitors abandoned/paused; free-stack only).",
+      "opportunity_ids": []
+    }
+  ]
+}
