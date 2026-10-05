@@ -1,0 +1,223 @@
+{
+  "ts": "2026-10-05T09:15:00-07:00",
+  "run_id": "weekday-2026-10-05",
+  "alert_user": false,
+  "sources": [
+    {
+      "name": "rad_oem",
+      "status": "OK",
+      "detail": "products.json HTTP 200 US (accessories 66 + spare-parts + all = 148 unique handles) + CA radpowerbikes.ca products.json 200 (139 acc+all). US STOCK FLIPS vs weekday-2026-10-02=2: small-front-mounted-basket IN\u2192OOS ($89; product page + support page confirm Out of Stock) and safe-shield-advanced-external-battery IN\u2192OOS ($599; battery, not printable); + Bern Brentwood/Hudson helmet single-size variants IN\u2192OOS (note). PRICE FLIPS=0 (cargo-net $20 / straps $25 / large-liner $87 / small-liner $69 / GUB $25 / charge cover $5 unchanged). Now BOTH Rad front-mounted baskets OOS in US (Large $119 + Small $89) and CA (C$159/C$119). Still OOS: radrover-rear-rack $99, radrunner-passenger-package $109, radwagon-deckpad, radexpand-replacement-tire, radwagon-4/5-passenger-cargo-bundle. In stock: Large Basket $119 + Front Rack $59 (rack-mount), Small Basket $89, Large Basket Bag $47, Caboose $199, RR3/Max passenger package $139. No sun-cover/visor SKU. CA vs 10-01 snapshot: 0 flips in overlapping handles; CA GUB PRO-3 OOS (US in stock).",
+      "last_ok": "2026-10-05T09:15:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "ebr_forum",
+      "status": "OK",
+      "detail": "Light weekday check: forums.electricbikereview.com Rad RSS (50) + Accessories RSS (50) OK + /search/search?keywords= (rad basket / radrunner basket / rad cup holder / rad display glare / front basket rad out of stock) OK. Newest Rad RSS still 2026-07-30 UL battery thread; Accessories newest 2026-10-05 battery fire bag + 10-02 helmet search (not Path A). No new Path A basket/visor/cup/organizer posts. Weekly EBR browser routine runs separately today.",
+      "last_ok": "2026-10-05T09:15:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "electric_bike_report",
+      "status": "OK",
+      "detail": "electricbikereport.com/feed OK (100 items); newest still 2026-09-30 GOTRAX Ranger 16 (no newer item). Rad mention 2026-09-06 crowdfunding. No new Rad Path A accessory article.",
+      "last_ok": "2026-10-05T09:15:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "amazon",
+      "status": "OK",
+      "detail": "curl (box) SERPs OK, no captcha: rad power bikes accessories (48), rad power bike basket organizer (58), ebike basket cup holder (48), rad power bikes basket liner (60), aventon aventure 2 front basket (48), radrunner passenger seat/pegs. Visible: Accmor $9.92\u2013$12.99, GEARV $18.89, Basket Liner Compatible with Rad Power $34.99/$39.99 (several new B0H4D* ASINs), Retrospec $79.99/$119.99. 1\u20133\u2605 READABLE on DP B0FNL2Q87Q (2 \u00d7 1\u2605 fit/size). BLOCKED streak=0.",
+      "last_ok": "2026-10-05T09:15:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "amazon_product_pages",
+      "status": "OK",
+      "detail": "curl DP OK: B0FNL2Q87Q Line and Ride Custom-Fit Small FMB liner now 'Only 1 left in stock' $34.99, 3.8\u2605 (was Currently unavailable 10-02) \u2014 6 reviews readable incl. 1\u2605 RKEKF3EWBY3S6 2026-02-12 'Did not fit radrover small basket with wood bottom' and 1\u2605 R124ONR7C699FM 2026-03-29 'Too small'; no AI review summary on page. B0FLTJHDXG Retrospec Tote XL In Stock $119.99 4.2\u2605. Tried; OK (streak=0).",
+      "last_ok": "2026-10-05T09:15:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "etsy",
+      "status": "OK",
+      "detail": "openapi.etsy.com v3 OK; display cover=8, phone mount=0, charge port (tight)=1, rad basket cup=0, rad basket organizer=1, ebike cup=15 (+1), visor=1, rad basket=13; ebike basket organizer=5 incl. NEW shop 22853389 VELOVAULT 4\u00d7 3D-printed generic e-bike basket organizer inserts $45 each (listed 2026-10-04 PT, 0\u20131 favorites, not Rad-specific: 'verify your basket dimensions'); aventon front basket=0; radrunner passenger=2 ($170/$190 seats).",
+      "last_ok": "2026-10-05T09:15:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "makerworld",
+      "status": "BLOCKED",
+      "detail": "HTTP 403 on search (day 3; first dark already alerted 10-01 \u2014 no repeat). WebSearch snippets used for competition proxy (Travel Mug Holder 662084 w/ 12mm Rad basket-tube adapter; Rad Front Basket Premium Light Mount 2736120). Non-blocking for Path A decisions (teardowns COMPLETE).",
+      "last_ok": "2026-09-30T09:05:00-07:00",
+      "consecutive_failures": 3,
+      "owner": "forecasting"
+    },
+    {
+      "name": "x",
+      "status": "BLOCKED",
+      "detail": "Public X expected BLOCKED (HTTP 307, 0-byte body, no timeline); no unofficial scrape. Non-blocking.",
+      "last_ok": null,
+      "consecutive_failures": 11,
+      "owner": "forecasting"
+    },
+    {
+      "name": "youtube",
+      "status": "OK",
+      "detail": "youtube_scan.py 7/7 searches OK; 31 signals emitted (no new fresh uploads \u2014 all \u22652018\u20132025 videos rotating in rank); commentThreads read on 8 basket/visor videos: 1 non-owner WTB lead 2025-12-04 on oOQDjJcHok0 (center LCD rain cover, NOT left pad). YOUTUBE_API_KEY from .env",
+      "last_ok": "2026-10-05T09:15:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "facebook_manual",
+      "status": "OK",
+      "detail": "Weekly 2026-09-28 carry: Grant Read OK; 3 Joined readable; Aventure Owners approved as group 4. Weekly FB listen scheduled 9:57 today (separate routine may patch this row).",
+      "last_ok": "2026-09-28T17:11:00Z",
+      "consecutive_failures": 0,
+      "owner": "manual"
+    },
+    {
+      "name": "reddit",
+      "status": "SKIPPED",
+      "detail": "Retired \u2014 no Reddit API; do not scrape (Reddit results excluded from WebSearch)",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "context_dev",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 paid Context.dev abandoned 2026-09-22. All context_* SKIPPED. NEVER DOWN, never alert.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_rad_oem",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free OEM products.json used instead. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_amazon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free Amazon WebFetch used under amazon instead. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_ebr",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_ebr_report",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free Report feed used under electric_bike_report. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "amazon_reviews_rad",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned (Context-backed alias). Free Amazon attempt recorded under amazon. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "amazon_reviews_aventon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "google_reviews",
+      "status": "SKIPPED",
+      "detail": "user_skipped \u2014 not attempting Google reviews scrape this run.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "google_reviews_rad",
+      "status": "SKIPPED",
+      "detail": "user_skipped \u2014 not attempting Google reviews scrape this run.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "google_reviews_aventon",
+      "status": "SKIPPED",
+      "detail": "user_skipped \u2014 not attempting Google reviews scrape this run.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "oem_help_rad",
+      "status": "OK",
+      "detail": "curl OK https://www.radpowerbikes.com/pages/support (200); support.radpowerbikes.com product page confirms Small FMB Out of Stock. No new glare/visor/charge-port/phone-mount language mined today",
+      "last_ok": "2026-10-05T09:15:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "oem_help_aventon",
+      "status": "BLOCKED",
+      "detail": "HTTP 403 https://rideaventon.zendesk.com/hc/en-us \u2014 Cloudflare challenge (day 2; was OK 10-01). Secondary help center; did not scrape harder. Non-blocking for Path A. 5-day gate not reached.",
+      "last_ok": "2026-10-01T09:05:00-07:00",
+      "consecutive_failures": 2,
+      "owner": "forecasting"
+    },
+    {
+      "name": "rad_yotpo",
+      "status": "STALE",
+      "detail": "Store-wide POST filter.json OK (total 67,899 unchanged; newest still 2026-04-15 id 830222856); 0 fresher store-wide. Accessory re-pull via widget reviews.json per star 1/2/3 + plain paging, looped to empty page, merged by id (all merged = bottomline): LFMB 270 (1\u20133\u2605 53), SFMB 248 (43), cargo-net 199 (57), straps 256 (32), bottle cage 440 (153), Large Basket 1263 (264), Small Basket 918 (108), liners 144/141, front rack 1120, basket bag 265, GUB 1510, charge cover 1, RadRover rack 1523, RR passenger pkg 239. Newest accessory review 2025-12-03. Boss rule 2026-09-28 \u2192 STALE until fresher store-wide appears.",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 5,
+      "owner": "forecasting"
+    },
+    {
+      "name": "aventon_oem",
+      "status": "OK",
+      "detail": "products.json HTTP 200 pages 1+2 = 396 products (prior runs read page 1 only = 249). No front basket SKU; Front Rack Set (Aventure/Aventure 2/3, 33 lb) IN STOCK $97.99; Aventure Front Rack $66.99 (Black in stock); Front Bag $41.99; Cargo Net $14.99; K&H Pet Bike Basket $156.99; Rear Rack Basket Abound $150.99/$168.99; BiKASE liner $34.99. BC280 Display Cover (aventon-display-cover) IN STOCK $23.99 on page 2 \u2014 earlier 'absent/404' was page-1 coverage, not a true flip. Rear Rack Set Aventure 2 still OOS $49.99.",
+      "last_ok": "2026-10-05T09:15:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "printables",
+      "status": "BLOCKED",
+      "detail": "HTTP 403 on search; WebSearch snippets used (Front Rack for Rad 133237; RadRover 6+ Display Covers 995999). Non-blocking.",
+      "last_ok": null,
+      "consecutive_failures": 6,
+      "owner": "forecasting"
+    },
+    {
+      "name": "ebay",
+      "status": "BLOCKED",
+      "detail": "HTTP 403 on sold search; rear-rack aftermarket prices NEEDS DATA via eBay. Non-blocking.",
+      "last_ok": null,
+      "consecutive_failures": 6,
+      "owner": "forecasting"
+    }
+  ]
+}
