@@ -80,8 +80,8 @@
     {
       "name": "facebook_manual",
       "status": "OK",
-      "detail": "Weekly 2026-09-28 carry: Grant Read OK; 3 Joined readable; Aventure Owners approved as group 4. Weekly FB listen scheduled 9:57 today (separate routine may patch this row).",
-      "last_ok": "2026-09-28T17:11:00Z",
+      "detail": "Weekly 2026-10-05: Grant OK; 5 weekly groups + 1 monthly (All Brands due) readable; Troubleshooters PARTIAL (FB search ignores dates); themes Aventure-2 front basket capacity (later), Rad display/remote mount cracks (supports remote clamp DESIGN), rear rack cargo (off_back WATCH). No visor/clasp/charge-cap/new fender hits. alert_user=false.",
+      "last_ok": "2026-10-05T17:25:00Z",
       "consecutive_failures": 0,
       "owner": "manual"
     },
@@ -225,5 +225,7 @@
     }
   ],
   "weekly_ebr_patch": true,
-  "weekly_ebr_window": "weekly-ebr-2026-10-05"
+  "weekly_ebr_window": "weekly-ebr-2026-10-05",
+  "weekly_fb_patch": true,
+  "weekly_fb_window": "weekly-fb-2026-10-05"
 }
