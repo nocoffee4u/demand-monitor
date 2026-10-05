@@ -17,8 +17,9 @@ Weekday Rad hunt
   → teardowns for cards above WATCH → data/teardowns/YYYY-MM-DD.csv
   → invent candidates (OEM cargo OOS + buyer talk) → data/invent/invent_candidates_YYYY-MM-DD.csv
 
-Weekly EBR browser + Weekly FB listen
+Weekly EBR browser + Weekly FB listen (FB: 5 weekly groups + 1 monthly on first Monday. See facebook_groups.md)
   → data/themes/YYYY-MM-DD_{ebr|fb}.json
+  → FB: data/source_health/YYYY-MM-DD_fb_weekly.{csv,json} (per-group fb_<group id>) + patch facebook_manual in the weekday health
   → linked signal rows
 
 Pulse

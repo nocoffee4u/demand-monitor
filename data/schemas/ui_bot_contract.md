@@ -9,6 +9,7 @@ Sheet columns match `signal.schema.json` / `theme.schema.json` / `source_health.
 | Themes EBR | `data/themes/YYYY-MM-DD_ebr.csv` (+ optional `.json` digest) |
 | Themes FB | `data/themes/YYYY-MM-DD_fb.csv` (+ optional `.json` digest) |
 | Source Health | `data/source_health/YYYY-MM-DD_weekday.csv` (+ optional `.json`) |
+| Source Health FB weekly | `data/source_health/YYYY-MM-DD_fb_weekly.csv` (+ `.json`): one row per group, keyed `fb_<group id>` from 2026-10-05 (5 weekly + 1 monthly). See `facebook_groups.md` |
 | Opportunities | `data/opportunities/YYYY-MM-DD.csv` (+ jsonl OK) |
 | Alerts | `data/alerts/YYYY-MM-DD.json` (see `alert.schema.json`) |
 | Heat (interim) | `data/scored/heat_YYYY-MM-DD.csv` |

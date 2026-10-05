@@ -15,7 +15,8 @@
           "name": { "type": "string" },
           "status": {
             "type": "string",
-            "enum": ["OK", "STALE", "BLOCKED", "AUTH", "EMPTY_UNEXPECTED", "SKIPPED"]
+            "enum": ["OK", "STALE", "BLOCKED", "AUTH", "EMPTY_UNEXPECTED", "SKIPPED", "PARTIAL", "NOT_DUE"],
+            "description": "PARTIAL and NOT_DUE are used only in *_fb_weekly per-group rows (see facebook_groups.md)"
           },
           "detail": { "type": ["string", "null"] },
           "last_ok": {

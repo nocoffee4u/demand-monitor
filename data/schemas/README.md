@@ -34,3 +34,4 @@ Rider-first demand infrastructure. This folder is the **system of record for raw
 - `scored_product.columns.md`
 - `competitive_teardown.md` / `competitive_teardown.schema.json` (required above WATCH)
 - `invent_candidates.md` (OEM cargo OOS invent lane)
+- `facebook_groups.md` (FB listen registry: 5 weekly + 1 monthly groups, `fb_<group id>` keys)

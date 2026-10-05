@@ -17,7 +17,7 @@ Daily file: `data/alerts/YYYY-MM-DD.json` (schema: `alert.schema.json`).
 ## Important sources (always treat BLOCKED/AUTH/STALE seriously)
 
 - `ebr_weekly`
-- `facebook_manual` (3 groups)
+- `facebook_manual` (5 weekly groups + 1 monthly; per-group `fb_<group id>` rows in `*_fb_weekly`. See `facebook_groups.md`)
 - `oem_catalog`
 - `etsy`
 - `makerworld`
