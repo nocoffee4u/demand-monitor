@@ -202,7 +202,7 @@
     {
       "name": "aventon_oem",
       "status": "OK",
-      "detail": "products.json HTTP 200 pages 1+2 = 397 products (+1 new: Aventon E-Shifter $18.99). Flips vs 10-05: aventon-display-shim IN→OOS ($8.99), battery-cover-abound-sr OOS→IN ($18.99), jagwire shift cable IN→OOS; 0 Path A flips. Still no front basket SKU; Front Rack Set (Aventure/Aventure 2/3) IN STOCK $97.99; Aventure Front Rack $66.99; Front Bag $41.99 (handle aventon-front-rack-bag now titled Abound Handlebar Bag $43.99); K&H Pet basket $156.99; BC280 Display Cover $23.99 in stock; Rear Rack Set Aventure 2 still OOS $49.99.",
+      "detail": "products.json HTTP 200 pages 1+2 = 397 products (+1 new: Aventon E-Shifter $18.99). Flips vs 10-05: aventon-display-shim IN→OOS ($8.99), battery-cover-abound-sr OOS→IN ($18.99), jagwire shift cable IN→OOS; 0 Path A flips. Still no front basket SKU; Front Rack Set (Aventure/Aventure 2/3) IN STOCK $97.99; Aventure Front Rack $66.99; Front Bag $41.99; K&H Pet basket $156.99; BC280 Display Cover $23.99 in stock; Rear Rack Set Aventure 2 still OOS $49.99.",
       "last_ok": "2026-10-06T09:20:00-07:00",
       "consecutive_failures": 0,
       "owner": "forecasting"
