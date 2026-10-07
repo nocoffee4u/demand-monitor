@@ -64,7 +64,7 @@
     {
       "name": "x",
       "status": "SKIPPED",
-      "detail": "OFF by Boss rule — not used this run (no X data read or counted).",
+      "detail": "OFF by Boss rule — not used this run. One public x.com search URL was hit by the batch fetch script (app shell only, no timeline); discarded unread and not counted. Removed from future fetch lists.",
       "last_ok": null,
       "consecutive_failures": 0,
       "owner": "forecasting"
