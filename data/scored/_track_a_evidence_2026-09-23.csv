@@ -1,0 +1,8 @@
+product_key,wtb_count,diy_workaround_count,howto_install_count,oem_gap,oem_in_stock_substitute,etsy_count,makerworld_count,source_diversity,recency_boost,evidence_7d,run_id,ts
+SOMO-RAD-SUN-01,1,2,0,1,false,8,0,0.8,0.8,5,track-a-scoring-fix-2026-09-23,2026-09-23T22:45:00-07:00
+rad_display_phone_mount,0,0,5,0,true,0,0,0.6,0.7,0,track-a-scoring-fix-2026-09-23,2026-09-23T22:45:00-07:00
+rad_power_charging_port_dust_cap,0,0,0,0,true,1,0,0.4,0.5,0,track-a-scoring-fix-2026-09-23,2026-09-23T22:45:00-07:00
+aventon_front_basket,1,0,0,0,false,0,0,0.2,0.35,1,track-a-scoring-fix-2026-09-23,2026-09-23T22:45:00-07:00
+rad_large_front_mounted_basket,0,0,0,1,false,0,0,0.45,0.5,1,track-a-scoring-fix-2026-09-23,2026-09-23T22:45:00-07:00
+rad_radrunner_passenger_package,0,0,0,1,false,0,0,0.35,0.4,1,track-a-scoring-fix-2026-09-23,2026-09-23T22:45:00-07:00
+rad_radrover_rear_rack,0,0,0,1,false,0,0,0.35,0.4,1,track-a-scoring-fix-2026-09-23,2026-09-23T22:45:00-07:00
