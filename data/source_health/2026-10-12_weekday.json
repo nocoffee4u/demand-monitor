@@ -80,8 +80,8 @@
     {
       "name": "facebook_manual",
       "status": "OK",
-      "detail": "Weekly 2026-10-05 carry (weekly-fb-2026-10-05; next listen Mon 2026-10-12 ~9:57 AM PT — not yet available at this hunt). Grant OK; 5 weekly groups + 1 monthly readable; Troubleshooters PARTIAL (FB search ignores dates). Themes already folded 10-06 (Aventon basket 18→48 WATCH; clamp card opp-55f52c35). Not re-read today (weekly cadence; listen fires after this hunt); never scraped.",
-      "last_ok": "2026-10-05T17:25:00Z",
+      "detail": "Weekly 2026-10-12: Grant OK; 5 weekly groups readable; monthly All Brands NOT_DUE (day 12); Troubleshooters PARTIAL (FB search ignores dates); themes: Aventure spare-battery cargo securing (later), Aventure-2 front basket capacity CARRY (later), large basket/rack cargo off_back WATCH. No visor/clasp/charge-cap/new fender/PROTOTYPE; no NEW remote-clamp for opp-55f52c35. alert_user=false.",
+      "last_ok": "2026-10-12T18:00:00Z",
       "consecutive_failures": 0,
       "owner": "manual"
     },
@@ -225,5 +225,7 @@
     }
   ],
   "weekly_ebr_patch": true,
-  "weekly_ebr_window": "weekly-ebr-2026-10-12"
+  "weekly_ebr_window": "weekly-ebr-2026-10-12",
+  "weekly_fb_patch": true,
+  "weekly_fb_window": "weekly-fb-2026-10-12"
 }
