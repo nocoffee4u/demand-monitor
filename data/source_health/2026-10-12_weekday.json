@@ -14,7 +14,7 @@
     {
       "name": "ebr_forum",
       "status": "OK",
-      "detail": "Light weekday check: forums.electricbikereview.com Rad RSS (50) + Accessories RSS via /forum/accessories/index.rss (50) OK (old /forum/electric-bike-accessories/index.rss 404). Rad newest still 2026-07-30 (UL battery packs thread); Accessories newest still 2026-10-08 hardwired headlight (not Path A; 0 new vs 10-09). /search/search?keywords= x7 OK (rad basket / radrunner basket / rad cup holder / rad display glare (0 hits) / front basket rad out of stock / rad display mount / rad remote bracket). No new Path A posts.",
+      "detail": "Weekly EBR dig 2026-10-12: Rad board RSS forums.electricbikereview.com/forum/rad-power-bikes/index.rss OK (HTTP 200, Rad Power Bikes Forum, 50 items) + board listing OK — newest Rad activity still 2026-07-30 UL battery thread, nothing since 10-05. Accessories RSS OK (50): only new = 'Is There a Quality Hardwired E-bike Headlight?' (58473, last post 10-08; generic 12V light picks, no Rad, no printable mount ask). Baseline rechecks unchanged (condensation 56621 last 2025-02-14; Known Issues 13196 last 2026-06-09; phone-charge 57670 last 2025-04-26). NOTHING_NEW vs 2026-10-05_ebr. Old electricbikereview.com/forum/... RSS path still 404s — forums. subdomain is the working URL. Weekday light check same morning also ran /search/search x7 (rad basket, radrunner basket, rad cup holder, rad display glare, front basket rad out of stock, rad display mount, rad remote bracket) OK — no new Path A posts.",
       "last_ok": "2026-10-12T09:20:00-07:00",
       "consecutive_failures": 0,
       "owner": "forecasting",
@@ -23,7 +23,7 @@
     {
       "name": "electric_bike_report",
       "status": "OK",
-      "detail": "electricbikereport.com/feed OK (100 items); NEW vs 10-09: Cikada Urban Cruise Review 2026-10-12; NYC Class-3 bills / TWR Ep 104 2026-10-11; Heybike Titan Review 2026-10-09. 0 Rad Path A articles. Newest was 2026-09-30 GOTRAX on 10-09.",
+      "detail": "Weekly dig 2026-10-12: homepage + feed OK (100 items); new since 10-05 = Heybike Titan review (10-09), TWR Ep 104 (10-11), Cikada Urban Cruise review (10-12); 0 Rad mentions; TWR 104 only Aventon Current EXP battery / Level 4 REC throttle Q&A (no accessory gap). NOTHING_NEW vs 2026-10-05_ebr.",
       "last_ok": "2026-10-12T09:20:00-07:00",
       "consecutive_failures": 0,
       "owner": "forecasting",
@@ -120,20 +120,20 @@
     {
       "name": "context_ebr",
       "status": "SKIPPED",
-      "detail": "context_paid_abandoned — weekly check 2026-10-05: mon_d85e4369a4604aea8e44ec654f9c4f56 status=paused, last_run 2026-09-22. Free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
+      "detail": "context_paid_abandoned — weekly 2026-10-12: mon_d85e4369 paused since 2026-09-22 (not called). Free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
       "last_ok": null,
       "consecutive_failures": 0,
       "owner": "context",
-      "ts": "2026-10-05T09:20:00-07:00"
+      "ts": "2026-10-12T09:20:00-07:00"
     },
     {
       "name": "context_ebr_report",
       "status": "SKIPPED",
-      "detail": "context_paid_abandoned — weekly check 2026-10-05: mon_d44aec3d8cf7487990619d666df879ae status=paused, last_run 2026-09-22. Free Report feed used under electric_bike_report. NEVER NOTHING_NEW.",
+      "detail": "context_paid_abandoned — weekly 2026-10-12: mon_d44aec3d paused since 2026-09-22 (not called). Free Report feed used under electric_bike_report. NEVER NOTHING_NEW.",
       "last_ok": null,
       "consecutive_failures": 0,
       "owner": "context",
-      "ts": "2026-10-05T09:20:00-07:00"
+      "ts": "2026-10-12T09:20:00-07:00"
     },
     {
       "name": "amazon_reviews_rad",
@@ -223,5 +223,7 @@
       "consecutive_failures": 10,
       "owner": "forecasting"
     }
-  ]
+  ],
+  "weekly_ebr_patch": true,
+  "weekly_ebr_window": "weekly-ebr-2026-10-12"
 }
