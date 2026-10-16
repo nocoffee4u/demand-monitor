@@ -1,0 +1,15 @@
+ts,run_id,alert_user,name,status,detail
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,rad_oem,OK,"Evening products.json HTTP 200; accessories 66 + spare-parts 65 = 131 unique (was 134 Sep 15); OOS unchanged: Large Front-Mounted Basket, RadRunner Passenger Package, RadRover Rear Rack, RadWagon Deckpad; no NEW OOS / no core back-in-stock"
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,ebr_forum,OK,Carried from morning weekday-2026-09-18 (not re-scraped evening); Context mon_d85e4369 last run 2026-09-18T09:07Z no change
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,electric_bike_report,OK,Context mon_d44aec3d scheduled run 2026-09-18T17:44Z completed no change; last_change_at null
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,amazon,OK,Context mon_7cfac79a CHANGE at 2026-09-19T01:48Z (Jerbor rotors/headlight/kickstand + 2-pin headlight; SERP churn); direct scrape not repeated evening
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,etsy,BLOCKED,Carried from morning — DataDome/403; not retested evening
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,makerworld,OK,Carried from morning weekday-2026-09-18; not retested evening
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,x,BLOCKED,Carried from morning — login/error shell; not retested evening
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,youtube,SKIPPED,Carried from morning — not used evening
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,context_rad_oem,OK,Primary mon_af59846a active; last_change_at null; last scheduled run 2026-09-18T07:30Z no change. DUPLICATE mon_35d2435d still active + NEW change 2026-09-19T02:24Z Back Order→Add to Cart (SKU unnamed; products.json core-4 still OOS) — do not delete duplicate / do not double-count
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,context_ebr,OK,mon_d85e4369 active; last run 2026-09-18T09:07Z no change; last_change_at null
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,context_amazon,OK,mon_7cfac79a active; NEW change chg_f46a5efb at 2026-09-19T01:48Z (high/0.98); next_run ~2026-09-20T01:47Z
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,context_ebr_report,OK,mon_d44aec3d active; scheduled run 2026-09-18T17:44Z no change; last_change_at null
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,facebook_manual,SKIPPED,No Facebook tonight (evening catch-up rule)
+2026-09-19T05:24:00Z,evening-2026-09-18,TRUE,reddit,SKIPPED,Retired — do not scrape

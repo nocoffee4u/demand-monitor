@@ -1,0 +1,11 @@
+{
+  "id": "theme-ebr-2026-09-21",
+  "ts": "2026-09-21T16:35:00Z",
+  "window": "weekly-ebr-2026-09-21",
+  "sources_readable": ["ebr_forum", "electricbikereport"],
+  "sources_failed": [],
+  "nothing_new": true,
+  "compared_to": "2026-09-17_ebr",
+  "notes": "Anonymous read OK. Rad board RSS + accessories RSS + baseline SUN-01/clasp/charge_cap/off_back threads rechecked. No new material accessory pain for SUN-01/clasp/charge_cap/fender since Sep 17. Battery-pack/recall/Infinite-mount threads present but liability (not launch). Context EBR monitors mon_d85e4369 and mon_d44aec3d: 0 changes since Sep 17.",
+  "themes": []
+}

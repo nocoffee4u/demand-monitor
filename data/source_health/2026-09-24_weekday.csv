@@ -1,0 +1,21 @@
+ts,run_id,alert_user,name,status,detail,last_ok,consecutive_failures,owner
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,rad_oem,OK,products.json HTTP 200; accessories 66 + spare-parts 65 = 131 unique; core OOS unchanged; no sun-cover SKU; Charge Port Cover IN STOCK; GUB PRO-3 IN STOCK; flips vs weekday-2026-09-23=0,2026-09-24T09:05:00-07:00,0,forecasting
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,ebr_forum,OK,Rad board RSS OK forums.electricbikereview.com; light weekday no new Path A accessory pain; battery/recall liability-only,2026-09-24T09:05:00-07:00,0,forecasting
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,electric_bike_report,OK,feed OK; newest still 2026-09-22 Euphree City Robin Review; no new Rad Path A accessory,2026-09-24T09:05:00-07:00,0,forecasting
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,amazon,OK,WebFetch OK on Rad accessories SERP (no bm-verify). Display-cover 1–3★ filter hit bm-verify interstitial — no review text. Overall OK; BLOCKED streak=0 (prior weekday OK).,2026-09-24T09:05:00-07:00,0,forecasting
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,etsy,OK,"openapi.etsy.com v3 OK; display cover count=8, phone mount count=0, charge port cover count=1",2026-09-24T09:05:00-07:00,0,forecasting
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,makerworld,OK,HTTP search 200; Rad-specific display-cover ~0; phone-mount generic; approximate competition only,2026-09-24T09:05:00-07:00,0,forecasting
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,x,BLOCKED,Public X expected BLOCKED; no unofficial scrape. Non-blocking.,,4,forecasting
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,youtube,OK,youtube_scan.py 7/7 searches OK; 32 signals emitted; YOUTUBE_API_KEY from .env,2026-09-24T09:05:00-07:00,0,forecasting
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,facebook_manual,OK,Weekday not due — OK-from-prior weekly 2026-09-21: 3 Joined groups; Aventon front-basket WATCH carry only. No FB scrape today.,2026-09-21T17:35:00Z,0,manual
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,reddit,SKIPPED,Retired — no Reddit API; do not scrape,,0,forecasting
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,context_rad_oem,SKIPPED,context_paid_abandoned — Grant/Boss lock; free OEM products.json used instead. NEVER NOTHING_NEW.,,0,context
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,context_amazon,SKIPPED,context_paid_abandoned — free Amazon WebFetch used under amazon instead. NEVER NOTHING_NEW.,,0,context
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,context_ebr,SKIPPED,context_paid_abandoned — free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.,,0,context
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,context_ebr_report,SKIPPED,context_paid_abandoned — free Electric Bike Report feed used instead. NEVER NOTHING_NEW.,,0,context
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,amazon_reviews_rad,SKIPPED,context_paid_abandoned (Context-backed alias). Free Amazon attempt recorded under amazon. NEVER NOTHING_NEW.,,0,context
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,amazon_reviews_aventon,SKIPPED,context_paid_abandoned — NEVER NOTHING_NEW.,,0,context
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,google_reviews_rad,SKIPPED,context_paid_abandoned — NEVER NOTHING_NEW.,,0,context
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,google_reviews_aventon,SKIPPED,context_paid_abandoned — NEVER NOTHING_NEW.,,0,context
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,oem_help_rad,OK,WebFetch OK https://www.radpowerbikes.com/pages/support — contact hours only; no glare/visor/charge-port/phone-mount language on landing page,2026-09-24T09:05:00-07:00,0,forecasting
+2026-09-24T09:05:00-07:00,weekday-2026-09-24,false,oem_help_aventon,OK,RECOVERED: WebFetch/curl HTTP 200 on https://rideaventon.zendesk.com/hc/en-us — no Cloudflare challenge (was BLOCKED consecutive_failures=1 on 09-23). Landing is thin JS shell; no accessory article bodies. consecutive_failures reset to 0.,2026-09-24T09:05:00-07:00,0,forecasting

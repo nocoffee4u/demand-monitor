@@ -1,0 +1,17 @@
+{
+  "id": "theme-ebr-2026-09-28",
+  "ts": "2026-09-28T16:35:00Z",
+  "window": "weekly-ebr-2026-09-28",
+  "sources_readable": ["ebr_forum", "electricbikereport"],
+  "sources_failed": [],
+  "nothing_new": true,
+  "compared_to": "2026-09-21_ebr",
+  "notes": "Anonymous free-stack OK. Rad board RSS https://forums.electricbikereview.com/forum/rad-power-bikes/index.rss (title Rad Power Bikes Forum) + accessories RSS /forum/accessories/index.rss + Electric Bike Report homepage/feed. Baseline Path A rechecks: condensation/display thread 56621 last posts Feb 2025 (no new since Sep 21); no new clasp/phone-mount, charge_cap, fender, or off_back rear-rack pain posts on Rad board since prior digest. Top Rad activity remains liability-only (UL replacement packs, CPSC recall, Infinite Battery mount, funding/crowdfunding). Accessories board recent = generic battery/radar/headlight/drivetrain — not new Rad Path A printable themes. Report TWR Ep 99 Rad Life Mobility crowdfunding = funding liability note only; Ep 102 no Path A accessory. Context mon_d85e4369 / mon_d44aec3d (full IDs paused): list-monitor-changes NOT_FOUND / monitors paused — SKIPPED, free RSS primary. NEVER equate Context SKIPPED with NOTHING_NEW for free sources — free sources readable; nothing_new is vs prior accessory themes only.",
+  "themes": [],
+  "liability_notes_not_themes": [
+    "UL certified replacement battery packs (Zen Energy) — battery liability",
+    "CPSC battery recall thread — liability",
+    "Infinite Battery mount tutorial — battery/mount liability",
+    "Rad January funding / Rad Life Mobility crowdfunding (Report TWR Ep 99) — funding chatter"
+  ]
+}
