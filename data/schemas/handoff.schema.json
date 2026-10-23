@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DemandMonitorHandoff",
+  "description": "Pulse → Forecasting / Design / Shopify handoff. draft_only MUST always be true (never publish).",
+  "type": "object",
+  "required": [
+    "type",
+    "ts",
+    "run_id",
+    "opportunity_id",
+    "product_key",
+    "brand",
+    "pain",
+    "summary",
+    "evidence_count",
+    "sources",
+    "confidence",
+    "action",
+    "requested_by",
+    "draft_only"
+  ],
+  "properties": {
+    "type": { "const": "demand_monitor_handoff" },
+    "ts": { "type": "string", "format": "date-time" },
+    "run_id": { "type": "string" },
+    "opportunity_id": { "type": "string" },
+    "product_key": { "type": "string" },
+    "brand": { "type": "string", "enum": ["rad", "aventon", "generic"] },
+    "pain": { "type": "string" },
+    "summary": { "type": "string" },
+    "evidence_count": { "type": "integer", "minimum": 0 },
+    "sources": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "medium-high"]
+    },
+    "action": {
+      "type": "string",
+      "enum": ["KEEP_HUNTING", "DESIGN_BRIEF", "SHOPIFY_DRAFT"],
+      "description": "KEEP_HUNTING = Forecasting deepens listen; DESIGN_BRIEF/SHOPIFY_DRAFT = draft only never publish"
+    },
+    "requested_by": { "const": "demand_monitor_ui" },
+    "draft_only": {
+      "const": true,
+      "description": "Must always be true"
+    }
+  },
+  "additionalProperties": false
+}

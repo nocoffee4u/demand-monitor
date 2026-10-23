@@ -1,0 +1,51 @@
+{
+  "id": "theme-fb-2026-10-12",
+  "ts": "2026-10-12T18:00:00Z",
+  "window": "weekly-fb-2026-10-12",
+  "sources_readable": [
+    "fb_1654952334789041",
+    "fb_629167654165317",
+    "fb_860508022428626",
+    "fb_333458264803610",
+    "fb_2677348212546303"
+  ],
+  "sources_failed": [],
+  "nothing_new": false,
+  "compared_to": "2026-10-05_fb",
+  "notes": "Personal Meta as Grant OK; no AUTH/checkpoint. 5 weekly groups readable; monthly eBikes All Brands NOT_DUE (day 12, outside first-Monday 1–7). Troubleshooters PARTIAL (keyword pass; FB search ignores date order / loose match). No display visor/glare, phone clasp, charge-port cap, or clear new fender-fit hits (Jeff Crocker A2 fender vibration mostly blamed on brake rotors; HappyRun Mini fender scam is Sep 25 carry). No NEW UI Remote/display clamp in-window for opp-55f52c35 (Boss LOCK stays KEEP_HUNTING). Aventure spare-battery cargo is strongest NEW theme (cargo angle only). alert_user=false.",
+  "themes": [
+    {
+      "label": "Aventure spare-battery / rear-rack cargo securing",
+      "tag": "Aventon",
+      "gist": "Aventure Owners first-party (NEW): Patrick O'Reilly (Oct 5, 14/74) asks for a safe secure way to carry a spare battery; replies include PVC fence-post box, backpack on knee pad, BiKASE bag on front basket, fireproof bag on rear rack, Topeak/Omnitrack (MIK/Topeak called expensive). CJ Jenista (6d) shares a rear-rack bag with battery pocket. Cargo/organizer angle only — battery shells stay off-limits. Later Aventure-2 candidate, never ahead of Rad launch three (SUN-01 / clasp / charge-port cap).",
+      "url": "https://www.facebook.com/groups/aventureowners/posts/1665830051566418/",
+      "relevance": "later_candidate",
+      "signal_ids": [
+        "sig-fb-aventure-spare-battery-cargo-2026-10-12",
+        "sig-fb-aventure-rear-battery-pocket-bag-2026-10-12"
+      ]
+    },
+    {
+      "label": "Bigger/deeper front basket capacity for Aventure 2 (carry)",
+      "tag": "Aventon",
+      "gist": "CARRY vs 2026-10-05: no new 7-day Aventure-2 front-basket WTB. Larry Guevara Sep 30 bigger/deeper basket thread still live (Robert Lyman: ordered then bike stolen). Kevin Mlagan Sep 25 25 lb front basket resurfaces in Aventure Owners search. Supports Aventon basket WATCH opp-40996e5a. Later candidate only.",
+      "url": "https://www.facebook.com/groups/860508022428626/posts/1543070910838997/",
+      "relevance": "later_candidate",
+      "signal_ids": [
+        "sig-fb-aventure2-bigger-front-basket-carry-2026-10-12",
+        "sig-fb-aventure-front-basket-25lb-carry-2026-10-12"
+      ]
+    },
+    {
+      "label": "Large basket / pet carrier WTB and rack cargo (config-only WATCH)",
+      "tag": "Rad|Aventon",
+      "gist": "Rad Upgrades: Redentor Panganiban (~Sep 15) WTB used Rad large basket + pet carrier (Vancouver); Lorna Chase offers both. Aventon Bikes: rear-rack-with-kid-seat failure and front-rack steering carry threads still present; no new PROTOTYPE ask. Config-only off-back WATCH supporting evidence — no CAD escalate.",
+      "url": "https://www.facebook.com/groups/629167654165317/posts/2729843974097664/",
+      "relevance": "off_back",
+      "signal_ids": [
+        "sig-fb-rad-large-basket-pet-carrier-wtb-2026-10-12",
+        "sig-fb-aventure-rear-rack-kid-seat-carry-2026-10-12"
+      ]
+    }
+  ]
+}

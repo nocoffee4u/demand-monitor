@@ -1,0 +1,238 @@
+{
+  "ts": "2026-09-25T09:10:00-07:00",
+  "run_id": "weekday-2026-09-25",
+  "amazon_blocked_streak": 0,
+  "sources": [
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "rad_oem",
+      "status": "OK",
+      "detail": "products.json HTTP 200; accessories 66 + spare-parts 65 = 131 unique; core OOS unchanged; no sun-cover SKU; Charge Port Cover IN STOCK; GUB PRO-3 IN STOCK; flips vs weekday-2026-09-24=0",
+      "last_ok": "2026-09-25T09:10:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "true",
+      "name": "ebr_forum",
+      "status": "OK",
+      "detail": "OK after URL migration: /forum/rad-power-bikes/index.rss returns Rad Power Bikes Forum (50 items). Legacy /forums/rad-power-bikes.90/index.rss now misroutes to Tern Forum \u2014 updated hunt path. Light weekday: battery/recall/funding only, no new Path A accessory pain. alert_user=true once for URL migration (important source path change, recovered).",
+      "last_ok": "2026-09-25T09:10:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "electric_bike_report",
+      "status": "OK",
+      "detail": "feed OK; newest still 2026-09-22 Euphree City Robin Review; no new Rad Path A accessory",
+      "last_ok": "2026-09-25T09:10:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "amazon",
+      "status": "OK",
+      "detail": "curl SERP bm-verify BLOCKED; WebFetch SERP OK (Rad accessories shelf + Line and Ride liner). Display-cover 1\u20133\u2605 SERP thin. Overall OK; BLOCKED streak=0 (prior weekday OK).",
+      "last_ok": "2026-09-25T09:10:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "etsy",
+      "status": "OK",
+      "detail": "openapi.etsy.com v3 OK; display cover=8, phone mount=0, charge port=1, rad basket cup=0, ebike cup=14",
+      "last_ok": "2026-09-25T09:10:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "makerworld",
+      "status": "OK",
+      "detail": "HTTP search 200; Rad-specific display-cover ~0; basket cup/organizer universal only; approximate competition",
+      "last_ok": "2026-09-25T09:10:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "x",
+      "status": "BLOCKED",
+      "detail": "Public X expected BLOCKED; no unofficial scrape. Non-blocking.",
+      "last_ok": "",
+      "consecutive_failures": 5,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "youtube",
+      "status": "OK",
+      "detail": "youtube_scan.py searches OK; 31 signals emitted; YOUTUBE_API_KEY from .env",
+      "last_ok": "2026-09-25T09:10:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "facebook_manual",
+      "status": "OK",
+      "detail": "Weekday not due \u2014 OK-from-prior weekly 2026-09-21: 3 Joined groups; Aventon front-basket WATCH carry only. No FB scrape today.",
+      "last_ok": "2026-09-21T17:35:00Z",
+      "consecutive_failures": 0,
+      "owner": "manual"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "reddit",
+      "status": "SKIPPED",
+      "detail": "Retired \u2014 no Reddit API; do not scrape",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "context_rad_oem",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 monitors paused; free OEM products.json used instead. NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "context_amazon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free Amazon WebFetch used under amazon instead. NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "context_ebr",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "context_ebr_report",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 free Electric Bike Report feed used instead. NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "amazon_reviews_rad",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned (Context-backed alias). Free Amazon attempt recorded under amazon. NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "amazon_reviews_aventon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "google_reviews_rad",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "google_reviews_aventon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned \u2014 NEVER NOTHING_NEW.",
+      "last_ok": "",
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "oem_help_rad",
+      "status": "OK",
+      "detail": "curl/WebFetch OK https://www.radpowerbikes.com/pages/support \u2014 support landing; no new glare/visor/charge-port/phone-mount language mined today",
+      "last_ok": "2026-09-25T09:10:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "oem_help_aventon",
+      "status": "OK",
+      "detail": "HTTP 200 https://rideaventon.zendesk.com/hc/en-us \u2014 no Cloudflare challenge. Landing thin; no accessory article bodies. consecutive_failures=0.",
+      "last_ok": "2026-09-25T09:10:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "ts": "2026-09-25T09:10:00-07:00",
+      "run_id": "weekday-2026-09-25",
+      "alert_user": "false",
+      "name": "rad_yotpo",
+      "status": "OK",
+      "detail": "Yotpo widget + store-wide filter.json OK; accessory 1\u20133\u2605 pulls OK for FMB/basket/net/straps/bottle",
+      "last_ok": "2026-09-25T09:10:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    }
+  ]
+}
