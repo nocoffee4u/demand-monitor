@@ -80,8 +80,8 @@
     {
       "name": "facebook_manual",
       "status": "OK",
-      "detail": "Weekly 2026-10-19 carry (weekly-fb-2026-10-19, late-landed commit 84feb93 on 10-23; not re-read today — weekly cadence, never scraped by weekday). Grant personal Meta OK; 5 weekly groups + 1 monthly (All Brands NOT_DUE); Troubleshooters PARTIAL (FB search ignores dates); themes: Aventure spare-battery/rack cargo securing CARRY with new activity (later), Aventure-2 fender vibration WATCH (adjustment fix, no part ask), generic mounts/bags/storage weak. No visor/clasp/charge-cap/Rad fender/PROTOTYPE; no NEW remote-clamp for opp-55f52c35. Weekday signals now carry its 6 sig-fb-*-2026-10-19 rows (replacing the 10-12 rows). STALE (day 4 on 10-23) cleared by the late land. Weekly FB 2026-10-26 is due today and had not landed at weekday commit time. Not an important source → no user alert.",
-      "last_ok": "2026-10-19T18:00:00Z",
+      "detail": "Weekly 2026-10-26 read (weekly-fb-2026-10-26). Grant personal Meta OK; 5 weekly groups + 1 monthly (All Brands NOT_DUE, day 26); Aventure Owners PARTIAL (~3 of 7 days, Oct 19-22 not reached); themes: Aventon rack/basket fit asks (watch), RAD Expand kickstand fat-tire fit gap (weak, structural), cold-weather battery cover + thumb-throttle trigger (log only); none flagged. No visor/clasp/charge-cap/Rad fender/PROTOTYPE; no new remote-clamp evidence for opp-55f52c35. Weekday signals now also carry the 6 sig-fb-*-2026-10-26 rows. Not an important source → no user alert.",
+      "last_ok": "2026-10-26T17:20:00Z",
       "consecutive_failures": 0,
       "owner": "manual"
     },
@@ -225,5 +225,7 @@
     }
   ],
   "weekly_ebr_patch": true,
-  "weekly_ebr_window": "weekly-ebr-2026-10-26"
+  "weekly_ebr_window": "weekly-ebr-2026-10-26",
+  "weekly_fb_patch": true,
+  "weekly_fb_window": "weekly-fb-2026-10-26"
 }
