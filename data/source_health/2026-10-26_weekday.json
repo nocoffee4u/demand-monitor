@@ -14,20 +14,20 @@
     {
       "name": "ebr_forum",
       "status": "OK",
-      "detail": "Light weekday check: forums.electricbikereview.com Rad RSS (50) + Accessories RSS (50) OK; 0 new threads on either vs 10-23 (Rad newest still 2026-07-30). /search/search?keywords= x7 OK, 0 new thread ids (rad basket / radrunner basket / rad cup holder / rad display glare (0 hits) / front basket rad out of stock / rad display mount / rad remote bracket). No new Path A posts. (Weekly EBR dig 2026-10-26 had not landed on the branch at weekday commit time.)",
-      "last_ok": "2026-10-26T09:30:00-07:00",
+      "detail": "Weekly EBR dig 2026-10-26: Rad board RSS forums.electricbikereview.com/forum/rad-power-bikes/index.rss OK (HTTP 200, Rad Power Bikes Forum, 50 items) + board listing OK - newest Rad activity still 2026-07-30 UL battery thread, nothing since 10-19. Accessories RSS OK (50) + board listing: only new activity = 'Camera for EMTB recommendation?' (59473, posts 10-21..10-23; generic GoPro/DJI action-cam picks, no Rad, no printable mount ask). Lock 59274 unchanged (last 10-15); headlight 58473 unchanged (last 10-08). Baseline rechecks unchanged (condensation 56621 last 2025-02-14; Known Issues 13196 last 2026-06-09; phone-charge 57670 last 2025-04-26). NOTHING_NEW vs 2026-10-19_ebr. Old electricbikereview.com/forum/... RSS path still 404s - forums. subdomain is the working URL.",
+      "last_ok": "2026-10-26T09:08:00-07:00",
       "consecutive_failures": 0,
       "owner": "forecasting",
-      "ts": "2026-10-26T09:30:00-07:00"
+      "ts": "2026-10-26T09:08:00-07:00"
     },
     {
       "name": "electric_bike_report",
       "status": "OK",
-      "detail": "electricbikereport.com/feed OK (100 items); 1 new vs 10-23: 'Scott Launches the Full-Suspension E-Ville, Priority's Single-Speed E-Sauce, Novbyx's Weld-Free Kickstarter E-Bike | TWR Ep 106' (2026-10-25 11:29 MST; weekly news roundup, not Rad). 0 Rad Path A articles.",
-      "last_ok": "2026-10-26T09:30:00-07:00",
+      "detail": "Weekly dig 2026-10-26: homepage + feed OK (100 items); new since 10-19 = Retrospec Valen Rev 14 kids mini e-moped review (10-22), The Weekly Recharge Ep 106 (10-25; Scott E-Ville, Priority E-Sauce, Novbyx); 0 Rad mentions in article bodies (nav menu only); no accessory gap. NOTHING_NEW vs 2026-10-19_ebr.",
+      "last_ok": "2026-10-26T09:08:00-07:00",
       "consecutive_failures": 0,
       "owner": "forecasting",
-      "ts": "2026-10-26T09:30:00-07:00"
+      "ts": "2026-10-26T09:08:00-07:00"
     },
     {
       "name": "amazon",
@@ -120,20 +120,20 @@
     {
       "name": "context_ebr",
       "status": "SKIPPED",
-      "detail": "context_paid_abandoned - weekly 2026-10-19: mon_d85e4369 paused since 2026-09-22 (not called). Free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
+      "detail": "context_paid_abandoned - weekly 2026-10-26: mon_d85e4369 paused since 2026-09-22 (not called). Free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
       "last_ok": null,
       "consecutive_failures": 0,
       "owner": "context",
-      "ts": "2026-10-19T09:36:00-07:00"
+      "ts": "2026-10-26T09:08:00-07:00"
     },
     {
       "name": "context_ebr_report",
       "status": "SKIPPED",
-      "detail": "context_paid_abandoned - weekly 2026-10-19: mon_d44aec3d paused since 2026-09-22 (not called). Free Report feed used under electric_bike_report. NEVER NOTHING_NEW.",
+      "detail": "context_paid_abandoned - weekly 2026-10-26: mon_d44aec3d paused since 2026-09-22 (not called). Free Report feed used under electric_bike_report. NEVER NOTHING_NEW.",
       "last_ok": null,
       "consecutive_failures": 0,
       "owner": "context",
-      "ts": "2026-10-19T09:36:00-07:00"
+      "ts": "2026-10-26T09:08:00-07:00"
     },
     {
       "name": "amazon_reviews_rad",
@@ -223,5 +223,7 @@
       "consecutive_failures": 20,
       "owner": "forecasting"
     }
-  ]
+  ],
+  "weekly_ebr_patch": true,
+  "weekly_ebr_window": "weekly-ebr-2026-10-26"
 }
