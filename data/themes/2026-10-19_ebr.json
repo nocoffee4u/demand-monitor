@@ -1,0 +1,20 @@
+{
+  "id": "theme-ebr-2026-10-19",
+  "ts": "2026-10-19T16:36:00Z",
+  "window": "weekly-ebr-2026-10-19",
+  "sources_readable": [
+    "ebr_forum",
+    "electricbikereport"
+  ],
+  "sources_failed": [],
+  "nothing_new": true,
+  "compared_to": "2026-10-12_ebr",
+  "notes": "Anonymous free-stack OK. Rad board RSS https://forums.electricbikereview.com/forum/rad-power-bikes/index.rss (HTTP 200, Rad Power Bikes Forum, 50 items) + board listing HTML OK: newest Rad activity still 2026-07-30 (UL replacement battery packs thread); no Rad thread activity since 2026-10-12. Old electricbikereview.com/forum/rad-power-bikes/index.rss still 404s; forums. subdomain is the working URL. Accessories RSS /forum/accessories/index.rss (HTTP 200, 50 items) + board listing: only new activity since 10-12 = 'Lock Recommendations?' (59274, posts 2026-10-14 and 10-15) - generic lock talk (Kryptonite Evolution Long Shackle U-lock + New York Cinch Ring, sling/cable locks, no racks in rural areas), no Rad, no printable lock-holder/mount ask - no Rad Path A printable theme. Headlight 58473 unchanged since 10-08. Baseline rechecks unchanged: condensation/display 56621 last post 2025-02-14; Known Issues 13196 last 2026-06-09; Phone won't charge 57670 last 2025-04-26 - no new visor, clasp/phone-mount, charge_cap, fender, basket or off_back posts. Electric Bike Report homepage + feed OK (100 items): new since 10-12 = Lectric XPress Lite review (2026-10-13), Addmotor Freetan M-368X eTrike review (2026-10-14), Magnum Pathfinder 2.0 review (2026-10-15); 0 Rad mentions in article bodies (site nav only). Context mon_d85e4369 / mon_d44aec3d: context_paid_abandoned (paused since 2026-09-22) - SKIPPED; free RSS/feed is primary. nothing_new is vs prior accessory themes only, not a dark-source claim.",
+  "themes": [],
+  "liability_notes_not_themes": [
+    "UL certified replacement battery packs (delivery early Oct 2026) - battery liability",
+    "CPSC battery recall thread - liability",
+    "Infinite Battery mount tutorial - battery/mount liability",
+    "Rad January funding / Rad Life Mobility crowdfunding - funding chatter"
+  ]
+}

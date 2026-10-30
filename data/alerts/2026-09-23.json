@@ -1,0 +1,54 @@
+{
+  "run_id": "weekday-2026-09-23",
+  "ts": "2026-09-23T09:30:00-07:00",
+  "alerts": [
+    {
+      "alert_user": true,
+      "severity": "info",
+      "kind": "source_blocked",
+      "names": [
+        "oem_help_aventon"
+      ],
+      "detail": "Aventon Zendesk help WebFetch BLOCKED by Cloudflare bot check. Free-stack otherwise healthy (OEM/EBR/Report/Etsy/MW/YT/Amazon OK). Context abandoned recorded as SKIPPED not NOTHING_NEW.",
+      "opportunity_ids": [
+        "opp-40996e5a"
+      ]
+    },
+    {
+      "alert_user": false,
+      "severity": "info",
+      "kind": "other",
+      "names": [
+        "rad_oem"
+      ],
+      "detail": "Live Rad OEM paginated 2026-09-23 PT: accessories 66 + spare-parts 65 = 131. Charge Port Cover IN STOCK; GUB PRO-3 IN STOCK; no sun-cover/visor SKU. Core OOS: large-front-mounted-basket, radrunner-passenger-package, radrover-rear-rack, radwagon-deckpad, radexpand-replacement-tire. Flips vs freestack night: 0.",
+      "opportunity_ids": [
+        "opp-a7bf736b",
+        "opp-c06fe8eb",
+        "opp-c79d9c4e"
+      ]
+    },
+    {
+      "alert_user": false,
+      "severity": "info",
+      "kind": "other",
+      "names": [
+        "amazon"
+      ],
+      "detail": "Amazon free WebFetch recovered OK today (prior freestack night was BLOCKED). No 1\u20133\u2605 display-cover review text available (empty filter). Not elevated as failure.",
+      "opportunity_ids": [
+        "opp-a7bf736b"
+      ]
+    },
+    {
+      "alert_user": false,
+      "severity": "info",
+      "kind": "other",
+      "names": [
+        "context_dev"
+      ],
+      "detail": "All context_* and Context-backed review aliases SKIPPED reason=context_paid_abandoned per Grant/Boss 2026-09-22 lock. No Context API polls.",
+      "opportunity_ids": []
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "ts": "2026-09-25T09:10:00-07:00",
+  "run_id": "weekday-2026-09-25",
+  "alert_user": true,
+  "reason": "ebr_forum_url_migration",
+  "summary": "EBR Rad Power forum RSS path changed: legacy /forums/rad-power-bikes.90/index.rss now serves Tern Forum. New OK path: https://forums.electricbikereview.com/forum/rad-power-bikes/index.rss. Hunt adapted; no Path A accessory loss beyond URL fix.",
+  "sources": [
+    "ebr_forum"
+  ],
+  "amazon_blocked_streak": 0
+}

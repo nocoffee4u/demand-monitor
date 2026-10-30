@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DemandSignal",
+  "type": "object",
+  "required": ["id", "ts", "source", "role", "kind", "summary"],
+  "properties": {
+    "id": { "type": "string", "description": "Stable unique id (uuid or source:hash)" },
+    "ts": { "type": "string", "format": "date-time", "description": "ISO-8601 UTC when observed" },
+    "source": {
+      "type": "string",
+      "description": "facebook_rpboc/upgrades/aventon are legacy keys through 2026-09-28. From 2026-10-05 FB signals use fb_<numeric group id> (see facebook_groups.md)",
+      "enum": ["rad_oem", "ebr_forum", "electric_bike_report", "amazon", "facebook_manual", "facebook_rpboc", "facebook_upgrades", "facebook_aventon", "fb_1654952334789041", "fb_629167654165317", "fb_860508022428626", "fb_333458264803610", "fb_2677348212546303", "fb_746195242754268", "etsy", "makerworld", "x", "youtube", "context_dev", "other"]
+    },
+    "role": { "type": "string", "enum": ["demand", "competition", "health"] },
+    "kind": {
+      "type": "string",
+      "enum": ["wish", "complaint", "oos", "review", "listing_change", "monitor_change", "theme", "other"]
+    },
+    "url": { "type": ["string", "null"] },
+    "product_key": { "type": ["string", "null"], "description": "Optional link to products.yaml / sheet key" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "summary": { "type": "string" },
+    "quote": { "type": ["string", "null"] },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Only real observed metrics (counts, OOS bool). Never invent."
+    },
+    "raw_ref": { "type": ["string", "null"], "description": "Path or Context.dev run/change id" }
+  }
+}

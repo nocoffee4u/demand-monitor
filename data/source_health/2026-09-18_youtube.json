@@ -1,0 +1,12 @@
+{
+  "ts": "2026-09-19T06:26:21.240556Z",
+  "run_id": "youtube-oneoff-2026-09-18",
+  "alert_user": false,
+  "sources": [
+    {
+      "name": "youtube",
+      "status": "OK",
+      "detail": "Data API 7 searches tightened keywords; 31 signals emitted."
+    }
+  ]
+}
