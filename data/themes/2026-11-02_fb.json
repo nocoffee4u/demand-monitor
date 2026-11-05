@@ -1,0 +1,59 @@
+{
+  "id": "theme-fb-2026-11-02",
+  "ts": "2026-11-02T17:15:00Z",
+  "window": "weekly-fb-2026-11-02",
+  "sources_readable": [
+    "fb_1654952334789041",
+    "fb_629167654165317",
+    "fb_860508022428626",
+    "fb_333458264803610",
+    "fb_2677348212546303",
+    "fb_746195242754268"
+  ],
+  "sources_failed": [],
+  "nothing_new": false,
+  "compared_to": "2026-10-26_fb",
+  "notes": "Verdict PARTIAL: 5 weekly groups + 1 monthly (eBikes All Brands due, first Monday) read; small loaded samples, mostly undated (FB search ignores dates). No display sun-glare/visor requests (Aventure Owners 'visor' search = helmets only), no charge-port dust cap hits, no phone-mount ask beyond a 'battery cover with phone holder' question. Troubleshooters: display mount/protector/cover-plate breaks found but none confirmed within 7 days; no UI Remote clamp break. Monthly All Brands: no transferable gaps beyond generic helmets/bike covers. No post URLs captured (group URLs used). Engagement counts not captured (null). alert_user=false.",
+  "themes": [
+    {
+      "label": "Aventure-2 handlebar cup/tumbler holder requests (later candidate)",
+      "tag": "Aventon",
+      "gist": "Aventure Owners 'cup holder' search: 5+ separate requests for a handlebar cup/tumbler holder, incl. Yeti-size on an AA2 and a step-through bottle-fit issue. All search results undated (unverified window). Aligns with Grant's own basket cup-holder wish. Strength moderate; later candidate only, behind Rad launch three (SUN-01 visor / phone clasp / charge-port cap).",
+      "url": "https://www.facebook.com/groups/aventureowners",
+      "relevance": "watch",
+      "signal_ids": [
+        "sig-fb-aventure-cup-holder-2026-11-02"
+      ]
+    },
+    {
+      "label": "Rad display LCD plastic mount cracked / display protector + cover plate broken",
+      "tag": "Rad",
+      "gist": "Troubleshooters keyword pass: LCD plastic mount cracked so the screen tilts down; Rad City 5 plastic display protector broke (shop quoted $80+ for the whole piece); display cover plate + buttons + gasket came off after a drop. Supports display-cover / remote-clamp DESIGN-gap adjacency for SUN-01. All undated, none confirmed in 7-day window: evidence WATCH, no flag. No UI Remote clamp break named (no new evidence for opp-55f52c35).",
+      "url": "https://www.facebook.com/groups/2677348212546303",
+      "relevance": "watch",
+      "signal_ids": [
+        "sig-fb-rad-lcd-mount-cracked-2026-11-02",
+        "sig-fb-radcity5-display-protector-broke-2026-11-02",
+        "sig-fb-rad-display-cover-plate-off-2026-11-02"
+      ]
+    },
+    {
+      "label": "Spare-battery/cargo securing and stock-rack fragility (Aventon; transferable)",
+      "tag": "Aventon",
+      "gist": "Spare battery rolled in a towel in the basket; seat-post battery-mount ask after the stock rack broke; 'those racks break easy' warning; 25 lb front basket ask; quick-release rear basket on A2; rear-rack light mount; battery-terminal cover for rack transport; battery cover with phone holder question. Supports off-back basket config-only WATCH; battery-holder ideas are NOT launch SKUs. A2 fender vibration at certain speeds also surfaced (undated; likely not new vs 'no new Aventure-2 fender since Oct 9'): fender-clip WATCH support. All undated.",
+      "url": "https://www.facebook.com/groups/aventureowners",
+      "relevance": "watch",
+      "signal_ids": [
+        "sig-fb-aventure-battery-cover-phone-holder-2026-11-02",
+        "sig-fb-aventure-spare-battery-basket-2026-11-02",
+        "sig-fb-aventure-seatpost-battery-mount-rack-broke-2026-11-02",
+        "sig-fb-aventure-rack-fragility-2026-11-02",
+        "sig-fb-aventure-25lb-front-basket-2026-11-02",
+        "sig-fb-aventure2-qr-rear-basket-2026-11-02",
+        "sig-fb-aventure-rear-rack-light-mount-2026-11-02",
+        "sig-fb-aventure2-fender-vibration-2026-11-02",
+        "sig-fb-battery-terminal-cover-rack-transport-2026-11-02"
+      ]
+    }
+  ]
+}
