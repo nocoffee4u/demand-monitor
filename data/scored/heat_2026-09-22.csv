@@ -1,0 +1,5 @@
+product_key,heat,evidence_7d,source_diversity,recency_boost,competition_proxy,run_id,ts
+SOMO-RAD-SUN-01,92,4,0.8,0.7,0.45,weekday-2026-09-22,2026-09-22T16:30:00Z
+rad_display_phone_mount,91,5,0.6,0.5,0.35,weekday-2026-09-22,2026-09-22T16:30:00Z
+rad_power_charging_port_dust_cap,8,0,0.4,0.3,0.55,weekday-2026-09-22,2026-09-22T16:30:00Z
+aventon_front_basket,38,1,0.2,0.4,0.2,weekday-2026-09-22,2026-09-22T16:30:00Z

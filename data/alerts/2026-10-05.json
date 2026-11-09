@@ -1,0 +1,11 @@
+{
+  "ts": "2026-10-05T09:15:00-07:00",
+  "run_id": "weekday-2026-10-05",
+  "alert_user": false,
+  "reason": "none",
+  "summary": "No alert criteria met vs 10-02: no card crossed above WATCH, none dropped from above WATCH, no new DESIGN gate, no important source first-dark/recovered/blocking. FYI: Rad Small Front-Mounted Basket flipped IN\u2192OOS ($89), so both Rad FMBs are now OOS (US+CA). Safe Shield Advanced battery also went OOS (not printable). Price flips=0. New Etsy entrant VELOVAULT listed 4 generic 3D-printed e-bike basket organizer inserts at $45 on 10-04, raising organizer competition_density from 0.45 to 0.60 (organizer stays DESIGN). Aventon front basket teardown COMPLETE and re-capped from 58 to 18 (WATCH; OEM front rack in stock; preference only). Passenger teardown COMPLETE (WATCH, auto-drop). Amazon SERP+DP+1\u20133\u2605 OK (streak=0). Line and Ride liner back in stock (1 left). MakerWorld still BLOCKED (day 3; already alerted 10-01). rad_yotpo STALE. oem_help_aventon BLOCKED day 2 (secondary). Context SKIPPED (known).",
+  "sources": [],
+  "amazon_blocked_streak": 0,
+  "boss_message": "",
+  "ui_bot_note": "Weekday hunt 2026-10-05 files ready for Sheet ingest on bot/signal-hunt. New dated files: data/signals/2026-10-05.jsonl + .csv (+ youtube_2026-10-05.jsonl); data/source_health/2026-10-05_weekday.csv + .json; data/scored/heat_2026-10-05.csv; data/opportunities/2026-10-05.csv + .jsonl; data/teardowns/2026-10-05.csv + opp-40996e5a_2026-10-05.md + opp-956f5178_2026-10-05.md; data/invent/invent_candidates_2026-10-05.csv; data/alerts/2026-10-05.json. Changes vs 10-02: Aventon front basket opp-40996e5a unmet 58\u219218, competition 0.0\u21920.40, teardown COMPLETE (still WATCH); passenger opp-956f5178 teardown NEEDS DATA\u2192COMPLETE, competition 0.40\u21920.50 (still WATCH); organizer opp-a9020bd9 competition 0.45\u21920.60, heat 51\u219247 (still DESIGN); rows re-sorted by unmet_demand (Aventon now sits below cup holder); other cards unchanged. OEM stock flips=2 (Small FMB IN\u2192OOS; Safe Shield Advanced battery IN\u2192OOS), price flips=0. Amazon streak=0. MakerWorld BLOCKED (day 3, no new alert). rad_yotpo STALE. Context_* SKIPPED. oem_help_aventon BLOCKED (day 2). aventon_oem now reads products.json pages 1+2 (396), and BC280 Display Cover is present ($23.99)."
+}

@@ -1,0 +1,11 @@
+{
+  "ts": "2026-10-02T09:15:00-07:00",
+  "run_id": "weekday-2026-10-02",
+  "alert_user": false,
+  "reason": "none",
+  "summary": "Board unchanged vs 10-01 \u2014 SUN-01 KEEP_HUNTING, organizer DESIGN, no new DESIGN/WATCH crosses. OEM stock flips=0; price flips=0. Amazon SERP+DP OK (streak=0); Line and Ride still unavailable. MakerWorld still BLOCKED (day 2; first dark already alerted 10-01 \u2014 no repeat). rad_yotpo still STALE (newest 2026-04-15). oem_help_aventon newly BLOCKED 403 (secondary; non-blocking). Context monitors remain SKIPPED (known).",
+  "sources": [],
+  "amazon_blocked_streak": 0,
+  "boss_message": "",
+  "ui_bot_note": "Weekday hunt 2026-10-02 files ready for Sheet ingest on bot/signal-hunt. New dated files: data/signals/2026-10-02.jsonl + .csv; data/source_health/2026-10-02_weekday.csv + .json; data/scored/heat_2026-10-02.csv; data/opportunities/2026-10-02.csv + .jsonl; data/teardowns/2026-10-02.csv; data/invent/invent_candidates_2026-10-02.csv; data/alerts/2026-10-02.json. Drive uploads: see drive_ids.json (parent 0AP1Zt35TN43AUk9PVA). Amazon streak=0. MakerWorld BLOCKED (day 2, no new alert). rad_yotpo STALE. Context_* SKIPPED. oem_help_aventon BLOCKED (new vs 10-01 OK)."
+}

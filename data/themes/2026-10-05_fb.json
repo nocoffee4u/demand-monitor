@@ -1,0 +1,58 @@
+{
+  "id": "theme-fb-2026-10-05",
+  "ts": "2026-10-05T17:25:00Z",
+  "window": "weekly-fb-2026-10-05",
+  "sources_readable": [
+    "fb_1654952334789041",
+    "fb_629167654165317",
+    "fb_860508022428626",
+    "fb_333458264803610",
+    "fb_2677348212546303",
+    "fb_746195242754268"
+  ],
+  "sources_failed": [],
+  "nothing_new": false,
+  "compared_to": "2026-09-28_fb",
+  "notes": "Personal Meta as Grant OK; no AUTH/checkpoint. 5 weekly groups + 1 monthly (eBikes All Brands due, first Monday) readable; Troubleshooters PARTIAL (keyword pass; FB group search ignores date order, most results undated). No display visor/glare, phone clasp, charge-port cap, or new fender-fit hits (Level 4 ADV fender-vs-rack Sep 28 is last week's flag carried over, not new). Caboose short saddle is last week's WATCH carry. Log-only: RadRunner 1 kickstand EU, Level 4 REC battery cover, battery button cover, RadMission mirror/brake lever, cheaper battery ask, seller promo (E-Z Rack truck bed clamp, competitor). Scam warning re Rad Mini fenders/front rack seller (Sep 25). alert_user=false.",
+  "themes": [
+    {
+      "label": "Bigger/deeper front basket and front-rack cargo for Aventure 2",
+      "tag": "Aventon",
+      "gist": "Aventure-2 first-party: Larry Guevara wants a bigger, deeper front basket; Kevin Mlagan asks for a front basket that holds ~25 lb (3/20); Giovanni Vigil debating a front rack (10/58); Desmond Mascarenas-Prince straps a spare tube under the pizza rack because his bag does not fit, plus a DIY front-rack bag that clears the headlight. Supports Aventon basket WATCH opp-40996e5a and basket organizer/cargo-securing ideas. Later candidate, never ahead of Rad launch three (SUN-01 visor / phone clasp / charge-port cap).",
+      "url": "https://www.facebook.com/groups/860508022428626/posts/1543070910838997/",
+      "relevance": "later_candidate",
+      "signal_ids": [
+        "sig-fb-aventure2-bigger-front-basket-2026-10-05",
+        "sig-fb-aventure-front-basket-25lb-2026-10-05",
+        "sig-fb-aventure-front-rack-debate-2026-10-05",
+        "sig-fb-aventure-m-spare-tube-strap-2026-10-05",
+        "sig-fb-aventure-diy-front-rack-bag-2026-10-05"
+      ]
+    },
+    {
+      "label": "Rad display/remote handlebar mount cracking and remote cover plate breaks",
+      "tag": "Rad",
+      "gist": "Troubleshooters keyword pass (PARTIAL; FB search ignores dates): cheap replacement LCD mount WTB after the mount cracked and the screen tilts down; Rad City 5 plastic protector broke with OEM fix = whole piece at $80+; PAS remote cover plate came off after a crash; Kelly Phillips (Sep 26, only dated item) cannot find part numbers. Evidence mostly undated. Supports the remote/display clamp DESIGN gap.",
+      "url": "https://www.facebook.com/groups/2677348212546303",
+      "relevance": "supports_design",
+      "signal_ids": [
+        "sig-fb-rad-lcd-mount-cracked-wtb-2026-10-05",
+        "sig-fb-radcity5-remote-protector-broke-2026-10-05",
+        "sig-fb-rad-pas-cover-plate-off-2026-10-05",
+        "sig-fb-rad-pas-remote-part-numbers-2026-10-05"
+      ]
+    },
+    {
+      "label": "Rear rack/basket cargo securing and rack failures",
+      "tag": "Rad|Aventon",
+      "gist": "RadWagon 4 rack + basket upgrade drew 'Where can I find one ??' (12/3); Aventure rear rack failed with a 4-year-old on a child seat (29/35, possible repost; structural, never SKU); stock Aventon rack broke and owner asks about a seat-post spare-battery mount (19/28, never SKU); fat-tire front rack 'doesn't turn with the steering' comment. Config-only WATCH supporting evidence.",
+      "url": "https://www.facebook.com/groups/629167654165317",
+      "relevance": "off_back",
+      "signal_ids": [
+        "sig-fb-radwagon4-rack-basket-where-2026-10-05",
+        "sig-fb-aventure-rear-rack-failed-kid-seat-2026-10-05",
+        "sig-fb-aventure-stock-rack-broke-battery-carry-2026-10-05"
+      ]
+    }
+  ]
+}

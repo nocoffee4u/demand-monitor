@@ -1,0 +1,21 @@
+{
+  "id": "theme-ebr-2026-10-05",
+  "ts": "2026-10-05T16:20:00Z",
+  "window": "weekly-ebr-2026-10-05",
+  "sources_readable": [
+    "ebr_forum",
+    "electricbikereport"
+  ],
+  "sources_failed": [],
+  "nothing_new": true,
+  "compared_to": "2026-09-28_ebr",
+  "notes": "Anonymous free-stack OK. Rad board RSS https://forums.electricbikereview.com/forum/rad-power-bikes/index.rss (HTTP 200, Rad Power Bikes Forum, 50 items) + board listing HTML: newest Rad activity still 2026-07-30 (UL replacement battery packs thread); no Rad thread activity since 2026-09-28. Note: electricbikereview.com/forum/rad-power-bikes/index.rss now 404s; forums. subdomain is the working URL. Accessories RSS /forum/accessories/index.rss (HTTP 200, 50 items): new since 9/28 = fire-bag charging-station ad thread (moderator-flagged spam, battery liability), 'New mirrors day' (generic mirrors, no Rad), 'helmet search bike' (no Rad) - no Rad Path A printable themes. Baseline rechecks: condensation/display 56621 last post 2025-02-14; Known Issues 13196 last 2026-06-09; Phone won't charge 57670 last 2025-04-26 - no new clasp/phone-mount, charge_cap, fender, basket or off_back posts. Electric Bike Report homepage + feed OK: newest GOTRAX Ranger 16 review (2026-09-30) and TWR Ep 102 (2026-09-27); 0 Rad mentions in posts since 9/28. Context mon_d85e4369 / mon_d44aec3d: status=paused (context_paid_abandoned), last_run 2026-09-22 - SKIPPED; free RSS/feed is primary. nothing_new is vs prior accessory themes only, not a dark-source claim.",
+  "themes": [],
+  "liability_notes_not_themes": [
+    "UL certified replacement battery packs (delivery early Oct 2026) - battery liability",
+    "CPSC battery recall thread - liability",
+    "Infinite Battery mount tutorial - battery/mount liability",
+    "Rad January funding / Rad Life Mobility crowdfunding - funding chatter",
+    "Accessories board fire-bag charging-station ad - battery liability / spam"
+  ]
+}

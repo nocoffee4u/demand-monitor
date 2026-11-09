@@ -1,0 +1,51 @@
+{
+  "id": "theme-fb-2026-10-26",
+  "ts": "2026-10-26T17:20:00Z",
+  "window": "weekly-fb-2026-10-26",
+  "sources_readable": [
+    "fb_1654952334789041",
+    "fb_629167654165317",
+    "fb_860508022428626",
+    "fb_333458264803610",
+    "fb_2677348212546303"
+  ],
+  "sources_failed": [],
+  "nothing_new": false,
+  "compared_to": "2026-10-19_fb",
+  "notes": "Personal Meta as Grant OK; no login/checkpoint. 5 weekly groups readable; monthly eBikes All Brands NOT_DUE (day 26; next due Mon 2026-11-02). Aventure Owners PARTIAL (~25 posts covering only ~Oct 23-26; Oct 19-22 not reached; group search run, only in-window hit 'mount' Oct 20 = brake work). No SUN-01 visor/glare, phone clasp/mount, charge-port cap, Rad fender fit, cup holder, or PROTOTYPE hits. Troubleshooters: 0 in-window UI Remote/display clamp breaks (no new evidence for opp-55f52c35). Aventure-2 fender vibration (Jeff Crocker Oct 9) had no new in-window activity: carried WATCH, not a new signal. No post URLs captured this week (group URLs used). alert_user=false.",
+  "themes": [
+    {
+      "label": "Aventon rack/basket fit asks (Level 3 rear basket, Aventure 3 front rack fit, Aventure 1 rack bags)",
+      "tag": "Aventon",
+      "gist": "Aventon Bikes: Tyler Cashman (~Oct 20) wants a rear basket/rack for a Level 3 (2/6); Michael Howell (~Oct 21) Aventure 1 rear rack + bags, wants 'a stout bag' (8/7). Aventure Owners: Daryl Evans (~Oct 25) AA3 front rack not listed as compatible but reviews say it fits (4/6). Reconfirms off-back/cargo WATCH; later candidate only, behind Rad launch three.",
+      "url": "https://www.facebook.com/groups/860508022428626",
+      "relevance": "watch",
+      "signal_ids": [
+        "sig-fb-aventon-level3-rear-basket-2026-10-26",
+        "sig-fb-aventure3-front-rack-fit-2026-10-26",
+        "sig-fb-aventure1-rack-bags-2026-10-26"
+      ]
+    },
+    {
+      "label": "RAD Expand center-mount kickstand / fat-tire fit gap",
+      "tag": "Rad",
+      "gist": "Shari Trygg McCorison (~Oct 25, rpboc + Upgrades cross-post, 2 comments): heel hits the rear kickstand on a RAD Expand; hasn't found a center-mount kickstand that works with 4\" fat tires. Metal/structural part, not a print SKU: weak.",
+      "url": "https://www.facebook.com/groups/rpboc",
+      "relevance": "weak",
+      "signal_ids": [
+        "sig-fb-rad-expand-kickstand-fit-2026-10-26"
+      ]
+    },
+    {
+      "label": "Cold-weather battery cover and thumb-throttle trigger chatter (log only)",
+      "tag": "transferable-generic",
+      "gist": "Tony Schawang (~Oct 25, Aventure Owners, 3/11): Amazon universal battery cover fits 'pretty good for being universal' but bottle holder had to come off. Brian Sweeney (Oct 23, Troubleshooters, 1/23): thumb-throttle trigger question. Battery shell and throttle are never launch SKUs: log only.",
+      "url": "https://www.facebook.com/groups/aventureowners",
+      "relevance": "log_only",
+      "signal_ids": [
+        "sig-fb-aventure-battery-cold-cover-2026-10-26",
+        "sig-fb-rad-thumb-throttle-trigger-2026-10-26"
+      ]
+    }
+  ]
+}

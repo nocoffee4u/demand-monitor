@@ -1,0 +1,100 @@
+{
+  "ts": "2026-10-05T17:25:00Z",
+  "run_id": "weekly-fb-2026-10-05",
+  "alert_user": false,
+  "alert_reason": null,
+  "compared_to": "2026-09-28_fb",
+  "sources": [
+    {
+      "name": "fb_1654952334789041",
+      "status": "OK",
+      "detail": "Joined; readable; personal Meta as Grant; New posts sort; ~8 posts (~1h to Sep 27, ~8d; group quiet); comment box shows Comment as Grant; 0 accessory hits",
+      "group_name": "Rad Power Bikes Owners Community",
+      "group_id": "1654952334789041",
+      "cadence": "weekly",
+      "legacy_key": "facebook_rpboc",
+      "url": "https://www.facebook.com/groups/rpboc",
+      "posts_loaded": 8,
+      "search_hits": 0,
+      "last_ok": "2026-10-05T17:25:00Z",
+      "owner": "manual"
+    },
+    {
+      "name": "fb_629167654165317",
+      "status": "OK",
+      "detail": "Joined; readable; 10 posts (2h to Sep 26); RadWagon 4 rack+basket Where can I find one (12/3); RadRunner 1 kickstand EU unavailable log-only; Caboose short saddle = last week WATCH carry",
+      "group_name": "Rad Power Bike Upgrades",
+      "group_id": "629167654165317",
+      "cadence": "weekly",
+      "legacy_key": "facebook_upgrades",
+      "url": "https://www.facebook.com/groups/629167654165317",
+      "posts_loaded": 10,
+      "search_hits": 2,
+      "last_ok": "2026-10-05T17:25:00Z",
+      "owner": "manual"
+    },
+    {
+      "name": "fb_860508022428626",
+      "status": "OK",
+      "detail": "Joined; readable; ~32 posts (12 min to Sep 27); Aventure 2 bigger/deeper front basket wish; Aventure rear rack failure w/ kid seat WATCH structural (possible repost); fat-tire front rack steering comment; Level 4 REC battery cover log-only; E-Z Rack truck bed clamp seller promo (competitor)",
+      "group_name": "Aventon Bikes",
+      "group_id": "860508022428626",
+      "cadence": "weekly",
+      "legacy_key": "facebook_aventon",
+      "url": "https://www.facebook.com/groups/860508022428626",
+      "posts_loaded": 32,
+      "search_hits": 3,
+      "last_ok": "2026-10-05T17:25:00Z",
+      "owner": "manual"
+    },
+    {
+      "name": "fb_333458264803610",
+      "status": "OK",
+      "detail": "Joined; New posts; ~34 top-level posts reaching ~7 days back (newest ~20h, oldest Sep 27); 7-day stop before 60 (group quiet ~4-6 posts/day); group search basket ~7/1, visor ~5/0 (helmet visors), glare ~2/0, mount ~3/1, rack ~7/1, fender ~2/0 (newest Jul 21 AA3 fender rub 16/22), cup holder ~3/0 (newest Jun 2024), clip ~2/0, clamp ~2/0; hits: 25 lb front basket, front rack debate, spare tube/bag fit, DIY front-rack bag, broken rack/battery mount",
+      "group_name": "Aventon Aventure Owners",
+      "group_id": "333458264803610",
+      "cadence": "weekly",
+      "legacy_key": null,
+      "url": "https://www.facebook.com/groups/aventureowners",
+      "posts_loaded": 34,
+      "search_hits": 5,
+      "last_ok": "2026-10-05T17:25:00Z",
+      "owner": "manual"
+    },
+    {
+      "name": "fb_2677348212546303",
+      "status": "PARTIAL",
+      "detail": "Keyword pass all 8 terms (clamp, clip, mount, cover, broken plastic, cracked, snapped, replacement part), first ~2-5 results each; FB group search ignores date order even with Most recent and most results undated, so no true last-7-days pass; hits support remote/display clamp DESIGN gap (LCD mount cracked WTB, Rad City 5 protector $80+, PAS cover plate, Kelly Phillips Sep 26 part numbers); RadMission mirror/brake lever log-only; scam warning re Rad Mini fenders/front rack seller (Sep 25)",
+      "group_name": "Rad Power Bike Troubleshooters",
+      "group_id": "2677348212546303",
+      "cadence": "weekly",
+      "legacy_key": null,
+      "url": "https://www.facebook.com/groups/2677348212546303",
+      "posts_loaded": null,
+      "search_hits": 4,
+      "last_ok": "2026-10-05T17:25:00Z",
+      "owner": "manual"
+    },
+    {
+      "name": "fb_746195242754268",
+      "status": "OK",
+      "detail": "Monthly (DUE: first Monday); tag monthly_watch / transferable-generic; Joined; ~18 posts (19h to Sep 27); 0 accessory hits (one cheaper replacement battery ask, log-only)",
+      "group_name": "eBikes All Brands Group",
+      "group_id": "746195242754268",
+      "cadence": "monthly",
+      "legacy_key": null,
+      "url": "https://www.facebook.com/groups/ebikesallbrandsgroup",
+      "posts_loaded": 18,
+      "search_hits": 0,
+      "last_ok": "2026-10-05T17:25:00Z",
+      "owner": "manual"
+    },
+    {
+      "name": "facebook_groups",
+      "status": "OK",
+      "detail": "6/6 Joined+readable (5 weekly + 1 monthly due); 1 PARTIAL (Troubleshooters FB search ignores dates); no AUTH/checkpoint; alert_user=false",
+      "last_ok": "2026-10-05T17:25:00Z",
+      "owner": "manual"
+    }
+  ]
+}
