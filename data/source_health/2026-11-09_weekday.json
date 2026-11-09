@@ -80,8 +80,8 @@
     {
       "name": "facebook_manual",
       "status": "PARTIAL",
-      "detail": "Weekly 2026-11-02 read (weekly-fb-2026-11-02). 5 weekly groups + 1 monthly (monthly watch run); small samples, mostly undated. All 6 groups PARTIAL (Aventure Owners ~12 posts, target 60 not reached; Troubleshooters keyword pass none confirmed in 7 days). Themes: Aventure-2 handlebar cup/tumbler holder (watch, later candidate behind Rad launch three), Rad display LCD mount/protector/cover-plate breaks (watch, undated, SUN-01 adjacency), spare-battery/cargo securing + rack fragility (watch; battery holders not SKUs); none flagged. No visor/glare, charge-port cap, or phone-mount asks (beyond battery cover w/ phone holder question); no UI Remote clamp break for opp-55f52c35. A2 fender vibration undated, likely not new vs Oct 9. Weekday signals now carry the 13 sig-fb-*-2026-11-02 rows (replacing prior sig-fb carry). Not an important source → no user alert.",
-      "last_ok": "2026-11-02T17:15:00Z",
+      "detail": "Weekly 2026-11-09 read (weekly-fb-2026-11-09). 5 weekly groups + 1 monthly (NOT_DUE), not 3. Grant personal Meta OK, read-only; all 5 weekly Joined. Upgrades OK; rpboc, Aventon Bikes, Aventure Owners, Troubleshooters PARTIAL (small/slow samples). Verdict MATERIAL (low-weight). Themes: Aventon fender bracket / fender hardware replacement (weak, Aventure-2 first-party, later candidate behind Rad launch three; fender-clip WATCH), front basket capacity / basket adapter fit (watch, transferable-generic), rear-rack cargo securing / under-rack mounts (watch, transferable-generic; off-back basket config-only WATCH); none flagged. No visor/glare, phone mount, charge-port cap, or cup-holder hits; no display/UI-remote clamp break for opp-55f52c35. rpboc 2019 Step-through display+controller OOS post = electronics log only (aligns with Rad US OOS wave). Weekday signals now carry the 6 sig-fb-*-2026-11-09 rows (replacing the 13 sig-fb-*-2026-11-02 carry). Not an important source → no user alert.",
+      "last_ok": "2026-11-09T17:10:00Z",
       "consecutive_failures": 0,
       "owner": "manual"
     },
@@ -225,5 +225,7 @@
     }
   ],
   "weekly_ebr_patch": true,
-  "weekly_ebr_window": "weekly-ebr-2026-11-09"
+  "weekly_ebr_window": "weekly-ebr-2026-11-09",
+  "weekly_fb_patch": true,
+  "weekly_fb_window": "weekly-fb-2026-11-09"
 }
