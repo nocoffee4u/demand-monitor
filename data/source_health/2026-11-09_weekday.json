@@ -14,20 +14,20 @@
     {
       "name": "ebr_forum",
       "status": "OK",
-      "detail": "Light weekday check: forums.electricbikereview.com Rad RSS (50) + Accessories RSS (50) OK. Rad 0 new vs 11-06 (newest still 2026-07-30); Accessories 0 new threads (newest still 2026-11-02 general lighting). 7 keyword searches OK, 0 new thread ids (glare=0).",
-      "last_ok": "2026-11-09T09:00:00-07:00",
+      "detail": "Weekly EBR dig 2026-11-09: Rad board RSS forums.electricbikereview.com/forum/rad-power-bikes/index.rss OK (HTTP 200, 50 items) + board listing OK - newest Rad activity still 2026-07-30 (UL battery packs thread); nothing since 11-02. Accessories RSS OK (50) + board listing OK: newest still 2026-11-02 GCN bike lights primer; no new threads/posts since 11-02 (Camera for EMTB 10-28, Gopro hero 10-27, Lock 10-15, headlight 10-08 unchanged). Baseline threads (59274, 58473, 56621, 13196, 57670) reachable HTTP 200, no new visor/clasp/phone-mount/charge_cap/fender/cup-holder/cargo posts. NOTHING_NEW vs 2026-11-02_ebr. Old electricbikereview.com/forum/... RSS path still 404s - forums. subdomain is the working URL.",
+      "last_ok": "2026-11-09T09:30:00-07:00",
       "consecutive_failures": 0,
       "owner": "forecasting",
-      "ts": "2026-11-09T09:00:00-07:00"
+      "ts": "2026-11-09T09:30:00-07:00"
     },
     {
       "name": "electric_bike_report",
       "status": "OK",
-      "detail": "electricbikereport.com/feed OK (100 items); 1 new vs 11-06 (PHOSGO Go5 Prototype Review, 2026-11-06 — not Rad, not Path A). 0 Rad Path A articles.",
-      "last_ok": "2026-11-09T09:00:00-07:00",
+      "detail": "Weekly dig 2026-11-09: homepage + feed OK (100 items); 1 new since 11-02 = PHOSGO Go5 Prototype Review (11-06), not Rad, no accessory gap. NOTHING_NEW vs 2026-11-02_ebr.",
+      "last_ok": "2026-11-09T09:30:00-07:00",
       "consecutive_failures": 0,
       "owner": "forecasting",
-      "ts": "2026-11-09T09:00:00-07:00"
+      "ts": "2026-11-09T09:30:00-07:00"
     },
     {
       "name": "amazon",
@@ -120,7 +120,7 @@
     {
       "name": "context_ebr",
       "status": "SKIPPED",
-      "detail": "context_paid_abandoned - weekly 2026-11-02: mon_d85e4369 paused since 2026-09-22 (not called). Free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
+      "detail": "context_paid_abandoned - weekly 2026-11-09: mon_d85e4369 paused since 2026-09-22 (not called). Free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
       "last_ok": null,
       "consecutive_failures": 0,
       "owner": "context",
@@ -129,7 +129,7 @@
     {
       "name": "context_ebr_report",
       "status": "SKIPPED",
-      "detail": "context_paid_abandoned - weekly 2026-11-02: mon_d44aec3d paused since 2026-09-22 (not called). Free Report feed used under electric_bike_report. NEVER NOTHING_NEW.",
+      "detail": "context_paid_abandoned - weekly 2026-11-09: mon_d44aec3d paused since 2026-09-22 (not called). Free Report feed used under electric_bike_report. NEVER NOTHING_NEW.",
       "last_ok": null,
       "consecutive_failures": 0,
       "owner": "context",
@@ -223,5 +223,7 @@
       "consecutive_failures": 30,
       "owner": "forecasting"
     }
-  ]
+  ],
+  "weekly_ebr_patch": true,
+  "weekly_ebr_window": "weekly-ebr-2026-11-09"
 }

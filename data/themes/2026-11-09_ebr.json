@@ -1,0 +1,20 @@
+{
+  "id": "theme-ebr-2026-11-09",
+  "ts": "2026-11-09T16:30:00Z",
+  "window": "weekly-ebr-2026-11-09",
+  "sources_readable": [
+    "ebr_forum",
+    "electricbikereport"
+  ],
+  "sources_failed": [],
+  "nothing_new": true,
+  "compared_to": "2026-11-02_ebr",
+  "notes": "Weekly EBR dig 2026-11-09: Rad board RSS forums.electricbikereview.com/forum/rad-power-bikes/index.rss OK (HTTP 200, 50 items) + board listing OK - newest Rad activity still 2026-07-30 (UL battery packs thread); nothing since 11-02. Accessories RSS OK (50) + board listing OK: newest still 2026-11-02 GCN bike lights primer; no new threads/posts since 11-02 (Camera for EMTB 10-28, Gopro hero 10-27, Lock 10-15, headlight 10-08 unchanged). Baseline threads (59274, 58473, 56621, 13196, 57670) reachable HTTP 200, no new visor/clasp/phone-mount/charge_cap/fender/cup-holder/cargo posts. NOTHING_NEW vs 2026-11-02_ebr. Old electricbikereview.com/forum/... RSS path still 404s - forums. subdomain is the working URL. Electric Bike Report: Weekly dig 2026-11-09: homepage + feed OK (100 items); 1 new since 11-02 = PHOSGO Go5 Prototype Review (11-06), not Rad, no accessory gap. NOTHING_NEW vs 2026-11-02_ebr. Context mon_d85e4369 / mon_d44aec3d: context_paid_abandoned (paused since 2026-09-22) - SKIPPED. nothing_new is vs prior accessory themes only, not a dark-source claim.",
+  "themes": [],
+  "liability_notes_not_themes": [
+    "UL certified replacement battery packs (delivery early Oct 2026) - battery liability",
+    "CPSC battery recall thread - liability",
+    "Infinite Battery mount tutorial - battery/mount liability",
+    "Rad January funding / Rad Life Mobility crowdfunding - funding chatter"
+  ]
+}
