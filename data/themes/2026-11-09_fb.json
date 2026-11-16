@@ -1,0 +1,51 @@
+{
+  "id": "theme-fb-2026-11-09",
+  "ts": "2026-11-09T17:10:00Z",
+  "window": "weekly-fb-2026-11-09",
+  "sources_readable": [
+    "fb_1654952334789041",
+    "fb_629167654165317",
+    "fb_860508022428626",
+    "fb_333458264803610",
+    "fb_2677348212546303"
+  ],
+  "sources_failed": [],
+  "nothing_new": false,
+  "compared_to": "2026-11-02_fb",
+  "notes": "Verdict MATERIAL (low-weight). Personal Meta as Grant OK, read-only; no login/checkpoint; all 5 weekly groups Joined. Monthly eBikes All Brands NOT_DUE (day 9). Upgrades OK; rpboc, Aventon Bikes, Aventure Owners, Troubleshooters PARTIAL (small/slow samples). No visor/glare, phone mount, charge-port cap, or cup-holder hits in window. Troubleshooters: no display/UI-remote clamp break in window (no new evidence for opp-55f52c35). Log-only (not themes, not SKUs): rpboc ~Nov 9 2019 Step-through needs display+controller, Rad out of stock, commenters point to Eggrider/Velofex (6 comments) - aligns with the Rad US OOS wave but is electronics, not a display-cover signal; Troubleshooters Nov 6 Radwagon 4 missing front brake-cable pinch bolt (6 comments, brake = log only); Oct 23 3D-printed thumb throttle trigger (31 comments, throttle = never a launch SKU); Upgrades Nov 7 Radmini flats (17 comments); Aventon Bikes hitch rack ask (17 comments) and seat upgrade; Black Friday chatter; rpboc 'bring back Radburro' (10 likes, 45 comments). No permalinks captured (read from screenshots; group URLs used). alert_user=false; no Boss flag.",
+  "themes": [
+    {
+      "label": "Aventon fender bracket / fender hardware replacement (Aventure-2 first-party)",
+      "tag": "Aventon",
+      "gist": "Aventure Owners (~Nov 8-9): 'Where do I buy one of these brackets circled' with a fender-bracket screenshot (model not stated, no counts seen). Context outside window: Oct 9 A2 fender vibration noise thread (4 likes/12 comments). Aventon/Aventure-2 first-party; supports config-only fender-clip WATCH; later candidate behind Rad launch three (SUN-01 visor / phone clasp / charge-port cap). Weight: weak (single post).",
+      "url": "https://www.facebook.com/groups/aventureowners",
+      "relevance": "weak",
+      "signal_ids": [
+        "sig-fb-aventon-fender-bracket-ask-2026-11-09"
+      ]
+    },
+    {
+      "label": "Front basket capacity / basket adapter fit (transferable-generic)",
+      "tag": "transferable-generic",
+      "gist": "rpboc (~Nov 9, UK): wants a large front-mounted basket because the small basket isn't big enough for three children (no counts). Aventure Owners (Nov 2): adapter to fit the Aventon Front Rack Set/basket on an Aventon-branded fork (8 comments). Carry of the Aventure-2 front basket capacity theme; WATCH.",
+      "url": "https://www.facebook.com/groups/rpboc",
+      "relevance": "watch",
+      "signal_ids": [
+        "sig-fb-rad-uk-large-front-basket-three-kids-2026-11-09",
+        "sig-fb-aventon-front-rack-fork-adapter-2026-11-09"
+      ]
+    },
+    {
+      "label": "Rear-rack cargo securing / under-rack mounts (transferable-generic)",
+      "tag": "transferable-generic",
+      "gist": "Aventure Owners (Nov 1): AA3 under-rear-rack mount for a Guardian Angel light (1 like, 6 comments). Upgrades (~Nov 5): Rover 6+ triple-locked rear cargo box (3 likes, 6 comments); (~Nov 4): 'Work mode' bags + trailer (9 likes, 23 comments). Off-back basket stays config-only WATCH (supporting evidence only, no CAD).",
+      "url": "https://www.facebook.com/groups/629167654165317",
+      "relevance": "watch",
+      "signal_ids": [
+        "sig-fb-aa3-under-rear-rack-light-mount-2026-11-09",
+        "sig-fb-rover6-triple-locked-cargo-box-2026-11-09",
+        "sig-fb-work-mode-bags-trailer-2026-11-09"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,231 @@
+{
+  "ts": "2026-10-19T09:30:00-07:00",
+  "run_id": "weekday-2026-10-19",
+  "alert_user": false,
+  "sources": [
+    {
+      "name": "rad_oem",
+      "status": "OK",
+      "detail": "products.json HTTP 200 US (all + accessories + spare-parts = 149 unique handles, unchanged vs 10-16) + CA radpowerbikes.ca 200 (139). US STOCK FLIPS=0 (Path-A 0); US PRICE CHANGES=0. CA stock/price flips=0. Both Rad front-mounted baskets still OOS US ($119/$89) + CA (C$159/C$119); radrover-rear-rack $99 + radrunner-passenger-package $109 still OOS. In stock unchanged: Front Rack $59, Large/Small Basket $119/$89, Basket Bag $47, liners $87/$69, cargo net $20, straps $25, bottle cage $20, GUB PRO-3 $25, charge port cover $5. No sun-cover/visor SKU; no Rad UI Remote/UI Display/clamp spare (US).",
+      "last_ok": "2026-10-19T09:30:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "ebr_forum",
+      "status": "OK",
+      "detail": "Weekly EBR dig 2026-10-19: Rad board RSS forums.electricbikereview.com/forum/rad-power-bikes/index.rss OK (HTTP 200, Rad Power Bikes Forum, 50 items) + board listing OK - newest Rad activity still 2026-07-30 UL battery thread, nothing since 10-12. Accessories RSS OK (50) + board listing: only new activity = 'Lock Recommendations?' (59274, posts 10-14/10-15; generic Kryptonite U-lock/cinch picks, no Rad, no printable lock-mount ask). Headlight 58473 unchanged (last 10-08). Baseline rechecks unchanged (condensation 56621 last 2025-02-14; Known Issues 13196 last 2026-06-09; phone-charge 57670 last 2025-04-26). NOTHING_NEW vs 2026-10-12_ebr. Old electricbikereview.com/forum/... RSS path still 404s - forums. subdomain is the working URL.",
+      "last_ok": "2026-10-19T09:36:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting",
+      "ts": "2026-10-19T09:36:00-07:00"
+    },
+    {
+      "name": "electric_bike_report",
+      "status": "OK",
+      "detail": "Weekly dig 2026-10-19: homepage + feed OK (100 items); new since 10-12 = Lectric XPress Lite review (10-13), Addmotor Freetan M-368X eTrike review (10-14), Magnum Pathfinder 2.0 review (10-15); 0 Rad mentions in article bodies (nav menu only); no accessory gap. NOTHING_NEW vs 2026-10-12_ebr.",
+      "last_ok": "2026-10-19T09:36:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting",
+      "ts": "2026-10-19T09:36:00-07:00"
+    },
+    {
+      "name": "amazon",
+      "status": "OK",
+      "detail": "DEGRADED SERPs, 1–3★ lane readable. Box curl: SERPs 2/9 readable (organizer 13 Rad-named, 0 rigid inserts; 'rad power ui remote mount' 0 Rad-named); 7/9 HTTP 503 'Sorry! Something went wrong' incl. one cooled-down retry. WebFetch public-page fallback read display cover (29 Rad-named, unchanged; clear-PVC rain covers + full-bike covers; no left-pad hood/visor), basket liner (soft liners only) and aventon basket (Abound SR/Sinch.2 only) → 5/9 readable; cup-holder SERP 503 on both paths; accessories/passenger/cargo-net not read today. 1–3★ lane READABLE via WebFetch DP (Line and Ride 3.8★/7, 1★ dates 2026-03-29/2026-02-12, newest 2026-08-30; Retrospec 3.9★/6, 36% 2★ unchanged) — 0 new low-star reviews → BLOCKED streak=0. Watch: if curl SERPs stay 503 tomorrow, rely on WebFetch fallback.",
+      "last_ok": "2026-10-19T09:30:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "amazon_product_pages",
+      "status": "OK",
+      "detail": "curl DP: B0FNL2Q87Q page 200 (title/stock/price parsed: Only 1 left $34.99, 3.8★ (7)) but no review block; B0FLTJHDXG + B0HHS1YVDK returned captcha (3.8 KB). WebFetch fallback OK on all 3: Retrospec In Stock $119.99 3.9★ (6) unchanged; Line and Ride review list visible, 0 new; B0HHS1YVDK base plate In Stock $29.99, 0 ratings, Material PETG, seller xuanyustore. Tried; OK via fallback (streak=0).",
+      "last_ok": "2026-10-19T09:30:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "etsy",
+      "status": "OK",
+      "detail": "openapi.etsy.com v3 OK; 21 query groups. Path-A groups: 0 new / 0 gone listing ids vs 10-16 (display cover=8, rad power bikes basket=14, rad basket organizer=1, rad basket cup=0, rad power visor=1, ebike display visor=2, rad display mount=3, rad remote cover=2, radrunner passenger=2, aventon front basket=0, aventon basket=4, ebike cup holder=14, ebike basket organizer=5, rad ui remote=1, rad remote mount=0). Generic basket_organizer_insert 1523→1514 (listing churn, not Rad-specific). Still no Etsy clamp listing.",
+      "last_ok": "2026-10-19T09:30:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "makerworld",
+      "status": "BLOCKED",
+      "detail": "HTTP 403 on 13/13 searches (day 7 after 10-09 re-block; recovered only 10-07 after 10-01→10-06 dark). WebSearch fill-in: MW 632673 Rad PAS controller mount (already in clamp teardown); no Rad left-pad visor STL. Non-blocking (no decision waits on it); competition counts carried. No new alert (dark already flagged 10-09).",
+      "last_ok": null,
+      "consecutive_failures": 7,
+      "owner": "forecasting"
+    },
+    {
+      "name": "x",
+      "status": "SKIPPED",
+      "detail": "OFF by Boss rule — not fetched.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "youtube",
+      "status": "OK",
+      "detail": "youtube_scan.py 7/7 searches OK; 31 signals (5 new / 5 gone video ids vs 10-16 from search-rank churn; new ids are 2018–2022 uploads). commentThreads OK on 31/31 videos: 4 top-level comments since 2026-09-01 (1 new, 2026-10-17 controller-tuning chat), none WTB/DIY Path A. +4 clamp searches (Data API search.list order=date): 0 relevant Rad UI Remote clamp hits. YOUTUBE_API_KEY from .env",
+      "last_ok": "2026-10-19T09:30:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "facebook_manual",
+      "status": "OK",
+      "detail": "Weekly 2026-10-19 read (weekly-fb-2026-10-19). Grant personal Meta OK; 5 weekly groups + 1 monthly (monthly All Brands NOT_DUE, day 19); Troubleshooters PARTIAL (FB search ignores dates); themes: Aventure spare-battery/rack cargo securing CARRY with new activity (later), Aventure-2 fender vibration WATCH (adjustment fix, no part ask), generic mounts/bags/storage weak. No visor/clasp/charge-cap/Rad fender/PROTOTYPE; no NEW remote-clamp for opp-55f52c35. alert_user=false.",
+      "last_ok": "2026-10-19T18:00:00Z",
+      "consecutive_failures": 0,
+      "owner": "manual"
+    },
+    {
+      "name": "reddit",
+      "status": "SKIPPED",
+      "detail": "Retired — no Reddit API; do not scrape (Reddit results excluded from WebSearch)",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "context_dev",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned — paid Context.dev abandoned 2026-09-22. All context_* SKIPPED. NEVER DOWN, never alert.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_rad_oem",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned — free OEM products.json used instead. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_amazon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned — free Amazon WebFetch used under amazon instead. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_ebr",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned - weekly 2026-10-19: mon_d85e4369 paused since 2026-09-22 (not called). Free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context",
+      "ts": "2026-10-19T09:36:00-07:00"
+    },
+    {
+      "name": "context_ebr_report",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned - weekly 2026-10-19: mon_d44aec3d paused since 2026-09-22 (not called). Free Report feed used under electric_bike_report. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context",
+      "ts": "2026-10-19T09:36:00-07:00"
+    },
+    {
+      "name": "amazon_reviews_rad",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned (Context-backed alias). Free Amazon attempt recorded under amazon. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "amazon_reviews_aventon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned — NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "google_reviews",
+      "status": "SKIPPED",
+      "detail": "user_skipped — not attempting Google reviews scrape this run.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "google_reviews_rad",
+      "status": "SKIPPED",
+      "detail": "user_skipped — not attempting Google reviews scrape this run.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "google_reviews_aventon",
+      "status": "SKIPPED",
+      "detail": "user_skipped — not attempting Google reviews scrape this run.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "oem_help_rad",
+      "status": "OK",
+      "detail": "https://www.radpowerbikes.com/pages/support HTTP 200 (text unchanged vs 10-16). No glare/visor/charge-port/phone-mount language; UI Remote/Display spares still not sold standalone (catalog).",
+      "last_ok": "2026-10-19T09:30:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "oem_help_aventon",
+      "status": "OK",
+      "detail": "Switched 2026-10-19 per Boss approval (2026-10-16): check now uses ONLY the official Zendesk Help Center API — HTML home page no longer attempted (was Cloudflare 403 days 1–6 through 10-16). /api/v2/help_center/en-us/articles.json?sort_by=updated_at&sort_order=desc HTTP 200 (657 articles; 1 updated since 10-16 run: Aventon Fast Charger 2026-10-16 22:52Z). /api/v2/help_center/articles/search.json?query=basket HTTP 200 (11: Abound rear-rack basket / pizza front rack; no Aventure 2 front basket). BLOCKED only if the API itself returns 403.",
+      "last_ok": "2026-10-19T09:30:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "rad_yotpo",
+      "status": "STALE",
+      "detail": "Store-wide POST filter.json OK (total 67,899 unchanged; newest still 2026-04-15 id 830222856; sorted + unsorted page 1; per-star 1/2/3 newest 2025-12-06/2025-12-02/2025-12-04). Accessory re-pull via widget reviews.json per star 1/2/3 + plain paging, looped to empty page, merged by id (= bottomline) on 15 handles (8,537) — 0 new review ids vs 10-16; newest accessory review 2025-12-03. Keyword totals remote 56 / bracket 277 / clamp 108 / glare 11, newest 2025-10-22 (no fresh mount WTB/DIY). Boss rule 2026-09-28 → STALE until fresher store-wide appears.",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 14,
+      "owner": "forecasting"
+    },
+    {
+      "name": "aventon_oem",
+      "status": "OK",
+      "detail": "products.json HTTP 200 pages 1+2 = 398 products (unchanged vs 10-16). Flips vs 10-16: 2 stock (Aventon Rear Rack Basket – Abound SR/LR $150.99 IN→OOS — Abound rear-rack cargo, not the Aventure 2 front-basket gap; Current LTD Ebike $7,999 OOS→IN); 0 price; Aventure front-basket Path A flips 0. Still no front basket SKU; Front Rack Set $97.99, Aventure Front Rack $66.99, Front Rack $59.99, Front Bag $41.99, Front Rack Bag $43.99, BiKASE basket liner $34.99, K&H Pet basket $156.99, Abound rear basket $168.99 in stock.",
+      "last_ok": "2026-10-19T09:30:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "printables",
+      "status": "BLOCKED",
+      "detail": "HTTP 403 on search (day 15); WebSearch snippets used: 995999 'Radrover 6+ Display Covers and UI Bracket' $7 STL (carry); radpowerbike tag snippet unchanged (221090 EggRider Sun cover = aftermarket display). Non-blocking.",
+      "last_ok": null,
+      "consecutive_failures": 15,
+      "owner": "forecasting"
+    },
+    {
+      "name": "ebay",
+      "status": "BLOCKED",
+      "detail": "HTTP 403 on sold search (day 15). WebSearch fill-in returned no eBay sold rows (radaccessories.com/Etsy protection covers only; protection class, not visor). Sold prices NEEDS DATA via eBay. Non-blocking.",
+      "last_ok": null,
+      "consecutive_failures": 15,
+      "owner": "forecasting"
+    }
+  ],
+  "weekly_ebr_patch": true,
+  "weekly_ebr_window": "weekly-ebr-2026-10-19",
+  "weekly_fb_patch": true,
+  "weekly_fb_window": "weekly-fb-2026-10-19"
+}

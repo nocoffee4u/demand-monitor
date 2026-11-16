@@ -1,0 +1,13 @@
+{
+  "ts": "2026-10-01T09:05:00-07:00",
+  "run_id": "weekday-2026-10-01",
+  "alert_user": true,
+  "reason": "important_source_first_dark",
+  "summary": "MakerWorld HTTP search first went BLOCKED today (403; was OK on 9/30). WebSearch snippets used as competition proxy. Non-blocking for Path A (teardowns already COMPLETE). Amazon primary SERP + DP OK (streak=0); Line and Ride confirmed Currently unavailable. rad_yotpo still STALE (newest 2026-04-15) \u2014 not an alert. Board: no card newly crossed above WATCH; no new DESIGN gate; SUN-01 still KEEP_HUNTING; OEM stock flips=0; 13 accessory price flips (sale\u2192list including cargo-net/straps/liners). BC280 still 404. Context monitors remain SKIPPED (known).",
+  "sources": [
+    "makerworld"
+  ],
+  "amazon_blocked_streak": 0,
+  "boss_message": "Demand hunt weekday-2026-10-01: MakerWorld search HTTP 403 (first dark; was OK 9/30). WebSearch snippets used. Board unchanged \u2014 SUN-01 KEEP_HUNTING, organizer DESIGN, no new DESIGN/WATCH crosses. Amazon streak=0 (SERP+DP OK; Line and Ride unavailable confirmed). Yotpo still STALE. OEM stock flips=0; cargo-net/straps/liners sale prices ended ($20/$25/$87/$69).",
+  "ui_bot_note": "Weekday hunt 2026-10-01 files ready for Sheet ingest on bot/signal-hunt. New dated files: data/signals/2026-10-01.jsonl + .csv; data/source_health/2026-10-01_weekday.csv + .json; data/scored/heat_2026-10-01.csv; data/opportunities/2026-10-01.csv + .jsonl; data/teardowns/2026-10-01.csv; data/invent/invent_candidates_2026-10-01.csv; data/alerts/2026-10-01.json. Drive uploads: see drive_ids.json (parent 0AP1Zt35TN43AUk9PVA). Amazon streak=0. MakerWorld BLOCKED (new). rad_yotpo STALE. Context_* SKIPPED."
+}

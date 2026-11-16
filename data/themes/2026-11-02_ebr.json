@@ -1,0 +1,20 @@
+{
+  "id": "theme-ebr-2026-11-02",
+  "ts": "2026-11-02T16:05:00Z",
+  "window": "weekly-ebr-2026-11-02",
+  "sources_readable": [
+    "ebr_forum",
+    "electricbikereport"
+  ],
+  "sources_failed": [],
+  "nothing_new": true,
+  "compared_to": "2026-10-26_ebr",
+  "notes": "Anonymous free-stack OK. Rad board RSS https://forums.electricbikereview.com/forum/rad-power-bikes/index.rss (HTTP 200, 50 items) + board listing HTML OK: newest Rad activity still 2026-07-30 (UL replacement battery packs thread); no Rad thread activity since 2026-10-26. Old electricbikereview.com/forum/rad-power-bikes/index.rss still 404s; forums. subdomain is the working URL. Accessories RSS (HTTP 200, 50 items) + board listing: new activity since 10-26 = 'Excellent GCN primer on bike lights' (59495, https://forums.electricbikereview.com/threads/excellent-gcn-primer-on-bike-lights.59495/, posts 2026-10-30 to 11-02; generic daytime/night light lumens, rear radar lights, Lezyne/Magicshine, no Rad, no printable mount ask), 'Gopro hero' (59489, 2026-10-27; generic first-person camera review, no Rad), and further posts on 'Camera for EMTB recommendation?' (59473, through 10-28; generic DJI Osmo Action/GoPro picks, no Rad, no printable mount ask) - no Rad Path A printable theme. Lock 59274 unchanged since 10-15; Headlight 58473 unchanged since 10-08. Baseline rechecks unchanged: condensation/display 56621 last post 2025-02-14; Known Issues 13196 last 2026-06-09; Phone won't charge 57670 last 2025-04-26 - no new visor, clasp/phone-mount, charge_cap, fender, basket cup holder/cargo or off_back posts. Electric Bike Report homepage + feed OK (100 items): new since 10-26 = Pedego Latch 2 review (10-26), Lectric XP Lite3 review (10-27), Tarran L1m cargo review (10-29), Pedego Ridge Rider 2 review (10-30); 0 Rad mentions in article bodies. Context mon_d85e4369 / mon_d44aec3d: context_paid_abandoned (paused since 2026-09-22) - SKIPPED; free RSS/feed is primary. nothing_new is vs prior accessory themes only, not a dark-source claim.",
+  "themes": [],
+  "liability_notes_not_themes": [
+    "UL certified replacement battery packs (delivery early Oct 2026) - battery liability",
+    "CPSC battery recall thread - liability",
+    "Infinite Battery mount tutorial - battery/mount liability",
+    "Rad January funding / Rad Life Mobility crowdfunding - funding chatter"
+  ]
+}

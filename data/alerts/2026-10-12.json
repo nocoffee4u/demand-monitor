@@ -1,0 +1,12 @@
+{
+  "ts": "2026-10-12T09:20:00-07:00",
+  "run_id": "weekday-2026-10-12",
+  "alert_user": false,
+  "reason": "quiet_no_material_change",
+  "summary": "Quiet run. MakerWorld still BLOCKED day 2 (already alerted 10-09). No card status/score change. Amazon 1–3★ readable streak=0; SERPs 9/9. oem_help_aventon Cloudflare 403 day 2 (API OK). rad_yotpo STALE day 9. printables/ebay BLOCKED day 10. Line and Ride liner still Currently unavailable. X SKIPPED. Rad US stock/price flips 0. EBR Report 3 new non-Path-A articles.",
+  "sources": [],
+  "amazon_blocked_streak": 0,
+  "boss_message": "FYI, no Amazon tripwire (1–3★ streak=0, SERPs 9/9). weekday-2026-10-12 (baseline tip c7857ea from 10-09; skipped weekend). MakerWorld still BLOCKED day 2 (dark already flagged 10-09 — no repeat alert). Printables/eBay BLOCKED day 10 (web-search fill-in). Yotpo STALE day 9 (newest still 2026-04-15). oem_help_aventon home Cloudflare 403 day 2 (API OK) — secondary, not at 5-day gate. Board: all status/scores carried vs 10-09 (SUN-01 KEEP_HUNTING unmet 100; organizer DESIGN 60; clamp KEEP_HUNTING 60/0.42/51). Boss LOCK 10-07/09: clamp stays KEEP_HUNTING, no ride-along/CAD — no fresher dated model-named ask today (YouTube clamp searches 0 relevant; Yotpo 0 new). Rad US stock flips 0 / price flips 0. Line and Ride liner still Currently unavailable. Electric Bike Report had 3 new non-Path-A articles (Cikada/NYC bills/Heybike). Weekly FB listen due ~9:57 AM PT after this hunt.",
+  "ui_bot_note": "Weekday hunt 2026-10-12 files ready for Sheet ingest on bot/signal-hunt. New dated files: data/signals/2026-10-12.jsonl + .csv (+ youtube_2026-10-12.jsonl); data/source_health/2026-10-12_weekday.csv + .json; data/scored/heat_2026-10-12.csv; data/opportunities/2026-10-12.csv + .jsonl; data/teardowns/2026-10-12.csv (carry; no new md refresh); data/invent/invent_candidates_2026-10-12.csv; data/alerts/2026-10-12.json. Changes vs 10-09: no card status/score deltas (all unmet/competition/heat/suggested_next carried). Source health: makerworld BLOCKED 1→2 (no new alert); oem_help_aventon BLOCKED 1→2; rad_yotpo STALE consecutive_failures 8→9; printables/ebay BLOCKED 9→10; amazon OK streak 0; x SKIPPED. Rad US stock flips 0 / price 0 (handles 149). Amazon display-cover Rad-named SERP 29→36 (rain covers, not visor). EBR Report 3 new non-Path-A articles. Signals note Line and Ride B0FNL2Q87Q still Currently unavailable. No weekday themes file.",
+  "user_alert_draft": ""
+}

@@ -1,0 +1,20 @@
+{
+  "id": "theme-ebr-2026-10-12",
+  "ts": "2026-10-12T16:18:00Z",
+  "window": "weekly-ebr-2026-10-12",
+  "sources_readable": [
+    "ebr_forum",
+    "electricbikereport"
+  ],
+  "sources_failed": [],
+  "nothing_new": true,
+  "compared_to": "2026-10-05_ebr",
+  "notes": "Anonymous free-stack OK. Rad board RSS https://forums.electricbikereview.com/forum/rad-power-bikes/index.rss (HTTP 200, Rad Power Bikes Forum, 50 items) + board listing HTML OK: newest Rad activity still 2026-07-30 (UL replacement battery packs thread); no Rad thread activity since 2026-10-05. Old electricbikereview.com/forum/rad-power-bikes/index.rss still 404s; forums. subdomain is the working URL. Accessories RSS /forum/accessories/index.rss (HTTP 200, 50 items): only new activity since 10-05 = 'Is There a Quality Hardwired E-bike Headlight?' (58473, last post 2026-10-08) - generic 12V/hardwired light picks (Knog Blinder, MagicShine, Outbound Trail EVO, Bontrager), one Aventon passing mention, no Rad, no printable mount/bracket ask - no Rad Path A printable theme. Baseline rechecks unchanged: condensation/display 56621 last post 2025-02-14; Known Issues 13196 last 2026-06-09; Phone won't charge 57670 last 2025-04-26 - no new clasp/phone-mount, charge_cap, fender, basket or off_back posts. Electric Bike Report homepage + feed OK (100 items): new since 10-05 = Heybike Titan review (2026-10-09), TWR Ep 104 (2026-10-11), Cikada Urban Cruise review (2026-10-12); 0 Rad mentions; TWR 104 mentions Aventon Current EXP battery and Level 4 REC throttle Q&A only (no accessory gap). Context mon_d85e4369 / mon_d44aec3d: context_paid_abandoned (paused since 2026-09-22) - SKIPPED; free RSS/feed is primary. nothing_new is vs prior accessory themes only, not a dark-source claim.",
+  "themes": [],
+  "liability_notes_not_themes": [
+    "UL certified replacement battery packs (delivery early Oct 2026) - battery liability",
+    "CPSC battery recall thread - liability",
+    "Infinite Battery mount tutorial - battery/mount liability",
+    "Rad January funding / Rad Life Mobility crowdfunding - funding chatter"
+  ]
+}

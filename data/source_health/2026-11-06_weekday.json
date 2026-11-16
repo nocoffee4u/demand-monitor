@@ -1,0 +1,227 @@
+{
+  "ts": "2026-11-06T09:00:00-07:00",
+  "run_id": "weekday-2026-11-06",
+  "alert_user": false,
+  "sources": [
+    {
+      "name": "rad_oem",
+      "status": "OK",
+      "detail": "products.json HTTP 200 US (all + accessories + spare-parts = 150 unique handles; 0 new/gone vs 11-05) + CA radpowerbikes.ca 200 (139, unchanged), read ~08:51 MST. STOCK WAVE RECHECK day 4: 0 US stock flips vs 11-05; 0 price changes; CA 0 flips. 30 of the 31 items that flipped IN→OOS on 11-03 are still OOS (1 previously restocked on 11-05 = Rad Wheel Lock by ABUS, still IN $59.99): incl. Small Basket (rack-mount) $89, Front Rack $59, Water Bottle Holder $20, GUB PRO-3 Phone Mount $25, RadRunner + RadWagon Caboose $199 each, RadRunner 3/Max Passenger Package $139, RadRunner Passenger Bars $79, Rad Battery Charger MY2025 $65, wheel-lock chains, saddles, tires/tubes, RadMini fenders, RadWagon Electric Cargo Bike $1,799. US OOS total 51 (unchanged), CA 46. Still IN stock: Large Basket $119, Basket Bag $47, roll-top liners $87/$69, Cargo Net $20, Cargo Straps $25, External Battery Charge Port Cover $5. Small+Large Front-Mounted Baskets still OOS (US $89/$119; CA C$119/C$159). No sun-cover/visor SKU; Rad UI Remote/Display spares still not sold standalone. Cloudflare watch: mid-run CA homepage HTML briefly matched Cloudflare challenge keywords while products.json stayed 200; end-of-run re-probe (~08:56 MST) of radpowerbikes.com home + products.json and radpowerbikes.ca home + products.json all HTTP 200 with no challenge. Today's catalog data captured OK; no stealth/proxy. Scores held (no buyer language moved).",
+      "last_ok": "2026-11-06T09:00:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "ebr_forum",
+      "status": "OK",
+      "detail": "Light weekday check: forums.electricbikereview.com Rad RSS (50) + Accessories RSS (50) OK. Rad 0 new vs 11-05 (newest still 2026-07-30); Accessories 0 new threads (newest still 2026-11-02 general lighting). 7 keyword searches OK, 0 new thread ids (glare=0).",
+      "last_ok": "2026-11-06T09:00:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting",
+      "ts": "2026-11-06T09:00:00-07:00"
+    },
+    {
+      "name": "electric_bike_report",
+      "status": "OK",
+      "detail": "electricbikereport.com/feed OK (100 items); 0 new vs 11-05 (newest still 2026-10-30). 0 Rad Path A articles.",
+      "last_ok": "2026-11-06T09:00:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting",
+      "ts": "2026-11-06T09:00:00-07:00"
+    },
+    {
+      "name": "amazon",
+      "status": "OK",
+      "detail": "box curl 9/9 SERPs HTTP 200, all on the 1st attempt (14th straight day). Display cover 48 results: 4 named (Rad UI Display Meter replacement $95 5.0★/1, RadWagon bike cover $28.99, RadRover 6 Plus bike cover $46.99, Aventon Level.3 rain cover $15.72); no left-pad visor/glare hood. Organizer 60 results, 9 Rad-named (soft liners $34.99/$39.99, Line and Ride, per-model handlebar baskets/racks); 0 rigid inserts. Liner 48 results, 4 Rad-named. Accessories 48 results, 17 Rad-named (11-05: 20; render variance). Cup holder 0 Rad-named (48 results); cargo net 0 (48). UI remote mount SERP only 5 results, 0 Rad-named (thin render, same as prior days). Passenger 48 results, 2 Rad-named (saddle/kids seat — not Path A passenger package). Aventon 60 results, 1 named (Abound SR $68.99; Sinch.2 dropped). 0 first-seen Rad/Aventon-named ASINs. Blocked-streak 0.",
+      "last_ok": "2026-11-06T09:00:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "amazon_product_pages",
+      "status": "OK",
+      "detail": "curl DP HTTP 200 on all 3 on the 1st attempt (no captcha): B0FNL2Q87Q $34.99 3.8★ (7) unchanged (availability line blank today; 11-05 'Only 17 left'); B0FLTJHDXG Retrospec In Stock $119.99 still 3.4★ (7) — no new low-star since 11-05 (histogram/text still NEEDS DATA on the 11-05 new 1★ cause; reviews page sign-in-walled); B0HHS1YVDK In Stock $29.99, no ratings.",
+      "last_ok": "2026-11-06T09:00:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "etsy",
+      "status": "OK",
+      "detail": "openapi.etsy.com v3 listings/active keyword search HTTP 200 on all 21 query groups on the first attempt (3rd OK day after the 11-03 outage). Counts vs 11-05: display cover 8, rad basket 14, rad ui remote 1, remote mount 0, remote cover 2, generic 'ebike display visor' 2 (was 3; 1 listing gone), ebike cup holder 13 (was 14; 1 gone), ebike basket organizer 5, generic organizer insert 1605 (1596; listing-id churn), phone mount 1 (all else same). No Rad left-pad visor listing. Competition-only; competition_density held.",
+      "last_ok": "2026-11-06T09:00:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "makerworld",
+      "status": "BLOCKED",
+      "detail": "HTTP 403 on 13/13 searches (day 21 after 10-09 re-block). Competition counts carried from teardowns (MW 632673 RAD PAS Controller Mount, Cults3D 3138405 UI display mount); no Rad left-pad visor STL known. Non-blocking (no decision waits on it).",
+      "last_ok": null,
+      "consecutive_failures": 21,
+      "owner": "forecasting"
+    },
+    {
+      "name": "x",
+      "status": "SKIPPED",
+      "detail": "OFF by Boss rule — not fetched.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "youtube",
+      "status": "OK",
+      "detail": "youtube_scan.py 7/7 searches OK; 32 signals (4 new / 2 gone video ids vs 11-05), all rank churn / older uploads (newest among new ids: ElectronicLab e-bike display wiring 2025-10-26; Dual Fishing Rod Holder install; Radrunner test ride; Rad Runner updates/mods) — 0 newly posted videos since 11-05. commentThreads OK on 32/32. 13 top-level comments since 2026-09-01 (4 newly visible from the new wiring video, none Path A; 1 dated 2026-11-05 about an Aairsk x5 NFC tab — not Rad Path A). 0 WTB/DIY Path A. 4 clamp searches: 0 relevant hits.",
+      "last_ok": "2026-11-06T09:00:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "facebook_manual",
+      "status": "PARTIAL",
+      "detail": "Weekly 2026-11-02 read (weekly-fb-2026-11-02). 5 weekly groups + 1 monthly (monthly watch run); small samples, mostly undated. All 6 groups PARTIAL (Aventure Owners ~12 posts, target 60 not reached; Troubleshooters keyword pass none confirmed in 7 days). Themes: Aventure-2 handlebar cup/tumbler holder (watch, later candidate behind Rad launch three), Rad display LCD mount/protector/cover-plate breaks (watch, undated, SUN-01 adjacency), spare-battery/cargo securing + rack fragility (watch; battery holders not SKUs); none flagged. No visor/glare, charge-port cap, or phone-mount asks (beyond battery cover w/ phone holder question); no UI Remote clamp break for opp-55f52c35. A2 fender vibration undated, likely not new vs Oct 9. Weekday signals now carry the 13 sig-fb-*-2026-11-02 rows (replacing prior sig-fb carry). Not an important source → no user alert.",
+      "last_ok": "2026-11-02T17:15:00Z",
+      "consecutive_failures": 0,
+      "owner": "manual"
+    },
+    {
+      "name": "reddit",
+      "status": "SKIPPED",
+      "detail": "Retired — no Reddit API; do not scrape (Reddit results excluded from WebSearch)",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "context_dev",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned — paid Context.dev abandoned 2026-09-22. All context_* SKIPPED. NEVER DOWN, never alert.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_rad_oem",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned — free OEM products.json used instead. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_amazon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned — free Amazon WebFetch used under amazon instead. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "context_ebr",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned - weekly 2026-11-02: mon_d85e4369 paused since 2026-09-22 (not called). Free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context",
+      "ts": "2026-11-02T09:05:00-07:00"
+    },
+    {
+      "name": "context_ebr_report",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned - weekly 2026-11-02: mon_d44aec3d paused since 2026-09-22 (not called). Free Report feed used under electric_bike_report. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context",
+      "ts": "2026-11-02T09:05:00-07:00"
+    },
+    {
+      "name": "amazon_reviews_rad",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned (Context-backed alias). Free Amazon attempt recorded under amazon. NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "amazon_reviews_aventon",
+      "status": "SKIPPED",
+      "detail": "context_paid_abandoned — NEVER NOTHING_NEW.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "context"
+    },
+    {
+      "name": "google_reviews",
+      "status": "SKIPPED",
+      "detail": "user_skipped — not attempting Google reviews scrape this run.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "google_reviews_rad",
+      "status": "SKIPPED",
+      "detail": "user_skipped — not attempting Google reviews scrape this run.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "google_reviews_aventon",
+      "status": "SKIPPED",
+      "detail": "user_skipped — not attempting Google reviews scrape this run.",
+      "last_ok": null,
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "oem_help_rad",
+      "status": "OK",
+      "detail": "https://www.radpowerbikes.com/pages/support HTTP 200 (~08:51 MST). 'Invest starting at $250' header banner still up; UI Remote/Display spares still not sold standalone (catalog).",
+      "last_ok": "2026-11-06T09:00:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "oem_help_aventon",
+      "status": "OK",
+      "detail": "Official Zendesk Help Center API only (Boss-approved switch 2026-10-16; HTML home page not attempted). articles.json sort_by=updated_at HTTP 200 (681 articles; unchanged vs 11-05); 2 updated since 11-05, none Path A (AutoShift Settings and Adjustments 2026-11-05T16:38:53Z; Pairing an Action Camera 2026-11-05T16:08:39Z). articles/search.json?query=basket HTTP 200 = 15 (unchanged), no Aventure 2 front-basket or fender-rattle article.",
+      "last_ok": "2026-11-06T09:00:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "rad_yotpo",
+      "status": "STALE",
+      "detail": "Store-wide POST filter.json OK (total 67,899 unchanged; newest still 2026-04-15 id 830222856; per-star 1/2/3 newest 2025-12-06/2025-12-02/2025-12-04). Accessory widget re-pull merged by id: 8,537 unique reviews, 0 new/gone vs 11-05, newest 2025-12-03. STALE day 28 until a store-wide review newer than 2026-04-15 appears (Boss rule 2026-09-28).",
+      "last_ok": "2026-09-28T09:20:00-07:00",
+      "consecutive_failures": 28,
+      "owner": "forecasting"
+    },
+    {
+      "name": "aventon_oem",
+      "status": "OK",
+      "detail": "products.json HTTP 200 pages 1+2 = 398 products (0 new / 0 gone vs 11-05). 0 price changes. Stock flips 5, none Path A (mix): Shifter Cable Housing Pace 350/Long IN→OOS $6.99; Complete Rear MTB Wheel 29 Ramblas IN→OOS $109.99; Fender Stays Level Rear OOS→IN $6.99; Rear Rack Hardware Pack Aventure OOS→IN $6.99; Reflector Pace/Level wheel OOS→IN $6.99. Still no Aventure 2 front basket SKU and no fender-rattle/damper part listed.",
+      "last_ok": "2026-11-06T09:00:00-07:00",
+      "consecutive_failures": 0,
+      "owner": "forecasting"
+    },
+    {
+      "name": "printables",
+      "status": "BLOCKED",
+      "detail": "HTTP 403 on search (day 29); web-search fill-in 2026-11-06 shows only the known Radrover 6+ Display Covers and UI Bracket ($7, 2024), RadCity LCD Mount (Mark), Cults3D/tag prior art, and EggRider Sun cover (not Rad). No new Rad left-pad visor or UI Remote clamp. Non-blocking.",
+      "last_ok": null,
+      "consecutive_failures": 29,
+      "owner": "forecasting"
+    },
+    {
+      "name": "ebay",
+      "status": "BLOCKED",
+      "detail": "HTTP 403 on sold search (day 29); 2026-11-06 web-search fill-in shows eBay shop snapshots only: Rad LCD Display Upgrade slip-on cover $21.95 (14+ sold), battery terminal cover cap $11.95 (21+ sold); no sold data for a left-pad visor. Non-blocking.",
+      "last_ok": null,
+      "consecutive_failures": 29,
+      "owner": "forecasting"
+    }
+  ]
+}
