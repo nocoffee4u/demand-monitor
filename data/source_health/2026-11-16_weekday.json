@@ -80,8 +80,8 @@
     {
       "name": "facebook_manual",
       "status": "PARTIAL",
-      "detail": "Weekly 2026-11-09 read (weekly-fb-2026-11-09). 5 weekly groups + 1 monthly (NOT_DUE), not 3. Grant personal Meta OK, read-only; all 5 weekly Joined. Upgrades OK; rpboc, Aventon Bikes, Aventure Owners, Troubleshooters PARTIAL (small/slow samples). Verdict MATERIAL (low-weight). Themes: Aventon fender bracket / fender hardware replacement (weak, Aventure-2 first-party, later candidate behind Rad launch three; fender-clip WATCH), front basket capacity / basket adapter fit (watch, transferable-generic), rear-rack cargo securing / under-rack mounts (watch, transferable-generic; off-back basket config-only WATCH); none flagged. No visor/glare, phone mount, charge-port cap, or cup-holder hits; no display/UI-remote clamp break for opp-55f52c35. rpboc 2019 Step-through display+controller OOS post = electronics log only (aligns with Rad US OOS wave). Weekday signals now carry the 6 sig-fb-*-2026-11-09 rows (replacing the 13 sig-fb-*-2026-11-02 carry). Not an important source \u2192 no user alert.",
-      "last_ok": "2026-11-09T17:10:00Z",
+      "detail": "Weekly 2026-11-16 read (weekly-fb-2026-11-16). 5 weekly groups + 1 monthly (NOT_DUE), not 3. Grant personal Meta OK, read-only; all 5 weekly Joined; all 5 PARTIAL (FB ignored chronological sort, thin loads, few in-window search results). Verdict near NOTHING_NEW: 1 weak theme (Aventure-2 rear-rack QD plate adapter + original AA parts ask; repeat rack/basket adapter-fit WATCH, Aventon first-party later candidate). No visor/glare, phone mount, charge-port cap, cup-holder or fender-rattle hits; no display/UI-remote clamp break for opp-55f52c35. Weekday signals now carry the 2 sig-fb-*-2026-11-16 rows (replacing the 6 sig-fb-*-2026-11-09 carry). Not an important source -> no user alert.",
+      "last_ok": "2026-11-16T17:40:00Z",
       "consecutive_failures": 0,
       "owner": "manual"
     },
