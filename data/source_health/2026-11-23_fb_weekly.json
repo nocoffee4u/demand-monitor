@@ -1,0 +1,87 @@
+{
+  "ts": "2026-11-23T17:50:00Z",
+  "run_id": "weekly-fb-2026-11-23",
+  "alert_user": false,
+  "alert_reason": "",
+  "compared_to": "2026-11-16_fb",
+  "sources": [
+    {
+      "name": "fb_1654952334789041",
+      "status": "PARTIAL",
+      "detail": "Joined; ~35 top-level posts loaded; chronological sort ignored (ages hours to ~3w, dated mostly from comment ages). T1: Robert W Wengrod Nov 12 8:29 AM display/bike cover for hitch-rack transport (10 comments; Osslund 'printed' display cover). T2: Zachary Herman RR+ console retaining band (undated), Ryan RL kickstand exploded/Rad OOS (~6d, 9 comments). Log only: display buy ask (~1w, 12c), 2019 ST display+controller OOS (~2w, 11c), Amazon throttle, UK large front basket, cracked frame/rim welds. No phone mount, visor/glare, cup holder, charge cap, fender rattle, UI clamp hits.",
+      "group_name": "Rad Power Bikes Owners Community",
+      "group_id": "1654952334789041",
+      "cadence": "weekly",
+      "legacy_key": "facebook_rpboc",
+      "url": "https://www.facebook.com/groups/rpboc",
+      "posts_loaded": 35,
+      "search_hits": null
+    },
+    {
+      "name": "fb_629167654165317",
+      "status": "PARTIAL",
+      "detail": "Joined; ~30 top-level posts, mixed order, visible dates Oct 31-Nov 12 (comments mostly 1w-4w; several off-topic shares). T2: Kelly Phillips UI Remote 400-00683 backordered (1/21; supply pain, not clamp break); Rover 6+ battery terminal block broke (15c, battery, log-only). Log only: RR2 20x3/20x4 tires sold out, part-ID ask, harness protection, Expand kickstand heel strike (~4w), RadMini LCD/controller upgrade (4/23). No display cover, visor, phone mount, cup holder, fender rattle, basket securing hits.",
+      "group_name": "Rad Power Bike Upgrades",
+      "group_id": "629167654165317",
+      "cadence": "weekly",
+      "legacy_key": "facebook_upgrades",
+      "url": "https://www.facebook.com/groups/629167654165317",
+      "posts_loaded": 30,
+      "search_hits": null
+    },
+    {
+      "name": "fb_860508022428626",
+      "status": "PARTIAL",
+      "detail": "Joined (~9.9K); ~35 top-level posts, Most relevant sort (not chronological), dated ~Nov 19-23 plus undated. T3: Rachel Monaco (~Nov 20) front rack for kids' backpacks, Yepp seat on rear (5 likes). Log only: vehicle-rack bike covers (4 likes), Abound LR handlebar rotation on center stand (3 likes), bikepacking racks/bags (4 likes), hitch rack ask (car rack), Soltero 2 battery, support complaint. No display cover, visor/glare, phone mount, charge cap, cup holder, fender rattle hits.",
+      "group_name": "Aventon Bikes",
+      "group_id": "860508022428626",
+      "cadence": "weekly",
+      "legacy_key": "facebook_aventon",
+      "url": "https://www.facebook.com/groups/860508022428626",
+      "posts_loaded": 35,
+      "search_hits": null
+    },
+    {
+      "name": "fb_333458264803610",
+      "status": "PARTIAL",
+      "detail": "Joined (30.9K); chronological sort WORKED this week ('New posts'); ~30 posts loaded back to Nov 15 (some skipped while scrolling). 9 searches (relevance-ranked, Most recent toggle no effect): basket 5-6, fender 7, visor 10, glare 6, mount 9, rack 9, cup holder 10, clip 8, clamp 7; no visibly dated in-window hit. T3: Robert Bartley Nov 15 A2 rear-rack QD plate adapter (16 likes, carry), repeated undated AA2 handlebar cup-holder asks, Joe Chinea display clock wish (undated). No new in-window A2 fender rattle (latest Jeff Crocker Oct 9).",
+      "group_name": "Aventon Aventure Owners",
+      "group_id": "333458264803610",
+      "cadence": "weekly",
+      "legacy_key": "",
+      "url": "https://www.facebook.com/groups/aventureowners",
+      "posts_loaded": 30,
+      "search_hits": 9
+    },
+    {
+      "name": "fb_2677348212546303",
+      "status": "PARTIAL",
+      "detail": "Joined (private, 10.9K). Keyword pass 8 terms: clamp ~12, clip ~18, mount ~17 results; cover, broken plastic, cracked, snapped, replacement part read first 2 screens each. Relevance-ranked, mostly undated; only in-window result Sar Ah Nov 18 46t chainring ask (drivetrain, log-only). T1 support: Helen Missy Bemis Jul 27 City 5 display plastic protector broke ($80+ shop quote, 3/6). No UI-remote/display clamp break (no new evidence for opp-55f52c35).",
+      "group_name": "Rad Power Bike Troubleshooters",
+      "group_id": "2677348212546303",
+      "cadence": "weekly",
+      "legacy_key": "",
+      "url": "https://www.facebook.com/groups/2677348212546303",
+      "posts_loaded": null,
+      "search_hits": 1
+    },
+    {
+      "name": "fb_746195242754268",
+      "status": "NOT_DUE",
+      "detail": "Not first Monday (day 23); next due Mon 2026-12-07.",
+      "group_name": "eBikes All Brands Group",
+      "group_id": "746195242754268",
+      "cadence": "monthly",
+      "legacy_key": "",
+      "url": "https://www.facebook.com/groups/ebikesallbrandsgroup",
+      "posts_loaded": null,
+      "search_hits": null
+    },
+    {
+      "name": "facebook_groups",
+      "status": "PARTIAL",
+      "detail": "5/5 weekly Joined+readable; 1 monthly NOT_DUE; all 5 weekly PARTIAL (chronological sort ignored except Aventure Owners, relevance-ranked mostly undated search, scroll timeouts); 3 themes; T1 Rad display-cover FLAG (supports SUN-01); no AUTH/checkpoint; alert_user=false",
+      "cadence": "weekly"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "id": "theme-fb-2026-11-23",
+  "ts": "2026-11-23T17:50:00Z",
+  "window": "weekly-fb-2026-11-23",
+  "sources_readable": [
+    "fb_1654952334789041",
+    "fb_629167654165317",
+    "fb_860508022428626",
+    "fb_333458264803610",
+    "fb_2677348212546303"
+  ],
+  "sources_failed": [],
+  "nothing_new": false,
+  "compared_to": "2026-11-16_fb",
+  "notes": "Verdict: 3 themes; T1 Rad display-cover FLAG (supports SUN-01; moderate, one recent post dated Nov 12 = before window, missed by last week's PARTIAL pass); T2 Rad OEM parts-scarcity WATCH/log; T3 Aventon cargo/rack fit later-candidate WATCH. alert_user=false (theme flags are not an alert-routing condition). Personal Meta as Grant, read-only; no login/2FA/checkpoint; all 5 weekly groups Joined (Troubleshooters Joined confirmed on follow-up, private 10.9K). Monthly eBikes All Brands NOT_DUE (day 23). All 5 weekly PARTIAL: FB ignored chronological sort on rpboc/Upgrades (worked on Aventure Owners this week), Aventon Bikes Most relevant only, group search relevance-ranked and mostly undated, feed scroll timeouts. No visor/glare, phone mount, charge-port cap or fender-rattle hits in window; no display/UI-remote clamp break (no new evidence for opp-55f52c35). Troubleshooters only in-window result: Sar Ah Nov 18 46t chainring ask (drivetrain, log-only). Log-only: rpboc Jordan Keith display buy ask (~1w, 12 comments), Teresa McLaughlin 2019 ST display+controller OOS at Rad (~2w, 11 comments), Ron Malizia Rover 6+ Amazon throttle, Catriona Drake UK large front basket (repeat), cracked frame/rim welds; Upgrades Rover 6+ battery terminal block (15 comments), Richard Reyes 20x3/20x4 tires sold out, harness protection; Troubleshooters Jeff Hilbert Nov 6 brake-cable pinch plate, Nate McGlone Aug 16 display ground off, Matt Farris Aug 7 City 3 display backordered (~$200 aftermarket); Aventon Bikes Roberta Larson vehicle-rack bike covers (4 likes), David Driskel Abound handlebar rotation on center stand (3 likes), Collin Ball bikepacking racks; Aventure Owners Joe Chinea display clock wish, John Surace rod holder mount, Mike Young Nov 15 original AA parts (4 likes, 7 comments), Jack Daniel Nov 15 early ST battery, busted screen ($90 Aventon). Peter Sherratt battery-top clip-on cover post could not be found/dated. No permalinks captured (group URLs).",
+  "themes": [
+    {
+      "label": "Rad display cover for weather/transport protection (FLAG; supports SUN-01)",
+      "tag": "Rad",
+      "gist": "rpboc Robert W Wengrod (Nov 12 2026 8:29 AM; before the Nov 16-23 window but missed by last week's PARTIAL pass): 2 Rad bikes on a hitch rack, wants covers after loading; 10 comments, no reactions shown. Commenter John Osslund uses a display cover 'printed' for it (5 yrs / ~4k mi RV haul); others use battery wraps, BBQ covers, Amazon LETSERBIKE neoprene battery cover; nobody named a printed display-cover seller or price. Supporting older: Troubleshooters Helen Missy Bemis (Jul 27) City 5 display 'plastic protector' broke, shop quoted $80+ (3 reactions, 6 comments); rpboc Marcella Pardo (Sep 18 2025) wanted DIY display cover ~3.5x4 in for stored bikes, couldn't find one on Amazon (7 comments). FLAG: supports SUN-01 display cover. Strength moderate (one recent post).",
+      "url": "https://www.facebook.com/groups/rpboc",
+      "relevance": "launch_flag_sku",
+      "signal_ids": [
+        "sig-fb-2026-11-23-rad-display-cover-hitch-rack-wengrod",
+        "sig-fb-2026-11-23-rad-city5-display-plastic-protector-broke-bemis",
+        "sig-fb-2026-11-23-rad-diy-display-cover-stored-bikes-pardo"
+      ]
+    },
+    {
+      "label": "Rad OEM parts scarcity driving 3rd-party part asks (WATCH/log)",
+      "tag": "Rad",
+      "gist": "rpboc Zachary Herman (undated, est. <1w): RadRunner Plus center console rubber retaining band broken, wants 3rd-party replacement. Upgrades Kelly Phillips (est. ~1-2w): UI Remote part 400-00683 backordered (1 reaction, 21 comments) - supply pain, not a clamp break. rpboc Ryan RL (~6d): kickstand exploded and Rad OOS (9 comments) - structural, NOT a launch SKU. Upgrades Rover 6+ battery terminal block broke (15 comments) - battery, log-only, NOT a SKU. No UI remote/display clamp break seen (no new evidence for opp-55f52c35). WATCH/log only.",
+      "url": "https://www.facebook.com/groups/rpboc",
+      "relevance": "watch",
+      "signal_ids": [
+        "sig-fb-2026-11-23-radrunner-plus-console-retaining-band-herman",
+        "sig-fb-2026-11-23-rad-ui-remote-400-00683-backordered-phillips",
+        "sig-fb-2026-11-23-rad-kickstand-exploded-oos-ryanrl"
+      ]
+    },
+    {
+      "label": "Aventon cargo/rack fit (Aventure-2 first-party; later candidate)",
+      "tag": "Aventon",
+      "gist": "Aventon Bikes Rachel Monaco (~Nov 20): wants a front rack for kids' backpacks (rear has Yepp seat; 5 likes). Aventure Owners Robert Bartley (Nov 15): A2 rear-rack QD plate adapter ask (16 likes; carried from last week). Undated repeated AA2 handlebar cup-holder asks in search. Joe Chinea display clock wish (undated). No new in-window Aventure-2 fender rattle (latest Jeff Crocker Oct 9). Later-candidate WATCH, behind Rad launch three (SUN-01 visor / phone clasp / charge-port cap).",
+      "url": "https://www.facebook.com/groups/aventureowners",
+      "relevance": "later_candidate",
+      "signal_ids": [
+        "sig-fb-2026-11-23-aventon-front-rack-kids-backpacks-monaco",
+        "sig-fb-2026-11-23-aventure2-rear-rack-qd-plate-adapter-bartley",
+        "sig-fb-2026-11-23-aventure2-handlebar-cup-holder-search-asks"
+      ]
+    }
+  ]
+}
