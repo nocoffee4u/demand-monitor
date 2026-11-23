@@ -14,7 +14,7 @@
     {
       "name": "ebr_forum",
       "status": "OK",
-      "detail": "Light weekday check: forums.electricbikereview.com Rad RSS (50) + Accessories RSS (50) OK. Rad 0 new vs 11-20 (newest still 2026-07-30); Accessories 0 new threads, 1 bump of an existing non-Rad thread (GCN primer on bike lights, 2026-11-22 08:14Z). 7 keyword searches OK, 1 new thread id ('Velotric Fold 1 Plus Review', not Rad / not Path A), glare=0. Weekly EBR 11-16 NOTHING_NEW; weekly EBR 11-23 routine had not committed an 11-23 themes file at build time.",
+      "detail": "Light weekday check: forums.electricbikereview.com Rad RSS (50) + Accessories RSS (50) OK. Rad 0 new vs 11-20 (newest still 2026-07-30); Accessories 0 new threads, 1 bump of an existing non-Rad thread (GCN primer on bike lights, 2026-11-22 08:14Z). 7 keyword searches OK, 1 new thread id ('Velotric Fold 1 Plus Review', not Rad / not Path A), glare=0. Weekly EBR 11-16 NOTHING_NEW; weekly EBR 11-23 routine had not committed an 11-23 themes file at build time. Weekly EBR dig 2026-11-23: Rad board RSS (forums.electricbikereview.com/forum/rad-power-bikes/index.rss, 50 items) + Accessories RSS (50) HTTP 200; Rad newest still 2026-07-30 (UL battery packs), Accessories top item = GCN lights primer bumped 2026-11-22 (general lighting, not new); baseline threads 59274/58473/56621/13196/57670 reachable HTTP 200, no new accessory posts. NOTHING_NEW vs 2026-11-16_ebr.",
       "last_ok": "2026-11-23T09:00:00-07:00",
       "consecutive_failures": 0,
       "owner": "forecasting",
@@ -23,7 +23,7 @@
     {
       "name": "electric_bike_report",
       "status": "OK",
-      "detail": "electricbikereport.com/feed OK (100 items); 1 new vs 11-20 (TWR Ep 110 podcast roundup, 2026-11-22 22:26Z; no Rad Path A). 0 Rad Path A articles.",
+      "detail": "electricbikereport.com/feed OK (100 items); 1 new vs 11-20 (TWR Ep 110 podcast roundup, 2026-11-22 22:26Z; no Rad Path A). 0 Rad Path A articles. Weekly EBR dig 2026-11-23: homepage 200 + feed OK (100 items); 2 new since 11-16 (Amflow UE Carbon review 11-18; news roundup 11-22), no Rad mention. NOTHING_NEW vs 2026-11-16_ebr.",
       "last_ok": "2026-11-23T09:00:00-07:00",
       "consecutive_failures": 0,
       "owner": "forecasting",
