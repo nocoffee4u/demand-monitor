@@ -1,0 +1,20 @@
+{
+  "id": "theme-ebr-2026-10-26",
+  "ts": "2026-10-26T16:08:00Z",
+  "window": "weekly-ebr-2026-10-26",
+  "sources_readable": [
+    "ebr_forum",
+    "electricbikereport"
+  ],
+  "sources_failed": [],
+  "nothing_new": true,
+  "compared_to": "2026-10-19_ebr",
+  "notes": "Anonymous free-stack OK. Rad board RSS https://forums.electricbikereview.com/forum/rad-power-bikes/index.rss (HTTP 200, Rad Power Bikes Forum, 50 items) + board listing HTML OK: newest Rad activity still 2026-07-30 (UL replacement battery packs thread); no Rad thread activity since 2026-10-19. Old electricbikereview.com/forum/rad-power-bikes/index.rss still 404s; forums. subdomain is the working URL. Accessories RSS /forum/accessories/index.rss (HTTP 200, 50 items) + board listing: only new activity since 10-19 = 'Camera for EMTB recommendation?' (59473, https://forums.electricbikereview.com/threads/camera-for-emtb-recommendation.59473/, posts 2026-10-21 to 10-23) - generic action-camera talk (GoPro / DJI Osmo Action, battery life, mounting options), no Rad, no printable camera-mount ask - no Rad Path A printable theme. Lock Recommendations 59274 unchanged since 10-15; Headlight 58473 unchanged since 10-08. Baseline rechecks unchanged: condensation/display 56621 last post 2025-02-14; Known Issues 13196 last 2026-06-09; Phone won't charge 57670 last 2025-04-26 - no new visor, clasp/phone-mount, charge_cap, fender, basket cup holder/cargo or off_back posts. Electric Bike Report homepage + feed OK (100 items): new since 10-19 = Retrospec Valen Rev 14 kids mini e-moped review (2026-10-22), The Weekly Recharge Ep 106 (2026-10-25; Scott E-Ville, Priority E-Sauce, Novbyx Kickstarter); 0 Rad mentions in article bodies (site nav only). Context mon_d85e4369 / mon_d44aec3d: context_paid_abandoned (paused since 2026-09-22) - SKIPPED; free RSS/feed is primary. nothing_new is vs prior accessory themes only, not a dark-source claim.",
+  "themes": [],
+  "liability_notes_not_themes": [
+    "UL certified replacement battery packs (delivery early Oct 2026) - battery liability",
+    "CPSC battery recall thread - liability",
+    "Infinite Battery mount tutorial - battery/mount liability",
+    "Rad January funding / Rad Life Mobility crowdfunding - funding chatter"
+  ]
+}

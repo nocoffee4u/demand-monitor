@@ -1,0 +1,87 @@
+{
+  "ts": "2026-11-16T17:40:00Z",
+  "run_id": "weekly-fb-2026-11-16",
+  "alert_user": false,
+  "alert_reason": "",
+  "compared_to": "2026-11-09_fb",
+  "sources": [
+    {
+      "name": "fb_1654952334789041",
+      "status": "PARTIAL",
+      "detail": "Joined; ~16 top-level posts loaded but FB ignored chronological sort (comment ages 1d-4w); dates mostly not shown. No visor/clasp/cap/cup holder/fender hits. Log only: fire-safety battery boxes ask (2/11, battery), Altec Lansing speaker magnetic bar mount (2/8, ~3-4w, not phone mount), 'pedalling alone' (25/61, solved), Rover PAS5 shutoff, Mini charger ask.",
+      "group_name": "Rad Power Bikes Owners Community",
+      "group_id": "1654952334789041",
+      "cadence": "weekly",
+      "legacy_key": "facebook_rpboc",
+      "url": "https://www.facebook.com/groups/rpboc",
+      "posts_loaded": 16,
+      "search_hits": null
+    },
+    {
+      "name": "fb_629167654165317",
+      "status": "PARTIAL",
+      "detail": "Joined; ~10 top-level posts Oct 31-Nov 15 (only Nov 8-15 in window, several spam/reshares). No accessory hits. Log only: Rover 6+ triple-locked at gym Nov 11 (4/11), motor hall-sensor fix Nov 15, RadWagon 4 powder-coat frame, 'work rig' conversion (22/43).",
+      "group_name": "Rad Power Bike Upgrades",
+      "group_id": "629167654165317",
+      "cadence": "weekly",
+      "legacy_key": "facebook_upgrades",
+      "url": "https://www.facebook.com/groups/629167654165317",
+      "posts_loaded": 10,
+      "search_hits": null
+    },
+    {
+      "name": "fb_860508022428626",
+      "status": "PARTIAL",
+      "detail": "Joined; ~12 top-level posts, ~1 week back (only one exact date, Nov 13). No fender/display/visor/phone/cap hits. Log only: hitch rack ask (1/32, car rack; likely 11-09's post), seat swap (Ramblas/Current ADV), Black Friday chatter (5/16, 1/16), Pace.3 gravel Q.",
+      "group_name": "Aventon Bikes",
+      "group_id": "860508022428626",
+      "cadence": "weekly",
+      "legacy_key": "facebook_aventon",
+      "url": "https://www.facebook.com/groups/860508022428626",
+      "posts_loaded": 12,
+      "search_hits": null
+    },
+    {
+      "name": "fb_333458264803610",
+      "status": "PARTIAL",
+      "detail": "Joined; chronological feed scrolled ~5-6 days back but only ~6-8 posts readable (feed unloads) + 10-term search Most recent (basket, visor, glare, mount, rack, fender, cup holder, clip, clamp, rattle): 0 new in-window hits; newest were Nov 8 fender bracket (already 11-09), Nov 2 basket adapter, Nov 1 AA3 under-rack mount, Oct 9 fender rattle. Feed hits (~Nov 15): A2 rear-rack QD plate adapter ask, original AA parts ask (3/6) -> theme 1. Small sample = PARTIAL.",
+      "group_name": "Aventon Aventure Owners",
+      "group_id": "333458264803610",
+      "cadence": "weekly",
+      "legacy_key": "",
+      "url": "https://www.facebook.com/groups/aventureowners",
+      "posts_loaded": 8,
+      "search_hits": 10
+    },
+    {
+      "name": "fb_2677348212546303",
+      "status": "PARTIAL",
+      "detail": "Weekly keyword pass (Most recent, top screen only): clamp, clip, mount, cover, broken plastic, cracked, snapped, replacement part. 0 results in Nov 9-16; newest Nov 6 Radwagon 4 brake-cable bolt (already logged), Oct 23 throttle trigger, Oct 28 Rover 6+ PAS. No UI-remote/display clamp break (no new evidence for opp-55f52c35).",
+      "group_name": "Rad Power Bike Troubleshooters",
+      "group_id": "2677348212546303",
+      "cadence": "weekly",
+      "legacy_key": "",
+      "url": "https://www.facebook.com/groups/2677348212546303",
+      "posts_loaded": null,
+      "search_hits": 0
+    },
+    {
+      "name": "fb_746195242754268",
+      "status": "NOT_DUE",
+      "detail": "Not first Monday (day 16); next due Mon 2026-12-07.",
+      "group_name": "eBikes All Brands Group",
+      "group_id": "746195242754268",
+      "cadence": "monthly",
+      "legacy_key": "",
+      "url": "https://www.facebook.com/groups/ebikesallbrandsgroup",
+      "posts_loaded": null,
+      "search_hits": null
+    },
+    {
+      "name": "facebook_groups",
+      "status": "PARTIAL",
+      "detail": "5/5 weekly Joined+readable; 1 monthly NOT_DUE; all 5 weekly PARTIAL (FB ignored chronological sort, thin loads, few in-window search results); verdict near NOTHING_NEW (1 weak repeat-WATCH theme); no AUTH/checkpoint; alert_user=false",
+      "cadence": "weekly"
+    }
+  ]
+}

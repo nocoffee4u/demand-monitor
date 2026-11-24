@@ -1,0 +1,46 @@
+{
+  "id": "theme-fb-2026-09-28",
+  "ts": "2026-09-28T17:11:00Z",
+  "window": "weekly-fb-2026-09-28",
+  "sources_readable": [
+    "facebook_rpboc",
+    "facebook_upgrades",
+    "facebook_aventon"
+  ],
+  "sources_failed": [],
+  "nothing_new": false,
+  "compared_to": "2026-09-21_fb",
+  "notes": "Personal Meta as Grant OK. All three Joined groups readable. Flag: Aventon Level 4 fender/rack tire-upsizing question (later candidate). Also Rad Caboose short-saddle WATCH (kid-passenger) and battery hardware off-back. No SUN-01/clasp/charge_cap/display/phone-mount. No PROTOTYPE. No basket/cup-holder/organizer hits.",
+  "themes": [
+    {
+      "label": "Level 4 fender vs rear rack when upsizing tires",
+      "tag": "Aventon",
+      "gist": "Aventon Level 4 step-through shopper asked whether fitting knobbier MTB tires forces the fender off and whether the rear rack still works afterward. Fender-fit flag; later candidate only (not Aventure 2; not Rad launch three). No printed-part WTB.",
+      "url": "https://www.facebook.com/groups/860508022428626",
+      "relevance": "launch_flag_sku",
+      "signal_ids": [
+        "sig-fb-aventon-level4-fender-rack-2026-09-28"
+      ]
+    },
+    {
+      "label": "RadRunner Plus short saddle that clears a Caboose",
+      "tag": "Rad",
+      "gist": "RadRunner Plus owner with a Caboose for grandkids wants a suspension seatpost plus a short comfort saddle because the stock saddle is fixed to its post and may foul the kid seat. Kid-passenger adjacent \u2014 WATCH only, not a launch SKU.",
+      "url": "https://www.facebook.com/groups/629167654165317",
+      "relevance": "watch",
+      "signal_ids": [
+        "sig-fb-rad-caboose-short-saddle-2026-09-28"
+      ]
+    },
+    {
+      "label": "Battery hardware anxiety (supply, lock, case scuff)",
+      "tag": "Rad|Aventon",
+      "gist": "Owners still chasing Safe Shield packs / lock-cylinder swaps on Rad; one Aventon rider considering tape on a scratched battery case. Off-back battery hardware \u2014 WATCH evidence only, never launch.",
+      "url": "https://www.facebook.com/groups/rpboc",
+      "relevance": "off_back",
+      "signal_ids": [
+        "sig-fb-battery-hardware-anxiety-2026-09-28"
+      ]
+    }
+  ]
+}

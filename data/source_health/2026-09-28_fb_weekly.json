@@ -1,0 +1,28 @@
+{
+  "ts": "2026-09-28T17:11:00Z",
+  "run_id": "weekly-fb-2026-09-28",
+  "alert_user": true,
+  "alert_reason": "fender_fit_flag: Aventon Level 4 tire/fender/rack question (later candidate; not Rad launch three)",
+  "sources": [
+    {
+      "name": "facebook_rpboc",
+      "status": "OK",
+      "detail": "Joined; readable; personal Meta as Grant; ~10 posts (~1d\u20136/7d); battery/lock talk; no flag SKUs"
+    },
+    {
+      "name": "facebook_upgrades",
+      "status": "OK",
+      "detail": "Joined; readable; ~10 posts New posts (~1\u20132d\u20131w); Caboose short-saddle WATCH"
+    },
+    {
+      "name": "facebook_aventon",
+      "status": "OK",
+      "detail": "Joined; readable; ~12\u201314 posts New posts (~3h\u20135d); Level 4 fender/rack FLAG"
+    },
+    {
+      "name": "facebook_groups",
+      "status": "OK",
+      "detail": "All 3 Joined+readable; no AUTH/checkpoint; alert_user=true (fender fit)"
+    }
+  ]
+}

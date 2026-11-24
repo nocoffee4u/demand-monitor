@@ -1,21 +1,20 @@
 #!/usr/bin/env bash
-# Runs the full demand-scan pipeline in order and prints the ranked report.
-# Requires REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET env vars to be set first
-# (see reddit_scan.py header for how to get them).
+# Runs the demand-scan pipeline. Reddit is retired (no usable API).
 set -e
 cd "$(dirname "$0")"
 
-echo "== 1/4 Reddit scan =="
-python3 reddit_scan.py
+echo "== 1/3 Google Trends scan =="
+python3 trends_scan.py || echo "[warn] trends scan failed; continuing"
 
-echo "== 2/4 Google Trends scan =="
-python3 trends_scan.py
+echo "== 2/3 Marketplace listing scan =="
+python3 marketplace_scan.py || echo "[warn] marketplace scan failed; continuing"
 
-echo "== 3/4 Marketplace listing scan =="
-python3 marketplace_scan.py
-
-echo "== 4/4 Scoring & ranking =="
-python3 score_demand.py
+echo "== 3/3 Dashboard scoring =="
+python3 score_dashboard.py --config config/products.yaml \
+  --marketplace out/marketplace_signal.csv \
+  --trends out/trends_signal.csv \
+  --out out/dashboard_run.csv \
+  --fetch-oem || python3 score_demand.py
 
 echo
-echo "Done. See out/demand_report.csv for the full ranked list."
+echo "Done. See out/dashboard_run.csv for dashboard ingest fields."

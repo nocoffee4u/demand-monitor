@@ -1,0 +1,22 @@
+ts,run_id,alert_user,name,status,detail,last_ok,consecutive_failures,owner
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,rad_oem,OK,products.json HTTP 200; accessories 66 + spare-parts 65 = 131 unique; core OOS unchanged; no sun-cover SKU; Charge Port Cover IN STOCK; GUB PRO-3 IN STOCK; flips vs weekday-2026-09-24=0,2026-09-25T09:10:00-07:00,0,forecasting
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,true,ebr_forum,OK,"OK after URL migration: /forum/rad-power-bikes/index.rss returns Rad Power Bikes Forum (50 items). Legacy /forums/rad-power-bikes.90/index.rss now misroutes to Tern Forum — updated hunt path. Light weekday: battery/recall/funding only, no new Path A accessory pain. alert_user=true once for URL migration (important source path change, recovered).",2026-09-25T09:10:00-07:00,0,forecasting
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,electric_bike_report,OK,feed OK; newest still 2026-09-22 Euphree City Robin Review; no new Rad Path A accessory,2026-09-25T09:10:00-07:00,0,forecasting
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,amazon,OK,curl SERP bm-verify BLOCKED; WebFetch SERP OK (Rad accessories shelf + Line and Ride liner). Display-cover 1–3★ SERP thin. Overall OK; BLOCKED streak=0 (prior weekday OK).,2026-09-25T09:10:00-07:00,0,forecasting
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,etsy,OK,"openapi.etsy.com v3 OK; display cover=8, phone mount=0, charge port=1, rad basket cup=0, ebike cup=14",2026-09-25T09:10:00-07:00,0,forecasting
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,makerworld,OK,HTTP search 200; Rad-specific display-cover ~0; basket cup/organizer universal only; approximate competition,2026-09-25T09:10:00-07:00,0,forecasting
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,x,BLOCKED,Public X expected BLOCKED; no unofficial scrape. Non-blocking.,,5,forecasting
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,youtube,OK,youtube_scan.py searches OK; 31 signals emitted; YOUTUBE_API_KEY from .env,2026-09-25T09:10:00-07:00,0,forecasting
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,facebook_manual,OK,Weekday not due — OK-from-prior weekly 2026-09-21: 3 Joined groups; Aventon front-basket WATCH carry only. No FB scrape today.,2026-09-21T17:35:00Z,0,manual
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,reddit,SKIPPED,Retired — no Reddit API; do not scrape,,0,forecasting
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,context_rad_oem,SKIPPED,context_paid_abandoned — monitors paused; free OEM products.json used instead. NEVER NOTHING_NEW.,,0,context
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,context_amazon,SKIPPED,context_paid_abandoned — free Amazon WebFetch used under amazon instead. NEVER NOTHING_NEW.,,0,context
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,context_ebr,SKIPPED,context_paid_abandoned — free EBR RSS used under ebr_forum. NEVER NOTHING_NEW.,,0,context
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,context_ebr_report,SKIPPED,context_paid_abandoned — free Electric Bike Report feed used instead. NEVER NOTHING_NEW.,,0,context
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,amazon_reviews_rad,SKIPPED,context_paid_abandoned (Context-backed alias). Free Amazon attempt recorded under amazon. NEVER NOTHING_NEW.,,0,context
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,amazon_reviews_aventon,SKIPPED,context_paid_abandoned — NEVER NOTHING_NEW.,,0,context
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,google_reviews_rad,SKIPPED,context_paid_abandoned — NEVER NOTHING_NEW.,,0,context
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,google_reviews_aventon,SKIPPED,context_paid_abandoned — NEVER NOTHING_NEW.,,0,context
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,oem_help_rad,OK,curl/WebFetch OK https://www.radpowerbikes.com/pages/support — support landing; no new glare/visor/charge-port/phone-mount language mined today,2026-09-25T09:10:00-07:00,0,forecasting
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,oem_help_aventon,OK,HTTP 200 https://rideaventon.zendesk.com/hc/en-us — no Cloudflare challenge. Landing thin; no accessory article bodies. consecutive_failures=0.,2026-09-25T09:10:00-07:00,0,forecasting
+2026-09-25T09:10:00-07:00,weekday-2026-09-25,false,rad_yotpo,OK,Yotpo widget + store-wide filter.json OK; accessory 1–3★ pulls OK for FMB/basket/net/straps/bottle,2026-09-25T09:10:00-07:00,0,forecasting

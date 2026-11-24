@@ -1,0 +1,51 @@
+{
+  "id": "theme-fb-2026-10-19",
+  "ts": "2026-10-19T18:00:00Z",
+  "window": "weekly-fb-2026-10-19",
+  "sources_readable": [
+    "fb_1654952334789041",
+    "fb_629167654165317",
+    "fb_860508022428626",
+    "fb_333458264803610",
+    "fb_2677348212546303"
+  ],
+  "sources_failed": [],
+  "nothing_new": false,
+  "compared_to": "2026-10-12_fb",
+  "notes": "No SUN-01 visor/glare, phone clasp, charge-port cap, or Rad fender hits; no PROTOTYPE; Troubleshooters 0 in-window UI Remote/display clamp breaks; Rad groups sparse (Upgrades 3 posts in 7d). alert_user=false.",
+  "themes": [
+    {
+      "label": "Aventure spare-battery carry / rack cargo securing (carry, new activity)",
+      "tag": "Aventon",
+      "gist": "CARRY vs 2026-10-12 with fresh comments this week plus a new front-rack spare-battery post (rear-rack wobble). Cargo/organizer angle only; battery shells off-limits. Later Aventure-2 candidate, behind Rad launch three.",
+      "url": "https://www.facebook.com/groups/aventureowners/posts/1665830051566418/",
+      "relevance": "later_candidate",
+      "signal_ids": [
+        "sig-fb-aventure-spare-battery-carry-active-2026-10-19",
+        "sig-fb-aventure-front-rack-spare-battery-2026-10-19"
+      ]
+    },
+    {
+      "label": "Aventure-2 fender vibration at speed (fit WATCH)",
+      "tag": "Aventon",
+      "gist": "Jeff Crocker (Oct 9, just before 7-day window, missed last week) A2 fender vibration noise at certain speeds. Fixes: Paul Jensen says fender mounted too high rattled on fork, move it down (OP: may be the fix); Mike Betz check caliper centering + fender screws; most others blame brake rotor. No one made/bought a part. Fender-fit class but adjustment fix, no part demand: WATCH only. Supports config-only fender clip WATCH at most; not flagged (adjustment fix, no part ask, Oct 9 just outside window).",
+      "url": "https://www.facebook.com/groups/aventureowners/posts/1668911741258249",
+      "relevance": "watch",
+      "signal_ids": [
+        "sig-fb-aventure2-fender-vibration-2026-10-19"
+      ]
+    },
+    {
+      "label": "Generic handlebar mounts, rack bags and storage hangers (weak)",
+      "tag": "transferable-generic",
+      "gist": "Weak adjacent chatter only: Rad speaker bar mount, Aventure 3 delivery bag, Aventure 3 storage hang ask; also Aventon Bikes had an unverified Flipkart 360° phone-mount link share (no counts/permalink, not logged as signal). No Rad visor/clasp/cap.",
+      "url": "https://www.facebook.com/groups/rpboc/posts/4691968874420690/",
+      "relevance": "weak",
+      "signal_ids": [
+        "sig-fb-rad-bar-speaker-mount-2026-10-19",
+        "sig-fb-aventure3-delivery-bag-2026-10-19",
+        "sig-fb-aventure3-storage-hang-2026-10-19"
+      ]
+    }
+  ]
+}

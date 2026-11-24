@@ -1,0 +1,11 @@
+product_key,evidence_7d,wtb_count,diy_workaround_count,howto_install_count,oem_gap,oem_in_stock_substitute,source_diversity,recency_boost,etsy_count,makerworld_count
+SOMO-RAD-SUN-01,2,0,3,1,1,false,0.95,0.55,8.0,0
+rad_basket_divider_organizer,3,2,3,0,0,true,0.55,0.45,1,2
+rad_basket_cargo_tiedown,2,1,2,0,0,true,0.4,0.35,0,5
+rad_large_front_mounted_basket,1,1,1,2,1,true,0.5,0.25,1,1
+aventon_front_basket,1,1,0,0,1,false,0.25,0.15,0,0
+rad_basket_cup_holder,2,1,1,2,0,true,0.45,0.3,9,10
+rad_radrover_rear_rack,1,0,0,0,1,false,0.3,0.2,0,0
+rad_radrunner_passenger_package,1,0,0,0,1,true,0.3,0.2,0,0
+rad_display_phone_mount,0,0,0,4,0,true,0.35,0.15,0,2
+rad_power_charging_port_dust_cap,0,0,0,0,0,true,0.2,0.1,1,0

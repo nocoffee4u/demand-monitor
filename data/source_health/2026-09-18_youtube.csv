@@ -1,0 +1,2 @@
+ts,run_id,alert_user,name,status,detail
+2026-09-19T06:26:21.240556Z,youtube-oneoff-2026-09-18,FALSE,youtube,OK,"Data API 7 searches tightened keywords; 31 signals emitted."

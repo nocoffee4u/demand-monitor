@@ -1,0 +1,20 @@
+{
+  "id": "theme-ebr-2026-11-23",
+  "ts": "2026-11-23T16:00:00Z",
+  "window": "weekly-ebr-2026-11-23",
+  "sources_readable": [
+    "ebr_forum",
+    "electricbikereport"
+  ],
+  "sources_failed": [],
+  "nothing_new": true,
+  "compared_to": "2026-11-16_ebr",
+  "notes": "Weekly EBR dig 2026-11-23: Rad board RSS forums.electricbikereview.com/forum/rad-power-bikes/index.rss OK (HTTP 200, 50 items) - newest Rad item still 2026-07-30 (UL battery packs thread); nothing since 11-16. Accessories RSS OK (HTTP 200, 50): top item is the GCN bike lights primer (bumped 2026-11-22, same thread as last week, general lighting); no new accessory threads. Baseline threads (59274, 58473, 56621, 13196, 57670) reachable HTTP 200, no new visor/clasp/phone-mount/charge_cap/fender/cup-holder/cargo posts seen. NOTHING_NEW vs 2026-11-16_ebr. Electric Bike Report: homepage 200 + feed OK (100 items); 2 new since 11-16 (Amflow UE Carbon review 11-18; news roundup 11-22 on Amflow UE Carbon / Juiced Scrambler); neither is a Rad accessory gap (no Rad mention). Context mon_d85e4369 / mon_d44aec3d: context_paid_abandoned (paused since 2026-09-22) - SKIPPED. nothing_new is vs prior accessory themes only, not a dark-source claim.",
+  "themes": [],
+  "liability_notes_not_themes": [
+    "UL certified replacement battery packs (delivery early Oct 2026) - battery liability",
+    "CPSC battery recall thread - liability",
+    "Infinite Battery mount tutorial - battery/mount liability",
+    "Rad January funding / Rad Life Mobility crowdfunding - funding chatter"
+  ]
+}
